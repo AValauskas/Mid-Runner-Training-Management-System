@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace TMS
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Coach, Athlete", AuthenticationSchemes = "coach, athlete")]
     public class TrainingController : ControllerBase
     {
         private readonly ITrainingsReposiry trainingRepo;
@@ -16,7 +18,7 @@ namespace TMS
         {
             trainingRepo = new TrainingsRepository();
         }
-
+        [Authorize(Roles = "Coach")]
         [HttpPost]
         public async Task<IActionResult> PostTraining([FromBody] TrainingEntity training)
         {

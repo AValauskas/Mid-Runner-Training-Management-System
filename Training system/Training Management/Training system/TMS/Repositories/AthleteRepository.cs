@@ -12,17 +12,16 @@ namespace TMS
     {
         private static CodeMashClient Client => new CodeMashClient(Settings.ApiKey, Settings.ProjectId);
 
-        public AthleteEntity FindAthlete(User user)
+        public async Task<AthleteEntity> FindAthlete(User user)
         {
-            /*  var athleteRepository = new CodeMashRepository<AthleteEntity>(Client);
+              var athleteRepository = new CodeMashRepository<AthleteEntity>(Client);
               var filterBuilder = Builders<AthleteEntity>.Filter;
-              var filter = filterBuilder.Eq(x => x., user.email) &
+              var filter = filterBuilder.Eq(x => x.Email, user.Email) &
               filterBuilder.Eq(x => x.Password, user.Password);
 
-             var athlete = athleteRepository.FindOne(filter);
+             var athlete = await athleteRepository.FindOneAsync(filter);
 
-             return athlete;*/
-            return null;
+             return athlete;
         }
 
         public async Task<AthleteEntity> InsertAthlete(User user)

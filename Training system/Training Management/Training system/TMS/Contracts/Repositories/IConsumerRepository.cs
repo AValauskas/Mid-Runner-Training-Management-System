@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace TMS
 {
-    public interface IAthleteRepository
+    public interface IConsumerRepository
     {
-        Task<AthleteEntity> FindAthlete(User user);
+        Task<ConsumerEntity> FindConsumer(User user);
     }
 }

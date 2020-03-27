@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -16,8 +18,10 @@ namespace TMS
         {
             authService = new AuthService()
             {
+                AuthRepository = new AuthRepository(),
                 AthleteRepository = new AthleteRepository(),
-                CoachRepository = new CoachRepository()
+                CoachRepository = new CoachRepository(),
+                ConsumerRepository = new ConsumerRepository()
             };
         }
 
@@ -32,20 +36,31 @@ namespace TMS
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(User user)
+        public async Task<IActionResult> Login([FromBody] User user)
         {
 
-            authService.Login(new User() { Email = "Aur", Password = "Val" }); ;
+            var jwt = await authService.Login(user);
+            if (jwt == null)
+            {
+                return BadRequest("this user doesn't exist");
+            }
 
-
-            return null;
+            return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
         }
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(User user)
+        public async Task<IActionResult> Register([FromBody] User user)
         {
-
-
-            return null;
+           var response = await authService.Register(user);
+            if (response == null)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(response);
+            }
         }
+
+
     }
 }

@@ -8,8 +8,8 @@ namespace TMS
 {
    public interface IAuthService
     {
-        Task Register(User user);
-        JwtSecurityToken Login(User user);
+        Task<string> Register(User user);
+        Task<JwtSecurityToken> Login(User user);
 
         JwtSecurityToken GenerateCoachToken(string id);
         JwtSecurityToken GenerateAthleteToken(string id);

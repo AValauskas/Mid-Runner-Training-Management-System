@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TMS
+namespace TMS.Domain
 {
-    public interface IAthleteRepository
+    public enum Role
     {
-        Task<AthleteEntity> FindAthlete(User user);
+        Athlete,
+        Coach,
+        Administrator
     }
 }

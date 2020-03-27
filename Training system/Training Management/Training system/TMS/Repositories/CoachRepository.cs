@@ -14,15 +14,15 @@ namespace TMS
 
         public async Task<CoachEntity> FindCoach(User user)
         {
-            /*  var athleteRepository = new CodeMashRepository<CoachEntity>(Client);
+              var athleteRepository = new CodeMashRepository<CoachEntity>(Client);
               var filterBuilder = Builders<CoachEntity>.Filter;
-              var filter = filterBuilder.Eq(x => x.Username, user.Username) &
+              var filter = filterBuilder.Eq(x => x.Email, user.Email) &
               filterBuilder.Eq(x => x.Password, user.Password);
 
               var coach = await athleteRepository.FindOneAsync(filter);
 
-              return coach;*/
-            return null;
+              return coach;
+            
         }
     }
 }

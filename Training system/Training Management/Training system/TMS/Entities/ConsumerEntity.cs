@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TMS
 {
-    [Collection("athletes")]
-    public class AthleteEntity:Entity
+    [Collection("consumers")]
+    public class ConsumerEntity:Entity
     {
         [Field("name")]
         public string Name { get; set; }
@@ -15,11 +15,15 @@ namespace TMS
         public string Surname { get; set; }
         [Field("competition")]
         public List<CompetitionEntity> Competitions { get; set; } = new List<CompetitionEntity>();
-        [Field("coach")]
-        public string Coach { get; set; }
         [Field("email")]
         public string Email { get; set; }
         [Field("password")]
         public string Password { get; set; }
+        [Field("role")]
+        public string Role { get; set; }
+        [Field("athletes")]
+        public List<string> Athletes { get; set; } = new List<string>();
+        [Field("invitefrom")]
+        public List<string> InviteFrom { get; set; } = new List<string>();
     }
 }

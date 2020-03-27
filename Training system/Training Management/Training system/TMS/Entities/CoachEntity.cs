@@ -13,8 +13,8 @@ namespace TMS
         public string Name { get; set; }
         [Field("surname")]
         public string Surname { get; set; }
-        [Field("username")]
-        public string Username { get; set; }
+        [Field("email")]
+        public string Email { get; set; }
         [Field("password")]
         public string Password { get; set; }
     }
