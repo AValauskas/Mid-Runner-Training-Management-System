@@ -1,6 +1,7 @@
 ﻿using CodeMash.Client;
 using CodeMash.Repository;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,28 @@ namespace TMS
             await athleteRepository.InsertOneAsync(training);
         }
 
+        public async Task<List<TrainingEntity>> GetAllAvailableTrainings()
+        {
+            var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
+            var response = await trainingRepo.FindAsync(x => x.IsPersonal == false, new DatabaseFindOptions());
+
+            return response.Items;
+        }
+
         public async Task<List<TrainingEntity>> GetAllTrainings()
         {
             var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
-            var response = await trainingRepo.FindAsync(x => true, new DatabaseFindOptions());
+            var response = await trainingRepo.FindAsync(x =>true, new DatabaseFindOptions());
+
+            return response.Items;
+        }
+        public async Task<List<TrainingEntity>> GetPersonalTrainings(string owner)
+        {
+            var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
+            var filterBuilder = Builders<TrainingEntity>.Filter;
+            var filter = filterBuilder.Eq("owner", ObjectId.Parse(owner));
+
+            var response = await trainingRepo.FindAsync(filter);
 
             return response.Items;
         }
@@ -38,6 +57,7 @@ namespace TMS
             var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
             await trainingRepo.ReplaceOneAsync(x=> x.Id == training.Id, training);
         }
+
 
         public async Task DeleteTraining(string id)
         {

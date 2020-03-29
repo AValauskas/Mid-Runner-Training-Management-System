@@ -13,6 +13,6 @@ namespace TMS
         [Field("pace")]
         public int Pace { get; set; }
         [Field("rest")]
-        public string Rest { get; set; }
+        public int Rest { get; set; }
     }
 }

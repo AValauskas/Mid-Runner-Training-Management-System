@@ -9,6 +9,8 @@ namespace TMS
     {
         Task InsertTraining(TrainingEntity training);
         Task<List<TrainingEntity>> GetAllTrainings();
+        Task<List<TrainingEntity>> GetPersonalTrainings(string owner);
+        Task<List<TrainingEntity>> GetAllAvailableTrainings();
         Task<TrainingEntity> GetTrainingByID(string id);
         Task ReplaceTraining(TrainingEntity training);
         Task DeleteTraining(string id);
