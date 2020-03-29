@@ -25,15 +25,7 @@ namespace TMS
             };
         }
 
-        [HttpGet("aaa")]
-        public async Task<IActionResult> Logaaain(User user)
-        {
 
-
-
-
-            return Ok();
-        }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] User user)

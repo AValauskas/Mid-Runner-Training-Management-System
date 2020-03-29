@@ -26,7 +26,7 @@ namespace TMS
                 return "Password must contain atleast one number";
             }
             //var pwd = new PasswordHash("some pwd");
-            var response = await AuthRepository.CheckIfPasswordOrEmailAlreadyExist(user);
+            var response = await AuthRepository.CheckIfEmailAlreadyExist(user);
             if(response != null)
             {
                 return response;

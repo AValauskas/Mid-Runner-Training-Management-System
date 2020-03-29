@@ -7,9 +7,9 @@ namespace TMS
     {
         [Field("distance")]
         public int Distance { get; set; }
-        [Field("besttimedate")]
-        public DateTime BestTimeDate { get; set; }
-        [Field("besttime")]
-        public string BestTime { get; set; }
+        [Field("date")]
+        public DateTime Date { get; set; }
+        [Field("time")]
+        public double Time { get; set; }
     }
 }

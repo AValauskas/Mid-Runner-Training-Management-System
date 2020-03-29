@@ -26,6 +26,28 @@ namespace TMS
 
             return response.Items;
         }
+        public async Task<List<PersonalTrainingEntity>> GetAllPersonalTrainingsCoach(string coach)
+        {
+            var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
+            var filterBuilder = Builders<PersonalTrainingEntity>.Filter;
+            var filter = filterBuilder.Eq("coach", ObjectId.Parse(coach));
+            var response = await trainingRepo.FindAsync(filter);
+
+
+            return response.Items;
+        }
+        public async Task<List<PersonalTrainingEntity>> GetAllPersonalTrainingsAthlete(string athlete)
+        {
+            var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
+            var filterBuilder = Builders<PersonalTrainingEntity>.Filter;
+            var filter = filterBuilder.Eq("athlete", ObjectId.Parse(athlete));
+            var response = await trainingRepo.FindAsync(filter);
+
+            return response.Items;
+        }
+
+
+
         public async Task<PersonalTrainingEntity> GetPersonalTrainingByID(string id)
         {
             var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
@@ -55,6 +77,33 @@ namespace TMS
 
             var filter = Builders<PersonalTrainingEntity>.Update.AddToSetEach(x => x.Results, result);
             await trainingRepo.UpdateOneAsync(x => x.Id == id, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true }) ;
+        }
+        public async Task AddResultsAndReport(string id, Results result)
+        {
+            var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);           
+
+            var filter = Builders<PersonalTrainingEntity>.Update.AddToSetEach(x => x.Results, result.results)
+                .Set(x => x.AthleteReport, result.report);
+            await trainingRepo.UpdateOneAsync(x => x.Id == id, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
+        }
+
+        
+        public async Task<bool> CheckIfAthleteisAddedInChoosenDay(DateTime day, string AthleteId)
+        {
+            var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
+
+            var filterBuilder = Builders<PersonalTrainingEntity>.Filter;
+            var subFilter = filterBuilder.Eq("athlete", ObjectId.Parse(AthleteId));
+            var filter = filterBuilder.Eq(x=>x.Day, day);
+
+            var response = await trainingRepo.FindAsync(x => true, new DatabaseFindOptions());
+
+            if (response.Items.Count !=0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
     }

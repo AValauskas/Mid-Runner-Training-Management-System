@@ -55,20 +55,16 @@ namespace TMS
              }   */
         }
 
-        public async Task<string> CheckIfPasswordOrEmailAlreadyExist(User user)
+        public async Task<string> CheckIfEmailAlreadyExist(User user)
         {
             var registerService = new CodeMashRepository<ConsumerEntity>(Client);
             var email = await registerService.FindOneAsync(x => x.Email == user.Email);
-            var password = await registerService.FindOneAsync(x => x.Password == user.Password);
 
             if (email != null)
             {
                 return "email already exist";
             }
-            else if (password != null)
-            {
-                return "password already exist";
-            }
+
             /*
             var registerServiceAthlete = new CodeMashRepository<AthleteEntity>(Client);
             var athleteEmail = await registerServiceAthlete.FindOneAsync(x => x.Email == user.Email);

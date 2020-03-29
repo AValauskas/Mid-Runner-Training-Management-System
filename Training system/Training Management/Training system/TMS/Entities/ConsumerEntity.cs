@@ -13,8 +13,10 @@ namespace TMS
         public string Name { get; set; }
         [Field("surname")]
         public string Surname { get; set; }
-        [Field("competition")]
+        [Field("competitions")]
         public List<CompetitionEntity> Competitions { get; set; } = new List<CompetitionEntity>();
+        [Field("records")]
+        public List<CompetitionEntity> Records { get; set; } = new List<CompetitionEntity>();
         [Field("email")]
         public string Email { get; set; }
         [Field("password")]
