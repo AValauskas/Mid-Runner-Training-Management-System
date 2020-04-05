@@ -1,0 +1,47 @@
+<form class="col s12 white" #userRegistrationForm="ngForm" (ngSubmit)="OnSubmit()">
+  <div class ="form-group">
+    <div class="row">
+      <div class="input-field col s6">
+        <input class="validate form-control" type="text" name="Email"  [(ngModel)]="user.Email" required placeholder="Enter email">        
+      </div>
+      <div class="input-field col s6">
+        <input class="validate form-control" type="password" name="Password" [(ngModel)]="user.Password" required minlength="6" placeholder="Enter password">
+        <!---<label [attr.data-error]="Password.errors!=null?(Password.errors.required?'Required field!':'Minimum 6 characters needed'):''">Password</label>-->
+      </div>
+    </div>
+  </div>
+  <div class ="form-group">
+    <div class="row">
+      <div class="input-field col s6">
+        <input  class="form-control" type="text" name="FirstName"  [(ngModel)]="user.Name" required placeholder="Enter your name">
+      
+      </div>
+      <div class="input-field col s6">
+        <input class="form-control" type="text" name="LastName"  [(ngModel)]="user.Surname" required placeholder="Enter your last name">
+        
+      </div>
+    </div>
+  </div>
+
+  <div class ="form-group ">
+      <label class="radio-inline">
+        <input type="radio" name="optradio" [(ngModel)]="user.Role" id="Athlete" value="Athlete" checked>Athlete
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="optradio"  [(ngModel)]="user.Role" id="Coach" value="Coach">Coach
+      </label>   
+  </div>
+  <div class ="form-group ">
+    <div class="row">
+      <div class="input-field col s12 text-center">
+        <button [disabled]="!userRegistrationForm.valid" class="btn-large btn-submit btn btn-secondary" type="submit">Submit</button>
+      </div>
+    </div>
+  </div>
+  </form>
+  <div *ngIf="error" class="">
+  <i class="material-icons ">error</i> <a class= "text-danger">{{error}}</a>
+</div>
+
+ 
+

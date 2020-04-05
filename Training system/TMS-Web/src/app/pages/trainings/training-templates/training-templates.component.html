@@ -1,0 +1,22 @@
+<p>training-templates works!</p>
+
+
+<div class="container">
+
+    <div class="table-responsive-lg" *ngIf="trainings" > 
+    <table class="table table-striped">
+      <thead>
+          
+      </thead>
+      <tbody>
+         
+          <div >
+        <tr *ngFor="let training of trainings">
+          <td >{{training.description}}</td>
+          <td >{{ training.type}}</td>   
+          <!--<td><button class="btn btn-info" data-toggle="modal" (click)="SetID( client.idTrainee)" data-target="#myModal">Write response</button ></td> -->         
+        
+        </div>
+      </tbody>
+    </table>
+  </div>

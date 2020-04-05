@@ -27,32 +27,6 @@ namespace TMS
             await registerService.InsertOneAsync(consumer);
 
 
-            /* if (user.Role == "Athlete")
-             {
-                 var registerService = new CodeMashRepository<AthleteEntity>(Client);
-
-                 var consumer = new AthleteEntity()
-                 {
-                     Email = user.Email,
-                     Name = user.Name,
-                     Password = user.Password,
-                     Surname = user.Surname
-                 };
-                 await registerService.InsertOneAsync(consumer);
-             }
-             else if (user.Role == "Coach")
-             {
-                 var registerService = new CodeMashRepository<CoachEntity>(Client);
-
-                 var consumer = new CoachEntity()
-                 {
-                     Email = user.Email,
-                     Name = user.Name,
-                     Password = user.Password,
-                     Surname = user.Surname                    
-             };
-                 await registerService.InsertOneAsync(consumer);
-             }   */
         }
 
         public async Task<string> CheckIfEmailAlreadyExist(User user)
@@ -65,30 +39,6 @@ namespace TMS
                 return "email already exist";
             }
 
-            /*
-            var registerServiceAthlete = new CodeMashRepository<AthleteEntity>(Client);
-            var athleteEmail = await registerServiceAthlete.FindOneAsync(x => x.Email == user.Email);
-            var athletePassword= await registerServiceAthlete.FindOneAsync(x => x.Password == user.Password);
-
-            var registerServiceCoach= new CodeMashRepository<CoachEntity>(Client);
-            var coachEmail = await registerServiceAthlete.FindOneAsync(x => x.Email == user.Email);
-            var coachPassword = await registerServiceAthlete.FindOneAsync(x => x.Email == user.Email);
-
-            if (athleteEmail != null)
-            {
-                return "email already exist";
-            }
-            else if (athletePassword != null)
-            {
-                return "password already exist";
-            }
-            else if (athletePassword != null)
-            {
-                return "email already exist";
-            }else if (athletePassword != null)
-            {
-                return "password already exist";
-            }*/
             return null;
         }
 
