@@ -27,6 +27,10 @@ namespace TMS
         [HttpPost]
         public async Task<IActionResult> PostTraining([FromBody] TrainingEntity training)
         {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idTraining = cla[1].Value;
+            training.Owner = idTraining;
             await trainingRepo.InsertTraining(training);
 
             return Ok(training);
@@ -44,6 +48,7 @@ namespace TMS
 
             return Ok(training);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpGet("availableTrainings")]
         public async Task<IActionResult> GetAllTrainings()

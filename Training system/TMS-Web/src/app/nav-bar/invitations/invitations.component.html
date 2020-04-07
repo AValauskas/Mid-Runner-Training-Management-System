@@ -1,0 +1,25 @@
+ <form class="form-inline my-2 my-lg-0 " #InviteForm="ngForm"  (ngSubmit)="SendInvite()" id="invites">
+        <input class="form-control mr-sm-2" type="text" placeholder="Send Invite"  [(ngModel)]="inviter.Id" name="Id">
+        <button [disabled]="!InviteForm.valid" class="btn btn-outline-success my-2 my-sm-0" type="submit" >Send</button>
+      </form>
+      <br>
+
+     
+        <div class="table-responsive-lg" *ngIf="invitations" id="invites"> 
+        <table class="table">
+          <thead>
+              
+          </thead>
+          <tbody>
+             
+              <div class="overflow-auto allinvitations"  >
+            <tr *ngFor="let invitation of invitations">
+              <td >{{invitation.name}}</td>
+              <td >{{ invitation.surname}}</td>   
+              <td><button class="btn btn-success "  id="roundbutton" (click)="AcceptInvite( invitation.idInvitationFrom)" >Accept</button ></td>    
+              <td><button class="btn btn-danger " id="roundbutton" (click)="DeclineInvite( invitation.idInvitationFrom)" >Decline</button ></td>    
+            </div>
+          </tbody>
+        </table>
+      
+    

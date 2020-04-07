@@ -6,6 +6,8 @@ import {PersonalTrainingsComponent} from './pages/trainings/personal-trainings/p
 import {LoginComponent} from './user/login/login.component';
 import {RegisterComponent} from './user/register/register.component';
 import {UserComponent} from './user/user.component';
+import { PersonalBestComponent } from './pages/user/personal-best/personal-best.component';
+import { PersonalInfoComponent } from './pages/user/personal-info/personal-info.component';
 
 const routes: Routes = [
 {path: '', component: UserComponent,
@@ -13,6 +15,8 @@ children: [{path: '', component:LoginComponent}]},
 {path: 'home', component: HomeComponent},
 {path: 'trainingTemplates', component: TrainingTemplatesComponent},
 {path: 'personalTrainings', component: PersonalTrainingsComponent},
+{path: 'personalBest', component: PersonalBestComponent},
+{path: 'personalInfo', component: PersonalInfoComponent},
 {path: 'register', component: UserComponent,
 children: [{path: '', component:RegisterComponent}]},
 {path: 'login', component: UserComponent,

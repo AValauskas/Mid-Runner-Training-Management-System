@@ -11,10 +11,31 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/trainingTemplates" href="#">Training templates</a>          
-        </li>      
-      </ul>
+        </li>    
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Personal Info
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">            
+            <a class="dropdown-item" href="personalInfo">Account Info</a>
+            <a class="dropdown-item" href="personalBest" *ngIf="Role==='Athlete' ||Role==='Coach' ">Personal Bests</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>  
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Invitations
+          </a>
+          <div class="dropdown-menu drop rounded">            
+            <app-invitations></app-invitations>
+          </div>
+        </li>    
+      </ul>      
     </div>
-    <ul class="nav navbar-nav ml-auto">          
+    
+    <ul class="nav navbar-nav ml-auto"> 
+         
       <li class="nav-item"  >                 
         <a class="nav-link" (click)="_auth.logoutUser()">
           <span class="glyphicon glyphicon-log-out"></span>

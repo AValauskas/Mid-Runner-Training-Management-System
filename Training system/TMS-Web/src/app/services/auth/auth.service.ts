@@ -18,17 +18,12 @@ export class AuthService {
   private _registerUrl = "Auth/Register";
 
 
-  constructor(private http: HttpClient, public _router:Router, private httpserv: HttpService) { }
+  constructor(public _router:Router, private httpserv: HttpService) { }
 
   loginUser(data):Observable<TokenParams>
   {
     console.log(data);
    return this.httpserv.requestCall(this._loginUrl,"Post",data,null).pipe(catchError(this.HandleError));   
- 
-   /* let header = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
-    return this.http.post<any>(this._loginUrl, data).pipe(
-      catchError(this.HandleError)
-     );*/
   }
 
   registerUser(data)

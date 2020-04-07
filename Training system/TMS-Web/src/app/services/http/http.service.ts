@@ -18,6 +18,7 @@ export class HttpService {
     let response;
     switch(method){
         case "Get":
+          console.log("ateina get");
             response=this.http.get<any>(this.apiUrl+api, {headers: headerHttp})
             .pipe(catchError(this.HandleError));
             break;
@@ -28,6 +29,10 @@ export class HttpService {
             break;
         case "Put":
             response = this.http.put<any>(this.apiUrl+api, data, {headers: headerHttp})
+            .pipe(catchError(this.HandleError));   
+            break;
+        case "Patch":
+            response = this.http.patch<any>(this.apiUrl+api, data, {headers: headerHttp})
             .pipe(catchError(this.HandleError));   
             break;
         case "Delete":
@@ -45,8 +50,10 @@ export class HttpService {
   private HandleError(errorResponse: HttpErrorResponse){
     if(errorResponse.error instanceof ErrorEvent ){
       console.error("an error",errorResponse.error.message)
+      
     }else{
       localStorage.setItem('error', errorResponse.error )
+      console.log(errorResponse.error);
     return "b";
     }
    

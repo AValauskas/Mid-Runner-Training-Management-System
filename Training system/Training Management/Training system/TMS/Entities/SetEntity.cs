@@ -9,10 +9,10 @@ namespace TMS
     public class SetEntity
     {
         [Field("distance")]
-        public int Distance { get;set; }
+        public float Distance { get;set; }
         [Field("pace")]
-        public int Pace { get; set; }
+        public float Pace { get; set; }
         [Field("rest")]
-        public int Rest { get; set; }
+        public float Rest { get; set; }
     }
 }

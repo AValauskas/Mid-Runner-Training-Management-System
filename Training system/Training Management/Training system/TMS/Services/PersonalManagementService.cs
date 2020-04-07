@@ -33,15 +33,60 @@ namespace TMS
             }                     
         }
 
-        public async Task<string> SendInviteToAnother(string senderId, string receiverId)
+
+
+
+        public async Task<string> SendInviteToAnother(string senderId, string senderRole, string receiverId)
         {
+            if (senderRole=="Athlete")
+            {
+                var coach = await ConsumerRepository.FindConsumerById(receiverId);
+                if (coach.InviteFrom.Contains(senderId))
+                {
+                    return "You already sent invitation";
+                }
+                if (coach.Athletes.Contains(senderId))
+                {
+                    return "You already belong to his trainer";
+                }
+                if (coach.Role =="Athlete")
+                {
+                    return "You can invite only coaches";
+                }
+                var athlete = await ConsumerRepository.FindConsumerById(senderId);
+                if (athlete.InviteFrom.Contains(receiverId))
+                {
+                    return "You already have request from this coach";
+                }
+            }
+            if (senderRole == "Coach")
+            {
+                var coach = await ConsumerRepository.FindConsumerById(senderId);
+                if (coach.Athletes.Contains(receiverId))
+                {
+                    return "You already train this athlete";
+                }
+                if (coach.InviteFrom.Contains(receiverId))
+                {
+                    return "Athlete already sent you invitation";
+                }
+                var athlete = await ConsumerRepository.FindConsumerById(receiverId);
+                if (athlete.InviteFrom.Contains(senderId))
+                {
+                    return "Athlete already sent invitation";
+                }
+                if (athlete.Role == "Coach")
+                {
+                    return "You can invite only athletes";
+                }
+            }
             var consumer = await ConsumerRepository.FindConsumerById(receiverId);
             if (consumer.Role == "Admin")
             {
-                return "You can't invite admin, only another coach";
+                return "You can't invite admin, only another coach is available";
             }
             await ConsumerRepository.SendInviteToAnother(senderId, receiverId);
-            return "Invite have been succesfully sent";
+            return null;
         }
         public async Task AcceptInvitation(string senderId,string role, string receiverId)
         {
@@ -68,6 +113,24 @@ namespace TMS
             {
                 await ConsumerRepository.DeleteInvitation(receiverId, senderId);
             }
+        }
+
+        public async Task<List<InviteForm>> GetInvitations(string idMainUser)
+        {
+            List<InviteForm> invites = new List<InviteForm>();
+            var consumer = await ConsumerRepository.FindConsumerById(idMainUser);
+            foreach (var inviterId in consumer.InviteFrom)
+            {
+                var invaiter = await ConsumerRepository.FindConsumerById(inviterId);
+                invites.Add(new InviteForm()
+                {
+                    Name = invaiter.Name,
+                    Surname = invaiter.Surname,
+                    IDInvitationFrom = inviterId
+                });
+            }
+
+            return invites;
         }
 
     }

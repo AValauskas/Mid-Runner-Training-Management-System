@@ -1,0 +1,22 @@
+<p>personal-best works!</p>
+
+<div class="container">
+
+    <div class="table-responsive-lg" *ngIf="competitions" > 
+    <table class="table table-striped">
+      <thead>
+          
+      </thead>
+      <tbody>
+         
+          <div >
+        <tr *ngFor="let competition of competitions">
+          <td >{{competition.distance}}</td>
+          <td >{{ competition.time}}</td> 
+          <td >{{ competition.date}}</td>     
+          <!--<td><button class="btn btn-info" data-toggle="modal" (click)="SetID( client.idTrainee)" data-target="#myModal">Write response</button ></td> -->         
+        
+        </div>
+      </tbody>
+    </table>
+  </div>

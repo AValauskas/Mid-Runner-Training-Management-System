@@ -27,8 +27,6 @@ namespace TMS
         public async Task<ConsumerEntity> FindConsumerById(string id)
         {
             var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
-
-
             var consumer = await ConsumerRepository.FindOneByIdAsync(id);
 
             return consumer;
@@ -131,6 +129,8 @@ namespace TMS
             var result = await ConsumerRepository.UpdateOneAsync(x => x.Id == receiverId, update);
 
         }
+
+        
 
 
 

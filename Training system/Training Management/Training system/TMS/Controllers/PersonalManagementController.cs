@@ -15,17 +15,33 @@ namespace TMS
     {
 
         private readonly IPersonalManagementService personalManagementService;
-
+        private readonly IConsumerRepository ConsumerRepository;
         public PersonalManagementController()
         {
 
+            ConsumerRepository = new ConsumerRepository();
             personalManagementService = new PersonalManagementService()
             {
                 ConsumerRepository = new ConsumerRepository()
             };
         }
 
+        //--------------------------------Competition/personal results-------------------------
         [Authorize(Roles = "Athlete")]
+        [HttpGet]
+        public async Task<IActionResult> GetCompetitions()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idAthlete = cla[1].Value;
+            var consumer = await ConsumerRepository.FindConsumerById(idAthlete);
+
+            return Ok(consumer.Records);
+
+
+        }       
+
+        [Authorize(Roles = "Athlete, Coach")]
         [HttpPatch]
         public async Task<IActionResult> AddCompetitionTime ([FromBody] CompetitionEntity competition)
         {
@@ -37,6 +53,10 @@ namespace TMS
             return Ok();
         }
 
+
+
+
+        //----------------------------Invites---------------------
         [Authorize(Roles = "Athlete, Coach")]
         [HttpPatch("invite")]
         public async Task<IActionResult> SendInvite([FromBody] ConsumerEntity consumer)
@@ -44,9 +64,17 @@ namespace TMS
             var claims = User.Claims;
             var cla = claims.ToList();
             var SenderId = cla[1].Value;
+            var SenderRole = cla[0].Value;
 
-            var result = await personalManagementService.SendInviteToAnother(SenderId, consumer.Id);
-            return Ok(result);
+            var result = await personalManagementService.SendInviteToAnother(SenderId, SenderRole, consumer.Id);
+            if (result == null)
+            {
+                return Ok(result);
+            }
+            {
+                return BadRequest(result);
+            }
+            
         }
 
 
@@ -60,7 +88,8 @@ namespace TMS
             var receiverRole = cla[0].Value;
 
             await personalManagementService.AcceptInvitation(consumer.Id, receiverRole, receiverId);
-            return Ok();
+            var invites = await personalManagementService.GetInvitations( receiverId);
+            return Ok(invites);
         }
         [Authorize(Roles = "Athlete, Coach")]
         [HttpPatch("DeclineInvite")]
@@ -72,7 +101,20 @@ namespace TMS
             var receiverRole = cla[0].Value;
 
             await personalManagementService.DeclineInvitation(consumer.Id, receiverRole, receiverId);
-            return Ok();
+            var invites = await personalManagementService.GetInvitations(receiverId);
+            return Ok(invites);
+        }
+
+        [Authorize(Roles = "Athlete, Coach")]
+        [HttpGet("invitations")]
+        public async Task<IActionResult> GetInvitations()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idAthlete = cla[1].Value;
+            var invites = await personalManagementService.GetInvitations(idAthlete);
+
+            return Ok(invites);
         }
 
     }
