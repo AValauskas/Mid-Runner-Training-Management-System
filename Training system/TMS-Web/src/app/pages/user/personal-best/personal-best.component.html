@@ -1,11 +1,45 @@
-<p>personal-best works!</p>
 
 <div class="container">
-
-    <div class="table-responsive-lg" *ngIf="competitions" > 
+  <div class="row">
+    <div class="col-sm-6 col-xs-6 responsive" *ngIf="competitions" > 
+      <div>
+        <p class = " text-center mt-3 responsive" id="title">Outside</p>
+      </div>   
     <table class="table table-striped">
       <thead>
-          
+        <tr>
+          <th class="col-md-3 " id = "tableTitle" scope="col">Distance</th>
+          <th class="col-md-2"  id = "tableTitle" scope="col">Time</th>
+          <th class="col-md-3" id = "tableTitle" scope="col">date</th>
+          <th class="col-md-4"  id = "tableTitle"scope="col">Competition</th>
+        </tr>
+      </thead>
+      <tbody>
+         
+          <div >
+        <tr *ngFor="let competition of competitions">
+          <td class="col-md-2 " >{{competition.distance}}</td>
+          <td class="col-md-2 " >{{ competition.time}}</td> 
+          <td class="col-md-4">{{ competition.date}}</td>    
+          <td class="col-md-4">LAFF</td>    
+          <!--<td><button class="btn btn-info" data-toggle="modal" (click)="SetID( client.idTrainee)" data-target="#myModal">Write response</button ></td> -->         
+        
+        </div>
+      </tbody>
+    </table>
+    </div>
+    <div class="col-sm-6 col-xs-6 responsive" *ngIf="competitions" > 
+      <div>
+        <p class = " text-center mt-3" id="title">Inside</p>
+      </div> 
+    <table class="table table-striped responsive">
+      <thead>
+        <tr>
+          <th class="col-md-3 " id = "tableTitle" scope="col">Distance</th>
+          <th class="col-md-2"  id = "tableTitle" scope="col">Time</th>
+          <th class="col-md-3" id = "tableTitle" scope="col">date</th>
+          <th class="col-md-4"  id = "tableTitle"scope="col">Competition</th>
+        </tr>
       </thead>
       <tbody>
          
@@ -13,10 +47,13 @@
         <tr *ngFor="let competition of competitions">
           <td >{{competition.distance}}</td>
           <td >{{ competition.time}}</td> 
-          <td >{{ competition.date}}</td>     
+          <td >{{ competition.date}}</td>  
+          <td >Kauno miesto</td>      
           <!--<td><button class="btn btn-info" data-toggle="modal" (click)="SetID( client.idTrainee)" data-target="#myModal">Write response</button ></td> -->         
         
         </div>
       </tbody>
     </table>
+    </div>
+    </div>
   </div>

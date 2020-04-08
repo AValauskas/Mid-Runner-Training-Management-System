@@ -15,6 +15,9 @@ import { MainModalComponent } from './Modals/main-modal/main-modal.component';
 import { PersonalBestComponent } from './pages/user/personal-best/personal-best.component';
 import { PersonalInfoComponent } from './pages/user/personal-info/personal-info.component';
 import { InvitationsComponent } from './nav-bar/invitations/invitations.component';
+import { PersonalStuffComponent } from './pages/user/personal-stuff/personal-stuff.component';
+import { CompetitionsComponent } from './pages/user/competitions/competitions.component';
+import { TrainingsComponent } from './pages/user/trainings/trainings.component';
 
 //import { NavbarComponent } from './navbar/navbar.component';
 
@@ -32,7 +35,10 @@ import { InvitationsComponent } from './nav-bar/invitations/invitations.componen
     MainModalComponent,
     PersonalBestComponent,
     PersonalInfoComponent,
-    InvitationsComponent
+    InvitationsComponent,
+    PersonalStuffComponent,
+    CompetitionsComponent,
+    TrainingsComponent
   ],
   imports: [
     BrowserModule,

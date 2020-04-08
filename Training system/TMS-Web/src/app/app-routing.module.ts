@@ -8,6 +8,7 @@ import {RegisterComponent} from './user/register/register.component';
 import {UserComponent} from './user/user.component';
 import { PersonalBestComponent } from './pages/user/personal-best/personal-best.component';
 import { PersonalInfoComponent } from './pages/user/personal-info/personal-info.component';
+import { PersonalStuffComponent } from './pages/user/personal-stuff/personal-stuff.component';
 
 const routes: Routes = [
 {path: '', component: UserComponent,
@@ -16,6 +17,7 @@ children: [{path: '', component:LoginComponent}]},
 {path: 'trainingTemplates', component: TrainingTemplatesComponent},
 {path: 'personalTrainings', component: PersonalTrainingsComponent},
 {path: 'personalBest', component: PersonalBestComponent},
+{path: 'personal', component: PersonalStuffComponent},
 {path: 'personalInfo', component: PersonalInfoComponent},
 {path: 'register', component: UserComponent,
 children: [{path: '', component:RegisterComponent}]},
