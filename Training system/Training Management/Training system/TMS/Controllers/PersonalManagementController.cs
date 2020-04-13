@@ -27,9 +27,11 @@ namespace TMS
         }
 
         //--------------------------------Competition/personal results-------------------------
-        [Authorize(Roles = "Athlete")]
-        [HttpGet]
-        public async Task<IActionResult> GetCompetitions()
+
+
+        [Authorize(Roles = "Athlete,Coach")]
+        [HttpGet("record/outside")]
+        public async Task<IActionResult> GetRecordsOutside()
         {
             var claims = User.Claims;
             var cla = claims.ToList();
@@ -39,7 +41,42 @@ namespace TMS
             return Ok(consumer.Records);
 
 
-        }       
+        }
+        [Authorize(Roles = "Athlete,Coach")]
+        [HttpGet("record/inside")]
+        public async Task<IActionResult> GetRecordsInside()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idAthlete = cla[1].Value;
+            var consumer = await ConsumerRepository.FindConsumerById(idAthlete);
+            var record = consumer.Records.Where(x => x.Place == InsideOutside.Inside.ToString());
+            return Ok(record);
+        }
+
+        [Authorize(Roles = "Athlete,Coach")]
+        [HttpGet("competitions/inside")]
+        public async Task<IActionResult> GetCompetitionsInside()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idAthlete = cla[1].Value;
+            var consumer = await ConsumerRepository.FindConsumerById(idAthlete);
+            var record = consumer.Records.Where(x => x.Place == InsideOutside.Outside.ToString());
+            return Ok(consumer.Records);
+        }
+        [Authorize(Roles = "Athlete,Coach")]
+        [HttpGet("competitions/inside")]
+        public async Task<IActionResult> GetCompetitionsOutside()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idAthlete = cla[1].Value;
+            var consumer = await ConsumerRepository.FindConsumerById(idAthlete);
+            var competitions = consumer.Competitions.Where(x => x.Place == InsideOutside.Outside.ToString());
+            List<CompetitionEntity> SortedList = competitions.OrderBy(o => o.Time).ToList();
+            return Ok(consumer.Records);
+        }
 
         [Authorize(Roles = "Athlete, Coach")]
         [HttpPatch]

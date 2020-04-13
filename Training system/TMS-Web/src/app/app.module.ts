@@ -18,6 +18,7 @@ import { InvitationsComponent } from './nav-bar/invitations/invitations.componen
 import { PersonalStuffComponent } from './pages/user/personal-stuff/personal-stuff.component';
 import { CompetitionsComponent } from './pages/user/competitions/competitions.component';
 import { TrainingsComponent } from './pages/user/trainings/trainings.component';
+import {FullCalendarModule} from '@fullcalendar/angular';
 
 //import { NavbarComponent } from './navbar/navbar.component';
 
@@ -45,6 +46,7 @@ import { TrainingsComponent } from './pages/user/trainings/trainings.component';
     AppRoutingModule,
     FormsModule,
      HttpClientModule,
+     FullCalendarModule
 
   ],
   providers: [],

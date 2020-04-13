@@ -10,18 +10,20 @@ namespace TMS
     public class PersonalTrainingEntity:Entity
     {
         [Field("day")]
-        public DateTime Day { get; set; }
+        public DateTime Day { get; set; } = DateTime.Now;
         [Field("training")]
-        public string TrainTemplateId { get; set; }
+        public string TrainTemplateId { get; set; } = "";
         [Field("results")]
         public List<SetEntity> Results { get; set; } = new List<SetEntity>();
         [Field("athlete")]
-        public string AthleteId { get; set; }
+        public string AthleteId { get; set; } = "";
         [Field("coach")]
-        public string CoachId { get; set; }
+        public string CoachId { get; set; } = "";
         [Field("athletereport")]
         public string AthleteReport { get; set; } = "";
         [Field("description")]
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
+        [Field("place")]
+        public string Place { get; set; } = InsideOutside.Inside.ToString();
     }
 }

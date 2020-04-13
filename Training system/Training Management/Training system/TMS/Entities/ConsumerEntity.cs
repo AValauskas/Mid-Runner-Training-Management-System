@@ -10,19 +10,19 @@ namespace TMS
     public class ConsumerEntity:Entity
     {
         [Field("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         [Field("surname")]
-        public string Surname { get; set; }
+        public string Surname { get; set; } = "";
         [Field("competitions")]
         public List<CompetitionEntity> Competitions { get; set; } = new List<CompetitionEntity>();
         [Field("records")]
         public List<CompetitionEntity> Records { get; set; } = new List<CompetitionEntity>();
         [Field("email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = "";
         [Field("password")]
-        public string Password { get; set; }
+        public string Password { get; set; } = "";
         [Field("role")]
-        public string Role { get; set; }
+        public string Role { get; set; } = "";
         [Field("athletes")]
         public List<string> Athletes { get; set; } = new List<string>();
         [Field("invitefrom")]

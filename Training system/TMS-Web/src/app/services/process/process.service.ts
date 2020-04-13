@@ -11,6 +11,7 @@ export class ProcessService {
 
   private trainingTemplatesUrl = "training";
   private personalManagement = "personalmanagement";
+  private personalTraining = "personaltraining";
   
   constructor(public _router:Router, private httpserv: HttpService, private http: HttpClient) { }
 
@@ -75,6 +76,15 @@ export class ProcessService {
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     })    
     return this.httpserv.requestCall(this.personalManagement+"/invite","Patch",data,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+
+  GetPersonalTrainings()
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalTraining+"/athlete","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
   private HandleError(errorResponse: HttpErrorResponse){
