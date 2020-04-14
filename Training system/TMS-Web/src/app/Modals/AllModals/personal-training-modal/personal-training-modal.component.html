@@ -1,0 +1,38 @@
+{{data}}
+    <!-- <form #personalTrainingForm="ngForm" class="" >
+     <div class="form-group">    
+        <label for="descriptionTextArea">Description</label>           
+       <textarea  type="text" class="form-control" [(ngModel)]="training.description" name="description" readonly > </textarea>
+      </div>   
+      
+  
+      
+     
+      <div class ="form-group ">
+        <div *ngFor="let result of Results; let i = index" name="results">
+          
+          <div class ="form-group ">
+          <div class= "row" >
+            <div class="input-field col s3" >
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="result.distance"  name="distance" placeholder="Distance/m" required>
+            </div>
+            <div class="input-field col s3" >
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="result.pace" name="pace" placeholder="Pace/s" required>                      
+            </div>  
+            <div class="input-field col s3" >
+              <input type="number" step="0.01" class="form-control"  [(ngModel)]="result.rest" name="rest" placeholder="Rest/s" required>                      
+            </div>
+            <div class="input-field col s1" >
+              <button  class="btn btn-info" (click)="OnDelete(i)">-</button>   -             
+            </div>
+            </div>
+            </div>
+        </div>                
+     </div>
+    <div class="form-group">
+    <button  class="btn btn-info" (click)="OnClick()">+</button>
+      </div>
+      <div class="form-group">
+       <button [disabled]="!trainingtemplateForm.valid" class="btn btn-secondary" type="submit" (click)="OnSubmit()">Confirm</button>
+       </div>
+   </form>   -->       

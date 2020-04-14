@@ -19,6 +19,7 @@ import { PersonalStuffComponent } from './pages/user/personal-stuff/personal-stu
 import { CompetitionsComponent } from './pages/user/competitions/competitions.component';
 import { TrainingsComponent } from './pages/user/trainings/trainings.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
+import { PersonalTrainingModalComponent } from './Modals/AllModals/personal-training-modal/personal-training-modal.component';
 
 //import { NavbarComponent } from './navbar/navbar.component';
 
@@ -39,7 +40,8 @@ import {FullCalendarModule} from '@fullcalendar/angular';
     InvitationsComponent,
     PersonalStuffComponent,
     CompetitionsComponent,
-    TrainingsComponent
+    TrainingsComponent,
+    PersonalTrainingModalComponent
   ],
   imports: [
     BrowserModule,
