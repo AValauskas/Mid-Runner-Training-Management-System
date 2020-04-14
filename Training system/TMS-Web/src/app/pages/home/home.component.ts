@@ -1,33 +1,125 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
-import { EventInput, Calendar } from '@fullcalendar/core';  
+declare var $ :any;
+import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';  
+import { FullCalendarComponent } from '@fullcalendar/angular';  
+import { EventInput } from '@fullcalendar/core';  
 import dayGridPlugin from '@fullcalendar/daygrid';  
 import { ProcessService } from 'src/app/services/process/process.service';
 import { Router } from '@angular/router';
-import interactionPlugin from '@fullcalendar/interaction'
+import interactionPlugin from '@fullcalendar/interaction';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
-import * as bootstrap from "bootstrap";
-import { PersonalTrainingModalComponent } from 'src/app/Modals/AllModals/personal-training-modal/personal-training-modal.component';
 import listPlugin from '@fullcalendar/list';
+import { PersonalTrainingModalComponent } from 'src/app/Modals/AllModals/personal-training-modal/personal-training-modal.component';
 
-interface IPersonalTraining{
-  day:Date;
-  trainTemplateId:string;
-  athleteId:string;   
-  coachId:string;    
-  athleteReport:string;    
-  description:string;     
-  place:string;  
-  id:string;     
-}
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  //changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent implements OnInit {
+  //Calendar stuff
+  @ViewChild('calendar') calendarComponent: FullCalendarComponent; // the #calendar in the template  
+  private child: PersonalTrainingModalComponent;
+  calendarVisible = true;  
+  calendarWeekends = true;  
+  calendarPlugins = [dayGridPlugin, interactionPlugin, bootstrapPlugin, listPlugin];
 
+
+  calendarEvents: EventInput[] = [];  
+  trainings: IPersonalTraining[];  
+  ChosenTraining:IPersonalTraining;
+  ToDoInTraining:ITrainingTemplate;
+
+  constructor(private _http: ProcessService,public _router:Router) { }
+
+  
+  ngOnInit() {  
+   
+    this.HttpCall();  
+    
+  }  
+  
+    HttpCall(){ 
+        this._http.GetPersonalTrainings().subscribe(data=>{   
+          
+        this.trainings = data;
+        this.trainings.forEach(element => {
+          this.calendarEvents.push({ title: element.description, date: new Date(element.day), trainingId:element.id })
+          });
+          
+        });
+      
+    }
+
+    toggleVisible() {  
+      this.calendarVisible = !this.calendarVisible;  
+    }  
+
+    dateClick(model) {  
+      console.log(model);
+      this._http.GetPersonalTrainingByDate(model.dateStr).subscribe(data=>{   
+          this.ChosenTraining= data;
+          console.log(this.ChosenTraining);
+          this._http.GetTrainingTemplateById(this.ChosenTraining.trainTemplateId).subscribe(data2=>{   
+          this.ToDoInTraining=data2;
+          console.log(this.ToDoInTraining);
+            $('#myModal').modal("show");
+          });
+          
+      
+      });
+
+
+    }  
+
+
+   FindByDate(train, date) { 
+      return train.day === new Date(date);
+    }
+    
+
+
+
+
+
+
+
+
+  eventDragStop(model) {  
+    console.log(model);
+
+  }      
+  toggleWeekends() {  
+    this.calendarWeekends = !this.calendarWeekends;  
+  }  
+  eventClick(model) {  
+    console.log(model);
+   
+  }  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
   @ViewChild(PersonalTrainingModalComponent)
   private child: PersonalTrainingModalComponent;
 
@@ -86,7 +178,7 @@ export class HomeComponent implements OnInit {
       calendar.render();
 
   }
-
+*/
  
   
 

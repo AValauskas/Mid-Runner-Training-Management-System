@@ -110,6 +110,17 @@ namespace TMS
         }
 
 
+        [HttpGet("date/{date}")]
+        public async Task<IActionResult> GetPersonalTrainingByDate([FromRoute] string date)
+        {
+            var training = await trainingRepo.GetPersonalTrainingByDate(date);
+            if (training == null)
+            {
+                return NotFound();
+            }
+            return Ok(training);
+        }
+
         [Authorize(Roles = "Coach, Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTraining([FromRoute] string id)

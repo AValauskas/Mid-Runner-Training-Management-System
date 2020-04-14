@@ -14,7 +14,7 @@ export class ProcessService {
   private personalTraining = "personaltraining";
   
   constructor(public _router:Router, private httpserv: HttpService, private http: HttpClient) { }
-
+//-------------------TEMPLATES------------------------------
   GetTrainingTemplates()
   {
     const HeadersForProductAPI = new HttpHeaders({
@@ -33,6 +33,18 @@ export class ProcessService {
     return this.httpserv.requestCall(this.trainingTemplatesUrl,"Post",data,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
+  GetTrainingTemplateById(id)
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.trainingTemplatesUrl +"/"+id,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+
+
+
+  //---------------------PERSONAL-----------------------------------
   GetRecords()
   { 
     const HeadersForProductAPI = new HttpHeaders({
@@ -42,6 +54,10 @@ export class ProcessService {
     return this.httpserv.requestCall(this.personalManagement,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
+
+
+
+  //----------------------------INVITATIONS----------------------------
   GetInvitations()
   { 
     const HeadersForProductAPI = new HttpHeaders({
@@ -78,6 +94,9 @@ export class ProcessService {
     return this.httpserv.requestCall(this.personalManagement+"/invite","Patch",data,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
+
+
+  //-------------------------------------------PERSONALTRAININGS------------------------------------------------
   GetPersonalTrainings()
   {
     const HeadersForProductAPI = new HttpHeaders({
@@ -87,6 +106,14 @@ export class ProcessService {
     return this.httpserv.requestCall(this.personalTraining+"/athlete","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
+  GetPersonalTrainingByDate(data)
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalTraining+"/date/"+data,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
   private HandleError(errorResponse: HttpErrorResponse){
     if(errorResponse.status!=200){
       return "error";

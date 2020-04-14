@@ -55,7 +55,21 @@ namespace TMS
 
             return response;
         }
+        public async Task<PersonalTrainingEntity> GetPersonalTrainingByDate(string date)
+        {
+            var firstdateInDateTime = DateTime.Parse(date).AddHours(-4);
+            var LastdateInDateTime = DateTime.Parse(date).AddHours(4);
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var totalFirstTime = (long)(DateTime.SpecifyKind(firstdateInDateTime, DateTimeKind.Local).ToUniversalTime() - epoch).TotalMilliseconds;
+            var totalLastTime = (long)(DateTime.SpecifyKind(LastdateInDateTime, DateTimeKind.Local).ToUniversalTime() - epoch).TotalMilliseconds;
 
+            var filterBuilder = Builders<PersonalTrainingEntity>.Filter;
+            var filter = filterBuilder.Gt("day", totalFirstTime)& filterBuilder.Lt("day", totalLastTime);
+            var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
+            var response = await trainingRepo.FindOneAsync(filter);
+
+            return response;
+        }
 
         public async Task DeleteTraining(string id)
         {

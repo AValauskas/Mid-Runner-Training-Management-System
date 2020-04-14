@@ -20,6 +20,13 @@ import { CompetitionsComponent } from './pages/user/competitions/competitions.co
 import { TrainingsComponent } from './pages/user/trainings/trainings.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import { PersonalTrainingModalComponent } from './Modals/AllModals/personal-training-modal/personal-training-modal.component';
+import { CommonModule } from '@angular/common';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+
+
 
 //import { NavbarComponent } from './navbar/navbar.component';
 
@@ -44,12 +51,18 @@ import { PersonalTrainingModalComponent } from './Modals/AllModals/personal-trai
     PersonalTrainingModalComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
      HttpClientModule,
-     FullCalendarModule
-
+     FullCalendarModule,
+     NgbModalModule,
+     FlatpickrModule.forRoot(),
+     CalendarModule.forRoot({
+       provide: DateAdapter,
+       useFactory: adapterFactory,
+     }),
   ],
   providers: [],
   bootstrap: [AppComponent]

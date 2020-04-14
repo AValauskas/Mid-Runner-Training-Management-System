@@ -17,5 +17,6 @@ namespace TMS
         Task AddResults(string id, List<SetEntity> result);
         Task AddResultsAndReport(string id, Results result);
         Task<bool> CheckIfAthleteisAddedInChoosenDay(DateTime day, string AthleteId);
+        Task<PersonalTrainingEntity> GetPersonalTrainingByDate(string date);
     }
 }

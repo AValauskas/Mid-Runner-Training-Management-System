@@ -1,4 +1,4 @@
-export interface IPersonalTraining{
+interface IPersonalTraining{
     day:Date;
     trainTemplateId:string;
     athleteId:string;   
@@ -6,5 +6,13 @@ export interface IPersonalTraining{
     athleteReport:string;    
     description:string;     
     place:string;  
-    id:string;     
+    id:string;    
+    sets:Sets[];
+    
+  }
+
+  interface Sets{
+  distance:number;
+  pace:number;
+  rest:number;
   }
