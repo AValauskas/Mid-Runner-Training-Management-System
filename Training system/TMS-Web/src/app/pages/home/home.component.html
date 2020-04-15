@@ -22,11 +22,15 @@
                  
           <!-- Modal body -->
           <div class="modal-body">
-            <app-personal-training-modal 
+            <app-personal-training-modal *ngIf="Role==='Athlete'"
             [toDo]="ToDoInTraining"
             [personalTraining]="ChosenTraining"
-            
+            [exist]="exist"
             ></app-personal-training-modal>     
+            <app-coach-training-assign-modal *ngIf="Role==='Coach'"
+            [dateClicked]="dateClicked"
+            ></app-coach-training-assign-modal>
+
           </div>
          
       

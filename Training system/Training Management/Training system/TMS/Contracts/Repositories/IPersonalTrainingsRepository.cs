@@ -18,5 +18,6 @@ namespace TMS
         Task AddResultsAndReport(string id, Results result);
         Task<bool> CheckIfAthleteisAddedInChoosenDay(DateTime day, string AthleteId);
         Task<PersonalTrainingEntity> GetPersonalTrainingByDate(string date);
+        Task ClearResults(string id);
     }
 }

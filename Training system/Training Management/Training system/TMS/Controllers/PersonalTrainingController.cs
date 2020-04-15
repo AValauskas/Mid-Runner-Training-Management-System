@@ -114,10 +114,7 @@ namespace TMS
         public async Task<IActionResult> GetPersonalTrainingByDate([FromRoute] string date)
         {
             var training = await trainingRepo.GetPersonalTrainingByDate(date);
-            if (training == null)
-            {
-                return NotFound();
-            }
+            
             return Ok(training);
         }
 
@@ -171,10 +168,12 @@ namespace TMS
             }
             if (report.report==null && report.results != null)
             {
+                await trainingRepo.ClearResults(id);
                 await trainingRepo.AddResults(id, report.results);
             }
             else if (report.report != null && report.results != null)
             {
+                await trainingRepo.ClearResults(id);
                 await trainingRepo.AddResultsAndReport(id, report);
             }
             else if (report.report == null && report.results == null)

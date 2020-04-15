@@ -25,6 +25,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { CoachTrainingAssignModalComponent } from './Modals/AllModals/coach-training-assign-modal/coach-training-assign-modal.component';
 
 
 
@@ -48,7 +49,8 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     PersonalStuffComponent,
     CompetitionsComponent,
     TrainingsComponent,
-    PersonalTrainingModalComponent
+    PersonalTrainingModalComponent,
+    CoachTrainingAssignModalComponent
   ],
   imports: [
     CommonModule,

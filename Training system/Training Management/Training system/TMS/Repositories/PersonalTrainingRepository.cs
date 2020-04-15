@@ -101,7 +101,15 @@ namespace TMS
             await trainingRepo.UpdateOneAsync(x => x.Id == id, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
         }
 
-        
+        public async Task ClearResults(string id)
+        {
+            var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
+
+            var filter = Builders<PersonalTrainingEntity>.Update.Unset(x => x.Results);
+                
+            await trainingRepo.UpdateOneAsync(x => x.Id == id, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
+        }
+
         public async Task<bool> CheckIfAthleteisAddedInChoosenDay(DateTime day, string AthleteId)
         {
             var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);

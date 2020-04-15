@@ -1,3 +1,4 @@
+<div *ngIf="exist">
 <div  *ngIf="toDo" >
   <div> 
     <label >Summary</label>       
@@ -19,10 +20,8 @@
               <label for="descriptionTextArea">Rest in seconds</label>                   
             </div>
 
-        <div *ngFor="let set of toDo.sets; let i = index" name="sets">         
+        <div *ngFor="let set of toDo.sets; let i = index" name="sets">       
          
-
-
           <div class= "row" >
             <div class="input-field col s3" >
               <input type="number" step="0.01" class="form-control" [(ngModel)]="set.distance"  name="distance" readonly>
@@ -54,8 +53,11 @@
      <div class ="form-group ">    
       <label>Place: {{personalTraining.place}}</label>   
      </div>  
-     <div class ="form-group ">
-      <div *ngFor="let trainingtoAdd of trainingsToAdd; let i = index trackBy: trackBy" name="sets" >
+     <div class ="form-group " *ngIf="canFillForm">    
+      <label>Fill your training:</label>   
+     </div>  
+     <div class ="form-group " *ngIf="canFillForm">
+      <div *ngFor="let trainingtoAdd of trainingsToAdd; let i = index" name="sets" >
                   
         <div class ="form-group ">
         <div class= "row" >
@@ -75,16 +77,23 @@
           </div>
       </div>             
    </div>
-   <div class="form-group">
+   <div class="form-group" *ngIf="canFillForm">
     <button  class="btn btn-info" (click)="OnClick()">+</button>
     </div>
-     <div class="form-group">    
+     <div class="form-group" *ngIf="canFillForm">    
       <label for="descriptionTextArea">Athlete report</label>           
-     <textarea  type="text" class="form-control" [(ngModel)]="personalTraining.report" name="Report" > </textarea>
+     <textarea  type="text" class="form-control" [(ngModel)]="personalTraining.athleteReport" name="Report" > </textarea>
     </div> 
+    <div class="form-group">
+      <button [disabled]="!PersonalTrain.valid" class="btn btn-secondary" type="submit" (click)="OnSubmit()" *ngIf="canFillForm">Confirm</button>
+      </div>
   </form> 
    
 </div>
 
 
+</div>
+</div>
+<div *ngIf="!exist">
+YOU ARE FREE TODAY
 </div>

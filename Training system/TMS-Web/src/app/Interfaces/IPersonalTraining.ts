@@ -1,4 +1,4 @@
-interface IPersonalTraining{
+export interface IPersonalTraining{
     day:Date;
     trainTemplateId:string;
     athleteId:string;   

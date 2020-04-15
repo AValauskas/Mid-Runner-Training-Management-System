@@ -17,5 +17,6 @@ namespace TMS
         Task<ConsumerEntity> FindConsumerById(string id);
         Task AceptInvitation(string coachId, string AthleteId);
         Task DeleteInvitation(string receiverId, string senderId);
+        
     }
 }

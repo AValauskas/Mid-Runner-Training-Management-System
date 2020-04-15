@@ -154,5 +154,17 @@ namespace TMS
             return Ok(invites);
         }
 
+        ////----------PersonalTraining--------------
+        [Authorize(Roles = "Coach")]
+        [HttpGet("athleteList/{date}")]
+        public async Task<IActionResult> GetAthletesWhoAreStillWithoutTrain([FromRoute] string date)
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idAthlete = cla[1].Value;
+            var athletes = await personalManagementService.GetAthletes(idAthlete, date);
+            return Ok(athletes);
+        }
+
     }
 }

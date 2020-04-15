@@ -14,7 +14,7 @@ export class ProcessService {
   private personalTraining = "personaltraining";
   
   constructor(public _router:Router, private httpserv: HttpService, private http: HttpClient) { }
-//-------------------TEMPLATES------------------------------
+//-------------------Training TEMPLATES------------------------------
   GetTrainingTemplates()
   {
     const HeadersForProductAPI = new HttpHeaders({
@@ -54,7 +54,14 @@ export class ProcessService {
     return this.httpserv.requestCall(this.personalManagement,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
-
+  GetAthletesWhichStillFree(date)
+  { 
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/athleteList/"+date,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
 
 
   //----------------------------INVITATIONS----------------------------
@@ -119,4 +126,23 @@ export class ProcessService {
       return "error";
     }  
   }
+
+  UpdatePersonalTrainingByAthlete(record, id)
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalTraining+"/results/"+ id,"Patch",record,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+
+  GetAllCoachAssignedTrainings()
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalTraining+"/coach","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+
 }

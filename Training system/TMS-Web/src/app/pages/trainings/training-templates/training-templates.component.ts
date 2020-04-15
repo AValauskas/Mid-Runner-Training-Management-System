@@ -1,15 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProcessService } from 'src/app/services/process/process.service';
-
-interface ITrainingTemplate{
-  description:string;
-  trainingtype:string;
-  destinition:number;    
-  repeats:number;  
-  personal:boolean;
-  sets:any;  
-}
+import { ITrainingTemplate } from '../../../Interfaces/ITrainingTemplate';
 
 
 @Component({
