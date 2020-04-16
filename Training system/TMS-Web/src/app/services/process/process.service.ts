@@ -42,7 +42,23 @@ export class ProcessService {
     return this.httpserv.requestCall(this.trainingTemplatesUrl +"/"+id,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
+  GetTrainingTemplatesIncludedPersonal()
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.trainingTemplatesUrl+"/allTrainings","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
 
+  GetTrainingsByType(type)
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.trainingTemplatesUrl+"/TrainingsByType/"+ type,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
 
   //---------------------PERSONAL-----------------------------------
   GetRecords()
@@ -121,12 +137,27 @@ export class ProcessService {
     })    
     return this.httpserv.requestCall(this.personalTraining+"/date/"+data,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
-  private HandleError(errorResponse: HttpErrorResponse){
-    if(errorResponse.status!=200){
-      return "error";
-    }  
+  GetPersonalTrainingsBusy()
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalTraining+"/countByBusy","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
+  InsertPersonalTraining(data)
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalTraining,"Post",data,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+
+
+
+  
   UpdatePersonalTrainingByAthlete(record, id)
   {
     const HeadersForProductAPI = new HttpHeaders({
@@ -145,4 +176,18 @@ export class ProcessService {
     return this.httpserv.requestCall(this.personalTraining+"/coach","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
+
+
+  private HandleError(errorResponse: HttpErrorResponse){
+    if(errorResponse.status!=200){
+      return "error";
+    }  
+  }
+
+
+
 }
+
+
+
+

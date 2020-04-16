@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace TMS
 {
-    public interface IPersonalTrainingService
+    public interface IAggregateRepository
     {
-        Task ProcessPersonalTraining(PersonalTraining training);
+        Task<List<CoachAssignedTrains>> GetCoachAssignedTrainingsCount(string coachId);
     }
 }

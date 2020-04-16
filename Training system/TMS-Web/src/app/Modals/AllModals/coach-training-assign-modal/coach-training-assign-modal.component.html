@@ -1,3 +1,50 @@
 <div *ngIf="!canFillForm">
     The date has passed
     </div>
+<div *ngIf="canFillForm">
+    <div>
+    <label>Choose training type</label>
+        <select [ngModel]="selectedType" (ngModelChange)="onChangeType($event)" name="typeChoose">
+            <option value=5e5900f597e81d0001a5cdec>Speed</option>
+            <option value="5e59010597e81d0001a5cded">Speed endurance</option>
+            <option value="5e59011297e81d0001a5cdee">Speed endurance II</option>
+            <option value="5e59021997e81d0001a5cdef">Tempo</option>
+            <option value="5e7f4732076ce700012eb97a">Exerciseses on the stairs</option>
+            <option value="5e7f47bd076ce700012eb97c">run on the stairs</option>
+            <option value="5e7f4764076ce700012eb97b">Cross</option>
+            <option value="5e7f4a96076ce700012eb97d">limbering-up</option>
+        </select>
+    </div>
+    <div *ngIf="selectedType!=''&& trainingsCount>0">
+        <form #PersonalTrain="ngForm" class="" >
+            <div class="form-group">    
+              <label for="descriptionTextArea">Description</label>           
+             <textarea  type="text" class="form-control" [(ngModel)]="Description" name="description" required > </textarea>
+            </div>  
+            <div class="form-group">    
+                <label>Choose training</label>
+                <select [ngModel]="selectedTraining" (ngModelChange)="onChangeTraining($event)" name="trainingChoose" required>
+                    <option [ngValue]="i" *ngFor="let i of Trainings">{{i.toDisplay}}</option>
+                </select>
+            </div>
+            <div class="form-group">    
+                <label>Choose Athletes</label>
+                <select [(ngModel)]="selectAthletes"  name="athleteChoose" multiple required>
+                    <option  [ngValue]="i" *ngFor="let i of Athletes">{{i.name}} {{i.surname}}</option>
+                    </select>
+            </div>
+            <div class ="form-group ">
+                <label class="radio-inline">
+                  <input type="radio" name="optradio" [(ngModel)]="Place" id="Inside" value="Inside" checked>Inside
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="optradio"  [(ngModel)]="Place" id="Outside" value="Outside">Outside
+                </label>   
+            </div>
+            <div class="form-group">
+                <button [disabled]="!PersonalTrain.valid" class="btn btn-secondary" type="submit" (click)="OnSubmit()">Confirm</button>
+                </div>
+        </form>
+    </div>
+</div>
+     

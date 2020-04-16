@@ -27,5 +27,8 @@ namespace TMS
         public string Owner { get; set; }
         [Field("personal")]
         public bool IsPersonal { get; set; }
+        [Field("description_to_display")]
+        public string ToDisplay { get; set; }
+
     }
 }

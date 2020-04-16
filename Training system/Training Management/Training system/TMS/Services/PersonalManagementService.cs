@@ -134,20 +134,18 @@ namespace TMS
             return invites;
         }
 
-
         public async Task<List<PersonInfo>> GetAthletes(string idCoach, string date)
         {
             var trainDate = DateTime.Parse(date);
             var trainDateStart = trainDate.AddHours(-4);
-            var trainDateEnd = trainDate.AddHours(4);
             List<PersonInfo> athletes = new List<PersonInfo>();
             var consumer = await ConsumerRepository.FindConsumerById(idCoach);            
             foreach (var athleteId in consumer.Athletes)
-            {
-                var athlete = await ConsumerRepository.FindConsumerById(athleteId);
+            {             
                 var isAdded = await PersonalTrainingsRepository.CheckIfAthleteisAddedInChoosenDay(trainDate, athleteId);
                 if (!isAdded)
                 {
+                    var athlete = await ConsumerRepository.FindConsumerById(athleteId);
                     athletes.Add(new PersonInfo()
                     {
                         Name = athlete.Name,

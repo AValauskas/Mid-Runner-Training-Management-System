@@ -19,6 +19,12 @@ namespace TMS
             await PersonalTrainingRepo.InsertOneAsync(personalTraining);
         }
 
+        public async Task InsertManyPersonalTrainings(List<PersonalTrainingEntity> personalTrainings)
+        {
+            var PersonalTrainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
+            await PersonalTrainingRepo.InsertManyAsync(personalTrainings);
+        }
+
         public async Task<List<PersonalTrainingEntity>> GetAllPersonalTrainings()
         {
             var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
@@ -57,8 +63,8 @@ namespace TMS
         }
         public async Task<PersonalTrainingEntity> GetPersonalTrainingByDate(string date)
         {
-            var firstdateInDateTime = DateTime.Parse(date).AddHours(-4);
-            var LastdateInDateTime = DateTime.Parse(date).AddHours(4);
+            var firstdateInDateTime = DateTime.Parse(date).AddHours(-6);
+            var LastdateInDateTime = DateTime.Parse(date).AddHours(6);
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var totalFirstTime = (long)(DateTime.SpecifyKind(firstdateInDateTime, DateTimeKind.Local).ToUniversalTime() - epoch).TotalMilliseconds;
             var totalLastTime = (long)(DateTime.SpecifyKind(LastdateInDateTime, DateTimeKind.Local).ToUniversalTime() - epoch).TotalMilliseconds;
@@ -112,13 +118,20 @@ namespace TMS
 
         public async Task<bool> CheckIfAthleteisAddedInChoosenDay(DateTime day, string AthleteId)
         {
+            var dayStart = day.AddHours(-6);
+            var dayEnd = day.AddHours(6);
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var totalFirstTime = (long)(DateTime.SpecifyKind(dayStart, DateTimeKind.Local).ToUniversalTime() - epoch).TotalMilliseconds;
+            var totalSecondTime = (long)(DateTime.SpecifyKind(dayEnd, DateTimeKind.Local).ToUniversalTime() - epoch).TotalMilliseconds;
             var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
 
             var filterBuilder = Builders<PersonalTrainingEntity>.Filter;
-            var subFilter = filterBuilder.Eq("athlete", ObjectId.Parse(AthleteId));
-            var filter = filterBuilder.Eq(x=>x.Day, day);
 
-            var response = await trainingRepo.FindAsync(x => true, new DatabaseFindOptions());
+            var filter = filterBuilder.Gte(x => x.Day, dayStart) &
+                filterBuilder.Lte(x=>x.Day, dayEnd) 
+                & filterBuilder.Eq("athlete", ObjectId.Parse(AthleteId));
+
+            var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions());
 
             if (response.Items.Count !=0)
             {

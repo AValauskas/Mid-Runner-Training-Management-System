@@ -14,19 +14,28 @@ namespace TMS
     public class PersonalTrainingController : ControllerBase
     {
         private readonly IPersonalTrainingsRepository trainingRepo;
+        private readonly IAggregateRepository aggregateRepo;
         private readonly ITrainingService trainingService;
+        private readonly IPersonalTrainingService personalTrainingService;
         public PersonalTrainingController()
         {
+            aggregateRepo = new AggregateRepository();
             trainingRepo = new PersonalTrainingRepository();
             trainingService = new TrainingService()
             {
-                PersonalTrainingsRepository = new PersonalTrainingRepository()
+                PersonalTrainingsRepository = new PersonalTrainingRepository(),
+                TrainingRepo= new TrainingsRepository()
+                
+            };
+            personalTrainingService = new PersonalTrainingService()
+            {
+                PersonalTrainingRepo = trainingRepo
             };
         }
 
         [Authorize(Roles = "Coach")]
         [HttpPost]
-        public async Task<IActionResult> CreatePersonalTraining([FromBody] PersonalTrainingEntity training)
+        public async Task<IActionResult> CreatePersonalTraining([FromBody] PersonalTraining training)
         {
             var claims = User.Claims;
             var cla = claims.ToList();
@@ -34,14 +43,14 @@ namespace TMS
             training.CoachId = idCoach;
             training.Day = training.Day.AddHours(2);
 
-            if (await trainingRepo.CheckIfAthleteisAddedInChoosenDay(training.Day, training.AthleteId))
-            {
-                return BadRequest("Athlete in choosen day already have one training");
-            }            
+            /*     if (await trainingRepo.CheckIfAthleteisAddedInChoosenDay(training.Day, training.AthleteIds))
+                 {
+                     return BadRequest("Athlete in choosen day already have one training");
+                 }       */
 
-            await trainingRepo.InsertPersonalTraining(training);
+            await personalTrainingService.ProcessPersonalTraining(training);
 
-            return Ok(training);
+            return Ok();
         }
         [Authorize(Roles = "Athlete")]
         [HttpGet("athlete")]
@@ -60,6 +69,16 @@ namespace TMS
             return Ok(training);
         }
 
+        [Authorize(Roles = "Coach")]
+        [HttpGet("countByBusy")]
+        public async Task<IActionResult> GetPersonalTrainingsCountByCoach()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idCoach = cla[1].Value;
+            var busyTrains = await aggregateRepo.GetCoachAssignedTrainingsCount(idCoach);
+            return Ok(busyTrains);
+        }
 
 
         [Authorize(Roles = "Coach")]
@@ -69,8 +88,6 @@ namespace TMS
             var claims = User.Claims;
             var cla = claims.ToList();
             var idCoach= cla[1].Value;
-
-
             var training = await trainingRepo.GetAllPersonalTrainingsCoach(idCoach);
             if (training == null)
             {

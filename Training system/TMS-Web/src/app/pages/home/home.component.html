@@ -29,6 +29,7 @@
             ></app-personal-training-modal>     
             <app-coach-training-assign-modal *ngIf="Role==='Coach'"
             [dateClicked]="dateClicked"
+            (renewTrainings)="renewTrainings()"
             ></app-coach-training-assign-modal>
 
           </div>

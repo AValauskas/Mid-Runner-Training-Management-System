@@ -22,7 +22,8 @@ namespace TMS
             ConsumerRepository = new ConsumerRepository();
             personalManagementService = new PersonalManagementService()
             {
-                ConsumerRepository = new ConsumerRepository()
+                ConsumerRepository = new ConsumerRepository(),
+                PersonalTrainingsRepository= new PersonalTrainingRepository()               
             };
         }
 

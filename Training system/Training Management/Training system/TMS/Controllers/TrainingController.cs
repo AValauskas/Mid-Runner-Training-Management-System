@@ -61,6 +61,41 @@ namespace TMS
             }
             return Ok(training);
         }
+
+        [Authorize(Roles = "Coach")]
+        [HttpGet("allTrainings")]
+        public async Task<IActionResult> GetAllTrainingsIncludedPersonal()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idCoach = cla[1].Value;
+
+            var training = await trainingRepo.GetAllTrainingsIncludedPersonal(idCoach);
+
+            if (training == null)
+            {
+                return NotFound();
+            }
+            return Ok(training);
+        }
+
+        [Authorize(Roles = "Coach")]
+        [HttpGet("TrainingsByType/{date}")]
+        public async Task<IActionResult> GetTrainingsByTaxonomy([FromRoute] string date)
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idCoach = cla[1].Value;
+
+            var training = await trainingRepo.GetTrainingsByType(date, idCoach);
+
+            if (training == null)
+            {
+                return NotFound();
+            }
+            return Ok(training);
+        }
+
         [Authorize(Roles = "Coach, Admin")]
         [HttpGet("personalTrainings")]
         public async Task<IActionResult> GetPersonalTrainings()

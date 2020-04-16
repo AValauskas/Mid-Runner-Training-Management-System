@@ -12,6 +12,7 @@ import { PersonalTrainingModalComponent } from 'src/app/Modals/AllModals/persona
 import { IPersonalTraining } from '../../Interfaces/IPersonalTraining';
 import { ITrainingTemplate } from '../../Interfaces/ITrainingTemplate';
 import { ThrowStmt } from '@angular/compiler';
+import { ITrainingDefinition } from 'src/app/Interfaces/ITrainingDefinition';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class HomeComponent implements OnInit {
  
   CoachAssignedTrainings: IPersonalTraining[];
   dateClicked:string;
+  CoachBusy: ITrainingDefinition[];
  
 
 
@@ -61,19 +63,24 @@ export class HomeComponent implements OnInit {
           
         this.trainings = data;
         this.trainings.forEach(element => {
-          this.calendarEvents.push({ title: element.description, date: new Date(element.day), trainingId:element.id })
+          this.calendarEvents.push({ title: element.description, date: new Date(element.day)})
           });          
         });      
     }
 
     HttpCallCoach(){ 
+      this._http.GetPersonalTrainingsBusy().subscribe(data=>{   
+        this.CoachBusy = data;    
+        this.CoachBusy.forEach(element => {
+          this.calendarEvents.push({ title: element.description, date: new Date(element.day) })
+          });   
+      });
+     
+     
       this._http.GetAllCoachAssignedTrainings().subscribe(data=>{   
         
-      this.CoachAssignedTrainings = data;
-      
-      this.CoachAssignedTrainings.forEach(element => {
-        this.calendarEvents.push({ title: element.description, date: new Date(element.day), trainingId:element.id })
-        });          
+      this.CoachAssignedTrainings = data;     
+            
       });      
   }
 //---------------------------------Clicks-------------------------------------
@@ -116,15 +123,27 @@ export class HomeComponent implements OnInit {
 
     CoachDateClick(model){
       this.dateClicked =model.dateStr;
-      this._http.GetAthletesWhichStillFree(model.dateStr).subscribe(data=>{   
-      console.log(data);
+      console.log(this.dateClicked);
+    //  this._http.GetAthletesWhichStillFree(model.dateStr).subscribe(data=>{   
+     // console.log(data);
 
-        $('#myModal').modal("show");
-      });
-      
+       
+    //  });
+      $('#myModal').modal("show");
 
     }
-
+    renewTrainings()
+    {
+      this._http.GetAllCoachAssignedTrainings().subscribe(data=>{   
+        this.calendarEvents = []
+        this.CoachAssignedTrainings = data;
+        
+        this.CoachAssignedTrainings.forEach(element => {
+          this.calendarEvents.push({ title: element.description, date: new Date(element.day), trainingId:element.id })
+          });          
+        }); 
+      console.log("atejo");
+    }
 
 
 
