@@ -5,7 +5,7 @@
    [events]="calendarEvents"  
 
   (dateClick)="dateClick($event)"
-  (eventDragStop)="eventDragStop($event)"  
+  
   [plugins]="calendarPlugins" 
   (eventClick)="eventClick($event)"  
  ></full-calendar>  
@@ -18,7 +18,17 @@
     <div class="modal" id="myModal">
       <div class="modal-dialog">
         <div class="modal-content">
-        
+
+          <div class="card-tabs" *ngIf="Role==='Coach'">
+            <ul class="nav nav-pills nav-fill color" >
+              <li class="nav-item">
+                <a class="nav-link" [ngClass]="{'active': ListActive }" (click)="ChangeActive('athletes')" >Athletes</a>
+              </li>
+              <li class="nav-item" >
+                <a  class="nav-link" [ngClass]="{'active': TrainingFormActive}" (click)="ChangeActive('train')">Trainings</a>
+              </li>
+            </ul>
+          </div>
                  
           <!-- Modal body -->
           <div class="modal-body">
@@ -27,10 +37,16 @@
             [personalTraining]="ChosenTraining"
             [exist]="exist"
             ></app-personal-training-modal>     
-            <app-coach-training-assign-modal *ngIf="Role==='Coach'"
+            <app-coach-training-assign-modal *ngIf="Role==='Coach' && TrainingFormActive"
             [dateClicked]="dateClicked"
             (renewTrainings)="renewTrainings()"
             ></app-coach-training-assign-modal>
+
+            <app-athlete-list *ngIf="Role==='Coach' && ListActive"
+            [dateClicked]="dateClicked"
+            (renewTrainings)="renewTrainings()"
+            >           
+            </app-athlete-list>
 
           </div>
          

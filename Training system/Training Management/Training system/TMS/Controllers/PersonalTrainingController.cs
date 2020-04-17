@@ -32,7 +32,7 @@ namespace TMS
                 PersonalTrainingRepo = trainingRepo
             };
         }
-
+        //NAUDOJAMA
         [Authorize(Roles = "Coach")]
         [HttpPost]
         public async Task<IActionResult> CreatePersonalTraining([FromBody] PersonalTraining training)
@@ -43,15 +43,11 @@ namespace TMS
             training.CoachId = idCoach;
             training.Day = training.Day.AddHours(2);
 
-            /*     if (await trainingRepo.CheckIfAthleteisAddedInChoosenDay(training.Day, training.AthleteIds))
-                 {
-                     return BadRequest("Athlete in choosen day already have one training");
-                 }       */
-
             await personalTrainingService.ProcessPersonalTraining(training);
 
             return Ok();
         }
+        //naudojama norint gauti asmenines treniruotes atletui ir jas atvaizduoti
         [Authorize(Roles = "Athlete")]
         [HttpGet("athlete")]
         public async Task<IActionResult> GetPersonalTrainingsByAthlete()
@@ -71,6 +67,7 @@ namespace TMS
 
         [Authorize(Roles = "Coach")]
         [HttpGet("countByBusy")]
+        //gaunama dienos ir atvaizduojama kiek atletų iš kiek atitinkamą dieną jau yra užimti
         public async Task<IActionResult> GetPersonalTrainingsCountByCoach()
         {
             var claims = User.Claims;
@@ -80,10 +77,26 @@ namespace TMS
             return Ok(busyTrains);
         }
 
+        [Authorize(Roles = "Coach")]
+        [HttpGet("coach/{date}")]
+        public async Task<IActionResult> GetPersonalAssignedPersonalTrainingsByCoach([FromRoute] string date)
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idCoach = cla[1].Value;
+            var training = await aggregateRepo.TrainingsWhichAssignedByDate(date, idCoach);
+            if (training == null)
+            {
+                return NotFound();
+            }
+            return Ok(training);
+        }
+
 
         [Authorize(Roles = "Coach")]
         [HttpGet("coach")]
-        public async Task<IActionResult> GetPersonalTrainingsByCoach()
+
+        public async Task<IActionResult> GetPersonalTrainingsWhicAlreadyGiven()
         {
             var claims = User.Claims;
             var cla = claims.ToList();
@@ -130,7 +143,11 @@ namespace TMS
         [HttpGet("date/{date}")]
         public async Task<IActionResult> GetPersonalTrainingByDate([FromRoute] string date)
         {
-            var training = await trainingRepo.GetPersonalTrainingByDate(date);
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idAthlete = cla[1].Value;
+
+            var training = await trainingRepo.GetPersonalTrainingByDate(date, idAthlete);
             
             return Ok(training);
         }

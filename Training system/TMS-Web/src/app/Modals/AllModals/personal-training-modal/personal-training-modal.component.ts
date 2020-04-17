@@ -32,6 +32,10 @@ export class PersonalTrainingModalComponent implements OnInit {
 
 
   ngOnChanges() {
+  if(typeof this.personalTraining !== 'undefined'){
+    this.trainingsToAdd =this.personalTraining.results
+    console.log(this.trainingsToAdd)
+  }
     if(this.exist){      
       var dateTraining=new Date(this.personalTraining.day)
     if(dateTraining.getTime() <= Date.now() )
@@ -70,7 +74,7 @@ export class PersonalTrainingModalComponent implements OnInit {
     this.athleteForm.report=this.personalTraining.athleteReport;
     this.athleteForm.results = this.trainingsToAdd;
     console.log(this.athleteForm);
-    this._http.UpdatePersonalTrainingByAthlete(this.athleteForm, this.personalTraining.id).subscribe(data=>{   
+    this._http.UpdatePersonalTrainingResults(this.athleteForm, this.personalTraining.id).subscribe(data=>{   
       console.log(data);      
     })
     $('#myModal').modal("hide");

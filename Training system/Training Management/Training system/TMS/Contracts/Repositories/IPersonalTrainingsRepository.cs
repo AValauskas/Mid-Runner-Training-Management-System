@@ -11,13 +11,14 @@ namespace TMS
         Task<List<PersonalTrainingEntity>> GetAllPersonalTrainings();
         Task<List<PersonalTrainingEntity>> GetAllPersonalTrainingsCoach(string coach);
         Task<List<PersonalTrainingEntity>> GetAllPersonalTrainingsAthlete(string coach);
+        Task<List<PersonalTrainingEntity>> GetAssignedTrainingsByDate(string date, string coach);
         Task<PersonalTrainingEntity> GetPersonalTrainingByID(string id);
         Task DeleteTraining(string id);
         Task AddReportFromAthlete(string id, string report);
         Task AddResults(string id, List<SetEntity> result);
         Task AddResultsAndReport(string id, Results result);
         Task<bool> CheckIfAthleteisAddedInChoosenDay(DateTime day, string AthleteId);
-        Task<PersonalTrainingEntity> GetPersonalTrainingByDate(string date);
+        Task<PersonalTrainingEntity> GetPersonalTrainingByDate(string date, string athlete);
         Task ClearResults(string id);
         Task InsertManyPersonalTrainings(List<PersonalTrainingEntity> personalTrainings);
     }

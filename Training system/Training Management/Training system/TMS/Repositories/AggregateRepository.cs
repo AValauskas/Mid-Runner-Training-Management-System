@@ -24,5 +24,28 @@ namespace TMS
             return trains;
         }
 
+
+        public async Task<List<TrainingsWhichAreAssignedByDate>> TrainingsWhichAssignedByDate(string date, string coachId)
+        {
+            var startTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            var dateFromDate = DateTime.Parse(date).AddHours(-5);
+            var dateToDate = DateTime.Parse(date).AddHours(5);
+            var dateFromFloat = dateFromDate.Subtract(startTime).TotalMilliseconds;
+            var dateToFloat = dateToDate.Subtract(startTime).TotalMilliseconds;
+
+            var service = new CodeMashRepository<PersonalTrainingEntity>(Client);
+            var trains = await service.AggregateAsync<TrainingsWhichAreAssignedByDate>(Guid.Parse("f19360c6-20c9-444b-8c5f-3073b7bf573b"), new AggregateOptions
+            {
+                Tokens = new Dictionary<string, string>()
+                {
+                       { "id", coachId },
+                       { "dateFrom", dateFromFloat.ToString() },
+                       { "dateTo", dateToFloat.ToString() },
+                }
+            });
+
+            return trains;
+        }
     }
 }

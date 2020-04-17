@@ -8,5 +8,6 @@ namespace TMS
     public interface IAggregateRepository
     {
         Task<List<CoachAssignedTrains>> GetCoachAssignedTrainingsCount(string coachId);
+        Task<List<TrainingsWhichAreAssignedByDate>> TrainingsWhichAssignedByDate(string date, string coachId);
     }
 }

@@ -26,6 +26,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CoachTrainingAssignModalComponent } from './Modals/AllModals/coach-training-assign-modal/coach-training-assign-modal.component';
+import { AthleteListComponent } from './Modals/AllModals/athlete-list/athlete-list.component';
 
 
 
@@ -50,7 +51,8 @@ import { CoachTrainingAssignModalComponent } from './Modals/AllModals/coach-trai
     CompetitionsComponent,
     TrainingsComponent,
     PersonalTrainingModalComponent,
-    CoachTrainingAssignModalComponent
+    CoachTrainingAssignModalComponent,
+    AthleteListComponent
   ],
   imports: [
     CommonModule,

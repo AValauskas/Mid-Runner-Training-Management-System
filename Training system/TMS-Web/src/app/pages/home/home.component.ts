@@ -32,6 +32,8 @@ export class HomeComponent implements OnInit {
   calendarPlugins = [dayGridPlugin, interactionPlugin, bootstrapPlugin, listPlugin];
   Role: string;
   calendarEvents: EventInput[] = [];  
+  ListActive= false;
+  TrainingFormActive= true;
 
 
   //----------Athlete
@@ -124,68 +126,41 @@ export class HomeComponent implements OnInit {
     CoachDateClick(model){
       this.dateClicked =model.dateStr;
       console.log(this.dateClicked);
-    //  this._http.GetAthletesWhichStillFree(model.dateStr).subscribe(data=>{   
-     // console.log(data);
-
-       
-    //  });
       $('#myModal').modal("show");
 
     }
+    
     renewTrainings()
     {
       this._http.GetAllCoachAssignedTrainings().subscribe(data=>{   
         this.calendarEvents = []
         this.CoachAssignedTrainings = data;
         
-        this.CoachAssignedTrainings.forEach(element => {
-          this.calendarEvents.push({ title: element.description, date: new Date(element.day), trainingId:element.id })
-          });          
+        this._http.GetPersonalTrainingsBusy().subscribe(data2=>{   
+          this.CoachBusy = data2;    
+          this.CoachBusy.forEach(element => {
+            this.calendarEvents.push({ title: element.description, date: new Date(element.day) })
+            });   
+        });        
         }); 
       console.log("atejo");
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    ChangeActive(data)
+    {
+        if(data== "train")
+        {
+          this.TrainingFormActive= true;
+          this.ListActive = false;
+        }
+        if(data== "athletes"){
+          this.TrainingFormActive= false;
+          this.ListActive = true;
+        }
+    }
 
    FindByDate(train, date) { 
       return train.day === new Date(date);
     }
     
-
-
-
-
-
-
-
-
-
-
-    toggleVisible() {  
-      this.calendarVisible = !this.calendarVisible;  
-    }  
-
-  eventDragStop(model) {  
-    console.log(model);
-
-  }      
-  toggleWeekends() {  
-    this.calendarWeekends = !this.calendarWeekends;  
-  }  
- 
 }

@@ -8,7 +8,8 @@ export interface IPersonalTraining{
     place:string;  
     id:string;    
     sets:Sets[];
-    
+    definition:string;
+    results:Sets[];
   }
 
   interface Sets{

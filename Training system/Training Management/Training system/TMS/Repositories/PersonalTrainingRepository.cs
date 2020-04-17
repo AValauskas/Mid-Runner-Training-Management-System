@@ -42,6 +42,25 @@ namespace TMS
 
             return response.Items;
         }
+
+        public async Task<List<PersonalTrainingEntity>> GetAssignedTrainingsByDate(string date, string coach)
+        {
+            var firstdateInDateTime = DateTime.Parse(date).AddHours(-6);
+            var LastdateInDateTime = DateTime.Parse(date).AddHours(6);
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var totalFirstTime = (long)(DateTime.SpecifyKind(firstdateInDateTime, DateTimeKind.Local).ToUniversalTime() - epoch).TotalMilliseconds;
+            var totalLastTime = (long)(DateTime.SpecifyKind(LastdateInDateTime, DateTimeKind.Local).ToUniversalTime() - epoch).TotalMilliseconds;
+
+            var filterBuilder = Builders<PersonalTrainingEntity>.Filter;
+            var filter = filterBuilder.Gt("day", totalFirstTime)
+                & filterBuilder.Lt("day", totalLastTime)
+                & filterBuilder.Eq("coach", ObjectId.Parse(coach));
+
+            var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
+            var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions(){});
+
+            return response.Items;
+        }
         public async Task<List<PersonalTrainingEntity>> GetAllPersonalTrainingsAthlete(string athlete)
         {
             var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
@@ -61,7 +80,7 @@ namespace TMS
 
             return response;
         }
-        public async Task<PersonalTrainingEntity> GetPersonalTrainingByDate(string date)
+        public async Task<PersonalTrainingEntity> GetPersonalTrainingByDate(string date, string athlete)
         {
             var firstdateInDateTime = DateTime.Parse(date).AddHours(-6);
             var LastdateInDateTime = DateTime.Parse(date).AddHours(6);
@@ -70,7 +89,10 @@ namespace TMS
             var totalLastTime = (long)(DateTime.SpecifyKind(LastdateInDateTime, DateTimeKind.Local).ToUniversalTime() - epoch).TotalMilliseconds;
 
             var filterBuilder = Builders<PersonalTrainingEntity>.Filter;
-            var filter = filterBuilder.Gt("day", totalFirstTime)& filterBuilder.Lt("day", totalLastTime);
+            var filter = filterBuilder.Gt("day", totalFirstTime)
+                & filterBuilder.Lt("day", totalLastTime)
+                & filterBuilder.Eq("athlete", ObjectId.Parse(athlete));
+
             var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
             var response = await trainingRepo.FindOneAsync(filter);
 
