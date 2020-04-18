@@ -60,6 +60,24 @@ export class ProcessService {
     return this.httpserv.requestCall(this.trainingTemplatesUrl+"/TrainingsByType/"+ type,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
 
+  DeleteTrainingTemplate(id)
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.trainingTemplatesUrl+"/"+ id,"Delete",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+  UpdateTrainingTemplate(data)
+  {   
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.trainingTemplatesUrl,"Put",data,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+
+
   //---------------------PERSONAL-----------------------------------
   GetRecords()
   { 

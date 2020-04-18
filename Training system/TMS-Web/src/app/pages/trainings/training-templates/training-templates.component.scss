@@ -1,0 +1,78 @@
+html, body {
+    height: 93vh;
+    background-color: grey;;
+}
+
+.btn-new {
+    background-color: #2A3F54;
+}
+div.back
+{
+    height:93vh;
+    background-color: grey;
+
+}
+
+div.left{
+    margin-top: 15%;
+    width:25%;
+    margin-left: 25px;
+    float:left;
+  
+  }
+ 
+  div.right{
+    margin-left:1%;
+    width:72%;
+    height:100%;
+    background-color: khaki;
+  }
+
+div.description
+{
+    //background: #ffdad8;
+    margin-top: -30%;
+    height: 10%;
+    background-color: khaki;
+    border-radius: 15px;
+  //  margin-left: 5%;
+    
+}
+div.times
+{
+    //background: #ffdad8;
+    margin-top: 5%;
+    height: 10%;
+    background-color: khaki;
+    border-radius: 15px;
+  //  margin-left: 5%;
+    
+}
+
+
+select.type
+{
+    font-family: "Arial Black", Gadget, sans-serif;
+    color: white;
+    border-radius: 7px;
+    height:5%;
+    margin-top: 2%;
+    margin-left: 2%;
+    background-color: rgb(59, 59, 59);
+}
+
+button.newTrain
+{
+    font-family: "Arial Black", Gadget, sans-serif;
+    color: white;
+    height:5%;
+    background-color: rgb(59, 59, 59);
+    margin-top: 2%;
+    margin-right: 10%;    
+}
+div.trainings
+{
+    margin-top: 5%;
+    overflow-y: scroll; 
+    height:600px;
+}

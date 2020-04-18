@@ -40,7 +40,7 @@ namespace TMS
             var filterBuilder = Builders<TrainingEntity>.Filter;
             var filter = filterBuilder.Eq("owner", ObjectId.Parse(owner)) | filterBuilder.Eq(x=>x.IsPersonal, false);
 
-            var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions() { IncludeTermNames = true }) ;
+            var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions() {  }) ;
 
             return response.Items;
         }

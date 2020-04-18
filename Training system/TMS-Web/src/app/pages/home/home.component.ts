@@ -74,7 +74,22 @@ export class HomeComponent implements OnInit {
       this._http.GetPersonalTrainingsBusy().subscribe(data=>{   
         this.CoachBusy = data;    
         this.CoachBusy.forEach(element => {
-          this.calendarEvents.push({ title: element.description, date: new Date(element.day) })
+          var splitted = element.description.split("/", 3); 
+          var eventColor="blue";
+          var firstNum = Number(splitted[0]);
+          var secondNum = Number(splitted[1]);
+          console.log(firstNum);
+          console.log(secondNum);
+          console.log(firstNum/secondNum);
+          if((firstNum/secondNum)>=0.75)
+          {eventColor="green"}
+          else if ((firstNum/secondNum)>=0.5)
+          {eventColor="rgb(240,230,140)"}
+          else if ((firstNum/secondNum)>=0.25)
+          {eventColor="grey"}
+          else
+          {eventColor="rgb(139,0,0)"}
+          this.calendarEvents.push({ title: element.description, date: new Date(element.day), color:eventColor})
           });   
       });
      

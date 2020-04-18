@@ -1,11 +1,12 @@
 export class ITrainingTemplate{
     description:string;
-    trainingtype:string;
+    trainingType:string;
     destinition:number;    
     repeats:number;  
-    personal:boolean;
+    isPersonal:boolean;
     toDisplay:string;
     sets:Sets[];
+    owner:string;
     id:string;
   }
   interface Sets{

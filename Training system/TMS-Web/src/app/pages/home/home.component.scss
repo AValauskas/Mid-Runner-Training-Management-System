@@ -1,2 +1,12 @@
 @import '~@fullcalendar/core/main.css';  
 @import '~@fullcalendar/daygrid/main.css';  
+
+div.calendar {
+ 
+    height: 100%;
+    background-color: whitesmoke;
+}
+html, body {
+    height: 100%;
+    background-color: grey;;
+}

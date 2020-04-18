@@ -1,28 +1,81 @@
-<p>training-templates works!</p>
 
-<button class="btn btn-secondary" data-toggle="modal" data-target="#myModal" *ngIf="Role==='Coach'||Role==='Admin'">New Training</button >
+<body>
+<div class="row w-100  back">
+  <div class="left">
 
-
-<div class="container">
-
-    <div class="table-responsive-lg" *ngIf="trainings" > 
-    <table class="table table-striped">
-      <thead>
-          
-      </thead>
-      <tbody>
-         
-          <div >
-        <tr *ngFor="let training of trainings">
-          <td >{{training.description}}</td>
-          <td >{{ training.type}}</td>   
-          <!--<td><button class="btn btn-info" data-toggle="modal" (click)="SetID( client.idTrainee)" data-target="#myModal">Write response</button ></td> -->         
+    <div class="description" *ngIf="training  && !insertModalActive" onclick="this.style.height = '30%';  $('description').addClass('active');">
+     Description
+     
+    </div>
+    <div class="times" *ngIf="training  && !insertModalActive" onclick="this.style.height = '30%';">
+      Sets
+ 
+     </div>
+     <div class="times" *ngIf="training  && !insertModalActive" onclick="this.style.height = '30%';">
+      Details
+ 
+     </div>
+     <div  *ngIf="training  && !insertModalActive" class="form-group" id="description">
+      <label>{{training.description}}</label>
+      
+    </div>
+  <div class ="form-group "  *ngIf="training && !insertModalActive">
+    <div *ngFor="let trainingSet of training.sets; let i = index" name="sets">
+      
+      <div class ="form-group ">
+      <div class= "row" >
+        <div class="input-field col s3" >
+          <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingSet.distance"  name="distance{{i}}" placeholder="Distance/m" readonly>
+        </div>
+        <div class="input-field col s3" >
+          <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingSet.pace" name="pace{{i}}" placeholder="Pace/s" readonly>                      
+        </div>  
+        <div class="input-field col s3" >
+          <input type="number" step="0.01" class="form-control"  [(ngModel)]="trainingSet.rest" name="rest{{i}}" placeholder="Rest/s" readonly>                      
+        </div>
         
         </div>
-      </tbody>
-    </table>
+        </div>
+    </div>                
+ </div>
+  <div  *ngIf="training  && !insertModalActive" class="form-group">
+    <div class="row">
+      <div class="input-field col s6" >
+        <button  class="btn btn-success" (click)="OpenModal('update')" *ngIf="belongsToUser">Update</button>                    
+      </div>
+      <div class="input-field col s6" >
+      <button  class="btn btn-info" (click)="OpenModal('delete')" *ngIf="belongsToUser">Delete</button>  
+    </div>
+    </div>
+    
+    
   </div>
-
+  
+  </div>
+  <div class="right">
+    <button class="btn btn-secondary float-right newTrain" (click)="OpenModal('insert')" *ngIf="Role==='Coach'||Role==='Admin'">New Training</button >
+    
+      <select class="type">
+        <option value=5e5900f597e81d0001a5cdec>Speed</option>
+        <option value="5e59010597e81d0001a5cded">Speed endurance</option>
+        <option value="5e59011297e81d0001a5cdee">Speed endurance II</option>
+        <option value="5e59021997e81d0001a5cdef">Tempo</option>
+        <option value="5e7f4732076ce700012eb97a">Exerciseses on the stairs</option>
+        <option value="5e7f47bd076ce700012eb97c">run on the stairs</option>
+        <option value="5e7f4764076ce700012eb97b">Cross</option>
+        <option value="5e7f4a96076ce700012eb97d">limbering-up</option>
+        </select>
+      <br><br>
+    <div class="list-group trainings">
+      <div *ngFor="let training of trainings" >
+    <a  class="list-group-item list-group-item-action " (click)="ChooseTraining(training.id)">{{training.toDisplay}}</a>
+      </div>
+      </div>
+  </div>
+  
+ 
+</div>
+</body>
     <!-- The Modal -->
     <div class="modal" id="myModal">
       <div class="modal-dialog">
@@ -32,8 +85,12 @@
          
           
           <!-- Modal body -->
-          <div class="modal-body">
+          <div class="modal-body" *ngIf="insertModalActive || updateModalActive" >
             <form #trainingtemplateForm="ngForm" class="" >
+              <div class="form-group">    
+                <label for="descriptionTextArea">ToDisplay</label>           
+               <textarea  type="text" class="form-control" [(ngModel)]="training.toDisplay" name="toDisplay" > </textarea>
+              </div>   
               <div class="form-group">    
                 <label for="descriptionTextArea">Description</label>           
                <textarea  type="text" class="form-control" [(ngModel)]="training.description" name="description" > </textarea>
@@ -43,16 +100,20 @@
                 <div class= "row" >
                   <div class="input-field col s5" >
                   <label for="exampleFormControlSelect1">Training type</label>
-                  <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="training.trainingtype" name="trainingtype" required >
-                    <option value="5e59010597e81d0001a5cded">Special endurance</option>
-                    <option value="5e59011297e81d0001a5cdee">Special endurance II</option>
+                  <select class="form-control" id="typeselection" [(ngModel)]="training.trainingType" name="trainingtype" required >
+                    <option value=5e5900f597e81d0001a5cdec>Speed</option>
+                    <option value="5e59010597e81d0001a5cded">Speed endurance</option>
+                    <option value="5e59011297e81d0001a5cdee">Speed endurance II</option>
                     <option value="5e59021997e81d0001a5cdef">Tempo</option>
+                    <option value="5e7f4732076ce700012eb97a">Exerciseses on the stairs</option>
+                    <option value="5e7f47bd076ce700012eb97c">run on the stairs</option>
                     <option value="5e7f4764076ce700012eb97b">Cross</option>
+                    <option value="5e7f4a96076ce700012eb97d">limbering-up</option>
                   </select>
                   </div>
                 <div class="input-field col s3">
                   <label for="exampleFormControlSelect1">Destinition</label>
-                <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="destinition" name="destinition"> 
+                <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="training.destinition" name="destinition"> 
                   <option type="number"  value=400>400</option>
                   <option type="number"  value=600>600</option>
                   <option type="number"  value=800>800</option>
@@ -69,7 +130,7 @@
               </div>
               <div class ="form-group  "*ngIf="Role==='Coach'">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="true" id="personalTraining" [(ngModel)]="training.personal" name="personal">
+                  <input class="form-check-input" type="checkbox" id="personalTraining" [(ngModel)]="training.isPersonal" name="isPersonal">
                   <label class="form-check-label" for="personalTraining">
                     Personal
                   </label>
@@ -81,13 +142,13 @@
                   <div class ="form-group ">
                   <div class= "row" >
                     <div class="input-field col s3" >
-                      <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingtoAdd.distance"  name="distance" placeholder="Distance/m" required>
+                      <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingtoAdd.distance"  name="distance{{i}}" placeholder="Distance/m" required>
                     </div>
                     <div class="input-field col s3" >
-                      <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingtoAdd.pace" name="pace" placeholder="Pace/s" required>                      
+                      <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingtoAdd.pace" name="pace{{i}}" placeholder="Pace/s" required>                      
                     </div>  
                     <div class="input-field col s3" >
-                      <input type="number" step="0.01" class="form-control"  [(ngModel)]="trainingtoAdd.rest" name="rest" placeholder="Rest/s" required>                      
+                      <input type="number" step="0.01" class="form-control"  [(ngModel)]="trainingtoAdd.rest" name="rest{{i}}" placeholder="Rest/s" required>                      
                     </div>
                     <div class="input-field col s1" >
                       <button  class="btn btn-info" (click)="OnDelete(i)">-</button>                     
@@ -100,11 +161,16 @@
               <button  class="btn btn-info" (click)="OnClick()">+</button>
               </div>
               <div class="form-group">
-               <button [disabled]="!trainingtemplateForm.valid" class="btn btn-secondary" type="submit" (click)="OnSubmit()">Confirm</button>
+               <button [disabled]="!trainingtemplateForm.valid" class="btn btn-secondary" (click)="OnSubmit()">Confirm</button>
                </div>
            </form>          
           </div>
-          
+
+          <div class="modal-body" *ngIf="deleteModalActive" >
+            You Sure you want to delete this training?
+            <button class="btn btn-secondary" type="submit" (click)="DeleteTemplate()">Confirm</button>
+            </div>
+
           <!-- Modal footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -114,4 +180,4 @@
       </div>
     </div>
     
-  </div>
+  
