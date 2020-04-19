@@ -12,6 +12,7 @@ export class ProcessService {
   private trainingTemplatesUrl = "training";
   private personalManagement = "personalmanagement";
   private personalTraining = "personaltraining";
+  private auth = "auth";
   
   constructor(public _router:Router, private httpserv: HttpService, private http: HttpClient) { }
 //-------------------Training TEMPLATES------------------------------
@@ -79,6 +80,22 @@ export class ProcessService {
 
 
   //---------------------PERSONAL-----------------------------------
+  GetPersonalInfo()
+  { 
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/personal","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+  ChangePassword(data)
+  { 
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/password","Patch",data,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
   GetRecords()
   { 
     const HeadersForProductAPI = new HttpHeaders({

@@ -24,6 +24,16 @@ namespace TMS
             return consumer;
         }
 
+        public async Task<ConsumerEntity> FindConsumerByEmail(string email)
+        {
+            var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
+            var filterBuilder = Builders<ConsumerEntity>.Filter;
+            var filter = filterBuilder.Eq(x => x.Email, email);
+
+            var consumer = await ConsumerRepository.FindOneAsync(filter);
+
+            return consumer;
+        }
         public async Task<ConsumerEntity> FindConsumerById(string id)
         {
             var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);

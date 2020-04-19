@@ -8,6 +8,7 @@ namespace TMS
     public interface IConsumerRepository
     {
         Task<ConsumerEntity> FindConsumer(User user);
+        Task<ConsumerEntity> FindConsumerByEmail(string email);
         Task AddNewCompetition(string athleteId, CompetitionEntity competition);
         Task UpdatePersonalRecord(string athleteId, CompetitionEntity competition);
         Task<ConsumerEntity> CheckIfRecordExist(string athleteId, CompetitionEntity competition);

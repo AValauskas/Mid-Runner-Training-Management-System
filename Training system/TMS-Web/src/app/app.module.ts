@@ -10,7 +10,6 @@ import { RegisterComponent } from './user/register/register.component';
 import { UserComponent } from './user/user.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { TrainingTemplatesComponent } from './pages/trainings/training-templates/training-templates.component';
-import { PersonalTrainingsComponent } from './pages/trainings/personal-trainings/personal-trainings.component';
 import { MainModalComponent } from './Modals/main-modal/main-modal.component';
 import { PersonalBestComponent } from './pages/user/personal-best/personal-best.component';
 import { PersonalInfoComponent } from './pages/user/personal-info/personal-info.component';
@@ -42,7 +41,6 @@ import { AthleteListComponent } from './Modals/AllModals/athlete-list/athlete-li
     UserComponent,
     NavBarComponent,
     TrainingTemplatesComponent,
-    PersonalTrainingsComponent,
     MainModalComponent,
     PersonalBestComponent,
     PersonalInfoComponent,

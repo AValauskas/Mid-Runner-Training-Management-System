@@ -13,5 +13,8 @@ namespace TMS
 
         JwtSecurityToken GenerateCoachToken(string id);
         JwtSecurityToken GenerateAthleteToken(string id);
+        Task ChangePassword(string idConsumer, string password);
+
+
     }
 }

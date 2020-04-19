@@ -21,6 +21,10 @@ namespace TMS
         public string Email { get; set; } = "";
         [Field("password")]
         public string Password { get; set; } = "";
+        [Field("salt")]
+        public string Salt { get; set; } = "";
+        [Field("emailconfirmed")]
+        public bool EmailConfirmed { get; set; } = false;
         [Field("role")]
         public string Role { get; set; } = "";
         [Field("athletes")]

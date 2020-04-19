@@ -16,8 +16,14 @@ namespace TMS
 
         private readonly IPersonalManagementService personalManagementService;
         private readonly IConsumerRepository ConsumerRepository;
+        private readonly IAuthService authService;
         public PersonalManagementController()
         {
+            authService = new AuthService()
+            {
+                AuthRepository = new AuthRepository(),
+                ConsumerRepository = new ConsumerRepository()
+            };
 
             ConsumerRepository = new ConsumerRepository();
             personalManagementService = new PersonalManagementService()
@@ -29,6 +35,8 @@ namespace TMS
 
         //--------------------------------Competition/personal results-------------------------
 
+       
+        
 
         [Authorize(Roles = "Athlete,Coach")]
         [HttpGet("record/outside")]
@@ -165,6 +173,32 @@ namespace TMS
             var idAthlete = cla[1].Value;
             var athletes = await personalManagementService.GetAthletes(idAthlete, date);
             return Ok(athletes);
+        }
+
+
+        //-----------------------------PersonalInfo     
+        [HttpGet("personal")]
+        public async Task<IActionResult> GetPersonalInfo()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idConsumer = cla[1].Value;
+            var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
+
+            return Ok(consumer);
+        }
+
+
+        [HttpPatch("password")]
+        public async Task<IActionResult> ChangePassword(User user)
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idConsumer = cla[1].Value;
+            await authService.ChangePassword(idConsumer, user.Password);
+
+            return Ok();
+
         }
 
     }

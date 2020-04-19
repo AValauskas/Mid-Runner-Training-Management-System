@@ -8,14 +8,14 @@ namespace TMS
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
+        private readonly IAuthRepository authRepo;
         private readonly IAuthService authService;
         public AuthController()
         {
+            authRepo = new AuthRepository();
             authService = new AuthService()
             {
                 AuthRepository = new AuthRepository(),
-                AthleteRepository = new AthleteRepository(),
-                CoachRepository = new CoachRepository(),
                 ConsumerRepository = new ConsumerRepository()
             };
         }
@@ -49,7 +49,15 @@ namespace TMS
                 return BadRequest(response);
             }
         }
-
+        [HttpPost("confirm/{id}")]
+        public async Task<IActionResult> Register([FromRoute] string Id)
+        {
+             await authRepo.VerifyRegister(Id);
+           
+             return Ok();
+            
+            
+        }
 
     }
 }
