@@ -1,5 +1,45 @@
 
 <body>
+    <div class="row">
+      <div class="left">
+           <div class="choose">
+            <p class="heading" [ngClass]="{'active': RecordsActive }" (click)="TurnRecords()" > Records</p>
+           </div>
+           <div class="choose">
+            <p class="heading"[ngClass]="{'active': CompetitionsActive}" (click)="TurnCompetitions()" > Competitions</p>
+           </div>
+           <div class="choose">
+            <p class="heading" [ngClass]="{'active': TrainingsActive}" (click)="TurnTrainings()"> Trainings</p>
+           </div>
+
+        </div>
+        <div class="right">
+            <div class="head ">
+                <p class="heading"> {{Chosen}}</p>
+            </div>
+            <div class="action">     
+                    <div *ngIf="RecordsActive">
+                        <app-personal-best></app-personal-best>
+                    </div>
+                    <div *ngIf="CompetitionsActive">
+                        <app-competitions></app-competitions>
+                    </div>
+                    <div *ngIf="TrainingsActive">
+                        <app-trainings></app-trainings>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+
+
+<!--
+<body>
     <div class="back" >
     
 <div class="container-fluid">
@@ -53,3 +93,4 @@
 
 </div>
 </body>
+-->

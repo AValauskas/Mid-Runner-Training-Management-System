@@ -102,9 +102,16 @@ export class ProcessService {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     })    
-    return this.httpserv.requestCall(this.personalManagement,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+    return this.httpserv.requestCall(this.personalManagement+"/records","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
-
+  GetCompetitions()
+  { 
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/competitions","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
   GetAthletesWhichStillFree(date)
   { 
     const HeadersForProductAPI = new HttpHeaders({

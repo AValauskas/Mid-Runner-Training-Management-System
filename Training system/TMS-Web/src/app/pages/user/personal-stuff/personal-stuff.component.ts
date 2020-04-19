@@ -19,6 +19,7 @@ export class PersonalStuffComponent implements OnInit {
     this.RecordsActive = true;
     this.CompetitionsActive = false;
     this.TrainingsActive = false;
+    console.log( this.Chosen);
   }
   TurnCompetitions()
   {
@@ -26,13 +27,15 @@ export class PersonalStuffComponent implements OnInit {
     this.RecordsActive = false;
     this.CompetitionsActive = true;
     this.TrainingsActive = false;
+    console.log( this.Chosen);
   }
   TurnTrainings()
   {
-    this.Chosen="Competitions"
+    this.Chosen="Trainings"
     this.RecordsActive = false;
     this.CompetitionsActive = false;
     this.TrainingsActive = true;
+    console.log( this.Chosen);
   }
 
 }

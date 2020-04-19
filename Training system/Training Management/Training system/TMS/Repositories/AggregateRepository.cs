@@ -23,7 +23,33 @@ namespace TMS
 
             return trains;
         }
+        public async Task<List<PersonalRecords>> RecordAggregate(string consumerId)
+        {
+            var service = new CodeMashRepository<ConsumerEntity>(Client);
+            var records = await service.AggregateAsync<PersonalRecords>(Guid.Parse("521f0ce6-bbfe-457c-9a91-5c82bde2eea3"), new AggregateOptions
+            {
+                Tokens = new Dictionary<string, string>()
+                {
+                       { "id", consumerId },
+                }
+            });
 
+            return records;
+        }
+
+        public async Task<List<CompetitionsAggregate>> CompetitionsAggregate(string consumerId)
+        {
+            var service = new CodeMashRepository<ConsumerEntity>(Client);
+            var competitions = await service.AggregateAsync<CompetitionsAggregate>(Guid.Parse("df55fb69-8ebe-4365-bd22-024e96763c3c"), new AggregateOptions
+            {
+                Tokens = new Dictionary<string, string>()
+                {
+                       { "id", consumerId },
+                }
+            });
+
+            return competitions;
+        }
 
         public async Task<List<TrainingsWhichAreAssignedByDate>> TrainingsWhichAssignedByDate(string date, string coachId)
         {

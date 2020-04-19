@@ -1,59 +1,67 @@
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-6 col-xs-6 responsive" *ngIf="competitions" > 
-      <div>
-        <p class = " text-center mt-3 responsive" id="title">Outside</p>
-      </div>   
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th class="col-md-3 " id = "tableTitle" scope="col">Distance</th>
-          <th class="col-md-2"  id = "tableTitle" scope="col">Time</th>
-          <th class="col-md-3" id = "tableTitle" scope="col">date</th>
-          <th class="col-md-4"  id = "tableTitle"scope="col">Competition</th>
-        </tr>
-      </thead>
-      <tbody>
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-xs-6 responsive" *ngIf="Outside" > 
+        <div>
+          <p class = " text-center mt-3 responsive" id="title">Outside</p>
+        </div>   
+      <table class="">
+        <thead>
+          <tr >
+            <th class="col-md-2 " >Distance</th>
+            <th class="col-md-2"  >Time</th>
+            <th class="col-md-4" >dateString</th>
+            <th class="col-md-4"  >Competition</th>
+          </tr>
+        </thead>
+        <tbody>
+           
+            
+          <tr *ngFor="let competitionOutside of Outside" class ="comp">
+            <td class="col-md-2 " >{{competitionOutside.distance}}</td>
+            <td class="col-md-2 " >{{ competitionOutside.time}}</td> 
+            <td class="col-md-4 ">{{ competitionOutside.dateString}}</td>    
+            <td class="col-md-4"><div class="competition"> {{ competitionOutside.competition}}</div></td>    
+         </tr>
+          
+          
+        </tbody>
+      </table>
+      </div>
+      <div class="col-sm-6 col-xs-6 responsive" *ngIf="Inside" > 
+        <div>
+          <p class = " text-center mt-3" id="title">Inside</p>
+        </div> 
+      <table class="">
+        <thead>
+          <tr>
+            <th class="col-md-2 "  >Distance</th>
+            <th class="col-md-2" >Time</th>
+            <th class="col-md-4"  >date</th>
+            <th class="col-md-4"  >Competition</th>
+          </tr>
+        </thead>
+        <tbody>
+           
+           
+          <tr *ngFor="let competitionInside of Inside" class ="comp">
+            <td class="col-md-2 ">{{competitionInside.distance}}</td>
+            <td class="col-md-2 ">{{ competitionInside.time}}</td> 
+            <td class="col-md-4" >{{ competitionInside.dateString}}</td>  
+            <td class ="col-md-4 comp"><div class="competition"> {{ competitionInside.competition}}</div></td>      
+          </tr>
+          
          
-          <div >
-        <tr *ngFor="let competition of competitions">
-          <td class="col-md-2 " >{{competition.distance}}</td>
-          <td class="col-md-2 " >{{ competition.time}}</td> 
-          <td class="col-md-4">{{ competition.date}}</td>    
-          <td class="col-md-4">LAFF</td>    
-          <!--<td><button class="btn btn-info" data-toggle="modal" (click)="SetID( client.idTrainee)" data-target="#myModal">Write response</button ></td> -->         
-        
-        </div>
-      </tbody>
-    </table>
-    </div>
-    <div class="col-sm-6 col-xs-6 responsive" *ngIf="competitions" > 
-      <div>
-        <p class = " text-center mt-3" id="title">Inside</p>
-      </div> 
-    <table class="table table-striped responsive">
-      <thead>
-        <tr>
-          <th class="col-md-3 " id = "tableTitle" scope="col">Distance</th>
-          <th class="col-md-2"  id = "tableTitle" scope="col">Time</th>
-          <th class="col-md-3" id = "tableTitle" scope="col">date</th>
-          <th class="col-md-4"  id = "tableTitle"scope="col">Competition</th>
-        </tr>
-      </thead>
-      <tbody>
-         
-          <div >
-        <tr *ngFor="let competition of competitions">
-          <td >{{competition.distance}}</td>
-          <td >{{ competition.time}}</td> 
-          <td >{{ competition.date}}</td>  
-          <td >Kauno miesto</td>      
-          <!--<td><button class="btn btn-info" data-toggle="modal" (click)="SetID( client.idTrainee)" data-target="#myModal">Write response</button ></td> -->         
-        
-        </div>
-      </tbody>
-    </table>
-    </div>
-    </div>
+        </tbody>
+      </table>
+      </div>
+      </div>
+
+    
   </div>
+
+
+</body>
+

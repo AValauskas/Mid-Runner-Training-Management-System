@@ -1,1 +1,68 @@
-<p>competitions works!</p>
+
+<body>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-6 " *ngIf="Outside" > 
+          <div>
+            <p class = " text-center mt-3 " id="title">Outside</p>
+          </div>   
+        <table class="">
+          <thead>
+            <tr >
+              <th class="  " >Distance</th>
+              <th class=""  >Time</th>
+              <th class="" >Date</th>
+              <th class=""  >Competition</th>
+            </tr>
+          </thead>
+          <tbody>
+             
+              
+            <tr *ngFor="let competitionOutside of Outside" class ="comp">
+              <td class="" >{{competitionOutside.distance}}</td>
+              <td class=" " >{{ competitionOutside.time}}</td> 
+              <td class=" ">{{ competitionOutside.dateString}}</td>    
+              <td class=" "><div class="competition"> {{ competitionOutside.competition}}</div></td>    
+           </tr>
+            
+            
+          </tbody>
+        </table>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6 " *ngIf="Inside" > 
+          <div>
+            <p class = " text-center mt-3" id="title">Inside</p>
+          </div> 
+        <table class="">
+          <thead>
+            <tr>
+              <th class=""  >Distance</th>
+              <th class=" " >Time</th>
+              <th class=""  >Date</th>
+              <th class=""  >Competition</th>
+            </tr>
+          </thead>
+          <tbody>
+             
+             
+            <tr *ngFor="let competitionInside of Inside" class ="comp">
+              <td class="">{{competitionInside.distance}}</td>
+              <td class=" ">{{ competitionInside.time}}</td> 
+              <td class="" >{{ competitionInside.dateString}}</td>  
+              <td class =" "><div class="competition"> {{ competitionInside.competition}}</div></td>      
+            </tr>
+            
+           
+          </tbody>
+        </table>
+        </div>
+        </div>
+  
+      
+    </div>
+  
+  
+  </body>
+  
+  

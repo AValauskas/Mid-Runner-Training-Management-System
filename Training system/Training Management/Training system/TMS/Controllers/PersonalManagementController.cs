@@ -17,9 +17,11 @@ namespace TMS
         private readonly IPersonalManagementService personalManagementService;
         private readonly IConsumerRepository ConsumerRepository;
         private readonly IAuthService authService;
+        private readonly IAggregateRepository aggregateRepo;
         public PersonalManagementController()
         {
-            authService = new AuthService()
+            aggregateRepo = new AggregateRepository();
+               authService = new AuthService()
             {
                 AuthRepository = new AuthRepository(),
                 ConsumerRepository = new ConsumerRepository()
@@ -38,7 +40,7 @@ namespace TMS
        
         
 
-        [Authorize(Roles = "Athlete,Coach")]
+       /* [Authorize(Roles = "Athlete,Coach")]
         [HttpGet("record/outside")]
         public async Task<IActionResult> GetRecordsOutside()
         {
@@ -50,43 +52,31 @@ namespace TMS
             return Ok(consumer.Records);
 
 
-        }
+        }*/
         [Authorize(Roles = "Athlete,Coach")]
-        [HttpGet("record/inside")]
-        public async Task<IActionResult> GetRecordsInside()
+        [HttpGet("records")]
+        public async Task<IActionResult> GetRecords()
         {
             var claims = User.Claims;
             var cla = claims.ToList();
-            var idAthlete = cla[1].Value;
-            var consumer = await ConsumerRepository.FindConsumerById(idAthlete);
-            var record = consumer.Records.Where(x => x.Place == InsideOutside.Inside.ToString());
-            return Ok(record);
+            var idConsumer = cla[1].Value;
+            var records = await aggregateRepo.RecordAggregate(idConsumer);
+            records.Select(x => { x.Records.Select(y => { y.DateString = y.Date.ToString("yyyy-MM-dd"); return y; }).ToList(); return x;}).ToList();
+            return Ok(records);
         }
 
         [Authorize(Roles = "Athlete,Coach")]
-        [HttpGet("competitions/inside")]
-        public async Task<IActionResult> GetCompetitionsInside()
+        [HttpGet("competitions")]
+        public async Task<IActionResult> GetCompetitions()
         {
             var claims = User.Claims;
             var cla = claims.ToList();
-            var idAthlete = cla[1].Value;
-            var consumer = await ConsumerRepository.FindConsumerById(idAthlete);
-            var record = consumer.Records.Where(x => x.Place == InsideOutside.Outside.ToString());
-            return Ok(consumer.Records);
+            var idConsumer = cla[1].Value;
+            var competitions = await aggregateRepo.CompetitionsAggregate(idConsumer);
+            competitions.Select(x => { x.Records.Select(y => { y.DateString = y.Date.ToString("yyyy-MM-dd"); return y; }).ToList(); return x; }).ToList();
+            return Ok(competitions);
         }
-        [Authorize(Roles = "Athlete,Coach")]
-        [HttpGet("competitions/inside")]
-        public async Task<IActionResult> GetCompetitionsOutside()
-        {
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idAthlete = cla[1].Value;
-            var consumer = await ConsumerRepository.FindConsumerById(idAthlete);
-            var competitions = consumer.Competitions.Where(x => x.Place == InsideOutside.Outside.ToString());
-            List<CompetitionEntity> SortedList = competitions.OrderBy(o => o.Time).ToList();
-            return Ok(consumer.Records);
-        }
-
+        
         [Authorize(Roles = "Athlete, Coach")]
         [HttpPatch]
         public async Task<IActionResult> AddCompetitionTime ([FromBody] CompetitionEntity competition)
