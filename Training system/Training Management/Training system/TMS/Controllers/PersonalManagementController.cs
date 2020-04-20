@@ -78,7 +78,7 @@ namespace TMS
         }
         
         [Authorize(Roles = "Athlete, Coach")]
-        [HttpPatch]
+        [HttpPatch("newcompetition")]
         public async Task<IActionResult> AddCompetitionTime ([FromBody] CompetitionEntity competition)
         {
             var claims = User.Claims;

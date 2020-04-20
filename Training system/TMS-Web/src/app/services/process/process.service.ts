@@ -96,6 +96,19 @@ export class ProcessService {
     })    
     return this.httpserv.requestCall(this.personalManagement+"/password","Patch",data,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
+
+
+//---------------------------------Competitions-------------------------
+
+   AddNewCompetition(data)
+  { 
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/newcompetition","Patch",data,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+
   GetRecords()
   { 
     const HeadersForProductAPI = new HttpHeaders({

@@ -2,6 +2,7 @@
 <body>
 
     <div class="container">
+      <button class="btn btn-secondary float-right newCompetition" (click)="OpenModal()" *ngIf="Role==='Coach'|| Role==='Athlete'">New Competition</button >
       <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-6 " *ngIf="Outside" > 
           <div>
@@ -10,20 +11,20 @@
         <table class="">
           <thead>
             <tr >
-              <th class="  " >Distance</th>
-              <th class=""  >Time</th>
-              <th class="" >Date</th>
-              <th class=""  >Competition</th>
+              <th class="col-md-2  " >Distance</th>
+              <th class="col-md-2"  >Time</th>
+              <th class="col-md-4" >Date</th>
+              <th class="col-md-4"  >Competition</th>
             </tr>
           </thead>
           <tbody>
              
               
             <tr *ngFor="let competitionOutside of Outside" class ="comp">
-              <td class="" >{{competitionOutside.distance}}</td>
-              <td class=" " >{{ competitionOutside.time}}</td> 
-              <td class=" ">{{ competitionOutside.dateString}}</td>    
-              <td class=" "><div class="competition"> {{ competitionOutside.competition}}</div></td>    
+              <td class="col-md-2" >{{competitionOutside.distance}}</td>
+              <td class="col-md-2 " >{{ competitionOutside.time}}</td> 
+              <td class="col-md-4">{{ competitionOutside.dateString}}</td>    
+              <td class="col-md-4 "><div class="competition"> {{ competitionOutside.competition}}</div></td>    
            </tr>
             
             
@@ -37,20 +38,20 @@
         <table class="">
           <thead>
             <tr>
-              <th class=""  >Distance</th>
-              <th class=" " >Time</th>
-              <th class=""  >Date</th>
-              <th class=""  >Competition</th>
+              <th class="col-md-2"  >Distance</th>
+              <th class="col-md-2 " >Time</th>
+              <th class="col-md-4"  >Date</th>
+              <th class="col-md-4"  >Competition</th>
             </tr>
           </thead>
           <tbody>
              
              
             <tr *ngFor="let competitionInside of Inside" class ="comp">
-              <td class="">{{competitionInside.distance}}</td>
-              <td class=" ">{{ competitionInside.time}}</td> 
-              <td class="" >{{ competitionInside.dateString}}</td>  
-              <td class =" "><div class="competition"> {{ competitionInside.competition}}</div></td>      
+              <td class="col-md-2">{{competitionInside.distance}}</td>
+              <td class="col-md-2 ">{{ competitionInside.time}}</td> 
+              <td class="col-md-4" >{{ competitionInside.dateString}}</td>  
+              <td class =" col-md-4"><div class="competition"> {{ competitionInside.competition}}</div></td>      
             </tr>
             
            
@@ -65,4 +66,21 @@
   
   </body>
   
-  
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        
+         
+         
+          <app-new-competition-modal
+          (FillForms)="FillForms()"
+          ></app-new-competition-modal>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+          
+        </div>
+      </div>
+    </div>

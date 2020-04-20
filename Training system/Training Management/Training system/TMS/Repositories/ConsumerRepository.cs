@@ -73,8 +73,10 @@ namespace TMS
         {
             var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
 
-            var filterBuilder = Builders<ConsumerEntity>.Filter;            
-            var filter = filterBuilder.Eq(x => x.Id, athleteId) & filterBuilder.Eq("records.distance", competition.Distance) & filterBuilder.Eq("records.place", competition.Place);                
+            var filterBuilder = Builders<ConsumerEntity>.Filter;
+            var subfilter = filterBuilder.Eq("distance", competition.Distance) & filterBuilder.Eq("place", competition.Place);
+            var filter = filterBuilder.Eq(x => x.Id, athleteId) & filterBuilder.ElemMatch("records", subfilter);
+           // var filter = filterBuilder.Eq(x => x.Id, athleteId) & filterBuilder.Eq("records.distance", competition.Distance) & filterBuilder.Eq("records.place", competition.Place);                
 
             var updateBuilder = Builders<ConsumerEntity>.Update;
             
@@ -87,10 +89,15 @@ namespace TMS
             var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
 
             var filterBuilder = Builders<ConsumerEntity>.Filter;
-            var filter = filterBuilder.Eq(x => x.Id, athleteId) 
-                & filterBuilder.Eq("records.distance", competition.Distance)
-                 & filterBuilder.Eq("records.place", competition.Place)
-                & filterBuilder.Lte("records.time", competition.Time);
+            var subfilter = filterBuilder.Eq("distance", competition.Distance)
+                & filterBuilder.Eq("place", competition.Place)
+                 & filterBuilder.Lte("time", competition.Time);
+
+            var filter = filterBuilder.Eq(x => x.Id, athleteId) & filterBuilder.ElemMatch("records", subfilter);
+            /* var filter = filterBuilder.Eq(x => x.Id, athleteId) 
+                  & filterBuilder.Eq("records.distance", competition.Distance)
+                   & filterBuilder.Eq("records.place", competition.Place)
+                  & filterBuilder.Lte("records.time", competition.Time);*/
 
             var updateBuilder = Builders<ConsumerEntity>.Update;
 

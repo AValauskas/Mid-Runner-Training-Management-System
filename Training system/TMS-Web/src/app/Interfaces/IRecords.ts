@@ -9,4 +9,5 @@ export interface IRecords{
     place: string;
     competition: string;
     dateString:string;
+    date:Date;
   }

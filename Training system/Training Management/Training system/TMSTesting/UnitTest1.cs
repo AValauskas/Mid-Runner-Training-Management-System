@@ -29,11 +29,11 @@ namespace TMSTesting
         [Test]
         public async Task SendEmailTry()
         {
-            var apiKey = "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";
+            var apiKey = "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";
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("aurimas19970704@gmail.com", "Example User");
+            var from = new EmailAddress("aur.val10@ktu.lt", "aurimas");
             var subject = "Sending with SendGrid is Fun";
-            var to = new EmailAddress("valauskas.aurimas@gmail.com", "Example User");
+            var to = new EmailAddress("valauskas.aurimas@gmail.com", "kitam");
             var plainTextContent = "and easy to do anywhere, even with C#";
             var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
