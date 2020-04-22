@@ -17,9 +17,12 @@ export class LoginComponent implements OnInit {
   constructor(private _auth: AuthService,private helper:HelperService, public _router:Router) { }
 
   ngOnInit(): void {    
-    if(localStorage.getItem('role')!=null)
-    {
-      this._router.navigate([decodeURI("home")]);     
+    
+        if (!this.helper.CheckIfTokenIsExpired())
+        {this._router.navigate([decodeURI("home")]);}
+        else
+        {this.helper.UnsetStorage();}    
+   {     
     }
   }
 

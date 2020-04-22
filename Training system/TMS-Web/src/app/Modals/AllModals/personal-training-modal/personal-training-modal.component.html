@@ -1,15 +1,26 @@
 <div *ngIf="exist">
-<div  *ngIf="toDo" >
-  <div> 
-    <label >Summary</label>       
+<div  *ngIf="toDo"  >
+  <div >
+    <div class = "tasks" >
+      <p class="heading"> TRAINING TEMPLATE</p>   
+      </div>
+
+     
    <form #TrainingTemplateForm="ngForm" class="" >
      <div class="form-group">    
-        <label for="descriptionTextArea">Description</label>           
+       <div class = "row ">
+        <div class="input-field col-md-3" >
+       <p for="descriptionTextArea">Description</p>
+        </div>
+        <div class="input-field col-md-9">        
        <textarea  type="text" class="form-control" [(ngModel)]="toDo.description" name="description" readonly > </textarea>
       </div>   
-      <div class ="form-group ">      
+       </div>
+        
+      </div>   
+      <div class ="form-group separate">      
           
-          <div class= "row" >
+          <div class= "row trainInfo" >
             <div class="input-field col s3" >
               <label for="descriptionTextArea">Distance</label>   
             </div>
@@ -22,7 +33,7 @@
 
         <div *ngFor="let set of toDo.sets; let i = index" name="sets">       
          
-          <div class= "row" >
+          <div class= "row trainInfo" >
             <div class="input-field col s3" >
               <input type="number" step="0.01" class="form-control" [(ngModel)]="set.distance"  name="distance{{i}}" readonly>
             </div>
@@ -38,17 +49,29 @@
         </div>                
      </div>
     
-     <div class ="form-group ">    
+     <div class ="form-group separate">    
       <label>Repeats: {{toDo.repeats}}</label>   
      </div>     
    </form>  
   </div>
 <div>
-  <label >Training</label> 
+  <div class = "tasks" >
+    <p class="heading"> PERSONAL TRAINING</p>   
+    </div>
    <form #PersonalTrain="ngForm" class="" >
-    <div class="form-group">    
-       <label for="descriptionTextArea">Coach Tasks</label>           
-      <textarea  type="text" class="form-control" [(ngModel)]="personalTraining.description" name="description" readonly > </textarea>
+    <div class="form-group">   
+      <div class = "row ">
+        <div class="input-field col-md-3" >
+          <label for="descriptionTextArea">Coach Tasks</label>   
+        </div>
+        <div class="input-field col-md-9">        
+          <textarea  type="text" class="form-control" [(ngModel)]="personalTraining.description" name="description" readonly > </textarea>
+      </div>   
+       </div>
+      
+
+               
+    
      </div>   
      <div class ="form-group ">    
       <label>Place: {{personalTraining.place}}</label>   
