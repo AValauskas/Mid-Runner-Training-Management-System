@@ -10,7 +10,10 @@ html, body {
     height: 100%;
     background-color: grey;;
 }
-#myModal
-{
-width: 100%;
+.modal-content{
+    border-radius: 0;
+    background-clip: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 700px;
 }

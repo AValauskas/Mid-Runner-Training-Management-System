@@ -1,8 +1,8 @@
 <div *ngIf="exist">
 <div  *ngIf="toDo"  >
   <div >
-    <div class = "tasks" >
-      <p class="heading"> TRAINING TEMPLATE</p>   
+    <div class = "tasks firstHeading" >
+      <p class="heading "> TRAINING TEMPLATE</p>   
       </div>
 
      
@@ -10,7 +10,7 @@
      <div class="form-group">    
        <div class = "row ">
         <div class="input-field col-md-3" >
-       <p for="descriptionTextArea">Description</p>
+       <label for="descriptionTextArea">Description</label>
         </div>
         <div class="input-field col-md-9">        
        <textarea  type="text" class="form-control" [(ngModel)]="toDo.description" name="description" readonly > </textarea>
@@ -55,7 +55,7 @@
    </form>  
   </div>
 <div>
-  <div class = "tasks" >
+  <div class = "tasks section" >
     <p class="heading"> PERSONAL TRAINING</p>   
     </div>
    <form #PersonalTrain="ngForm" class="" >
@@ -68,9 +68,7 @@
           <textarea  type="text" class="form-control" [(ngModel)]="personalTraining.description" name="description" readonly > </textarea>
       </div>   
        </div>
-      
-
-               
+                    
     
      </div>   
      <div class ="form-group ">    

@@ -22,6 +22,10 @@ export class TrainingTemplatesComponent implements OnInit {
   deleteModalActive =false;
   updateModalActive =false;
   insertModalActive =false;
+  descriptionClicked = false;
+  setsClicked = false;
+  manageClicked = false;
+
 
 
   constructor(private _http: ProcessService,public _router:Router) { }
@@ -166,4 +170,42 @@ export class TrainingTemplatesComponent implements OnInit {
     $('#myModal').modal("hide");
 
   }
+
+  ChangeDescriptionSize()
+  {
+    console.log("clicked");
+    if( this.descriptionClicked)
+    {
+      this.descriptionClicked= false;
+    }
+    else{
+      this.descriptionClicked= true;
+    }
+
+
+  }
+
+  changeTimes()
+  {
+    if( this.setsClicked)
+    {
+      this.setsClicked= false;
+    }
+    else{
+      this.setsClicked= true;
+    }
+  }
+
+  
+  changeManage()
+  {
+    if( this.manageClicked)
+    {
+      this.manageClicked= false;
+    }
+    else{
+      this.manageClicked= true;
+    }
+  }
 }
+

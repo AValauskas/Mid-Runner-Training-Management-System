@@ -2,6 +2,7 @@
 {
     text-align: center;
    margin-top: 10px;
+   background-color: khaki;
    
 }
 p.heading
@@ -16,8 +17,16 @@ div.form-group
 }
 div.separate
 {
-    border-top: rgb(187, 186, 186) 2px solid;
-
+    border-top: rgb(233, 230, 230) 2px solid;
+}
+div.firstHeading
+{
+    margin-top: 0;
+}
+div.section
+{
+    border-top: rgb(83, 82, 82) 2px solid;
+    border-bottom: rgb(83, 82, 82) 2px solid;
 }
 div.trainInfo
 {

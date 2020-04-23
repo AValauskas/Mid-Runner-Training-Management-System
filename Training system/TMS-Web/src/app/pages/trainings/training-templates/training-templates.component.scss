@@ -1,54 +1,94 @@
 html, body {
-    height: 93vh;
-    background-color: grey;;
+  height: 92.3vh;
+  background-color: grey;
+}
+.row {
+  width: 100%;
+}
+
+
+div.left{    
+  margin-top: 15%;
+  width:25%;    
+  float:left;
+  background-color: grey;
+  box-sizing: border-box;
+}
+
+div.right{
+  width:75%;
+  height: 92.3vh;
+  background-color: khaki;
+  box-sizing: border-box;
 }
 
 .btn-new {
-    background-color: #2A3F54;
-}
-div.back
-{
-    height:93vh;
-    background-color: grey;
-
+  background-color: #2A3F54;
 }
 
-div.left{
-    margin-top: 15%;
-    width:25%;
-    margin-left: 25px;
-    float:left;
-  
-  }
- 
-  div.right{
-    margin-left:1%;
-    width:72%;
-    height:100%;
-    background-color: khaki;
-  }
+div.transformable {
+  -webkit-transition: height 5000ms linear;
+  -moz-transition: height 5000ms linear;
+  -o-transition: height 5000ms linear;
+  -ms-transition: height 5000ms linear;
+  transition: height 5000ms linear;
 
+}
 div.description
-{
-    //background: #ffdad8;
+{  
+    margin-left: 5%;
+    width: 90%;
     margin-top: -30%;
     height: 10%;
+   //height: 100px;
     background-color: khaki;
     border-radius: 15px;
-  //  margin-left: 5%;
-    
+    transition: height 300ms;
+    overflow: hidden;
 }
-div.times
+div.description:hover,div.times:hover
 {
-    //background: #ffdad8;
-    margin-top: 5%;
-    height: 10%;
-    background-color: khaki;
-    border-radius: 15px;
-  //  margin-left: 5%;
-    
+    background-color: rgb(219, 209, 61);
+}
+div.descriptionBig
+{
+  overflow: hidden;
+  margin-left: 5%;
+  width: 90%;
+  margin-top: -30%;
+  height: 30%;
+// height: 300px;
+  background-color: khaki;
+  border-radius: 15px;
+  transition: height 300ms;
+  
 }
 
+div.times
+{
+  margin-left: 5%;
+  width: 90%;
+  margin-top: 5%;
+  height: 10%;
+ //height: 100px;
+  background-color: khaki;
+  border-radius: 15px;
+  transition: height 300ms;
+  overflow: hidden;
+}
+
+div.timesBig
+{
+  overflow: hidden;
+  margin-left: 5%;
+  width: 90%;
+  margin-top: 5%;
+  height: 30%;
+// height: 300px;
+  background-color: khaki;
+  border-radius: 15px;
+  transition: height 300ms;  
+}
 
 select.type
 {
@@ -70,9 +110,67 @@ button.newTrain
     margin-top: 2%;
     margin-right: 10%;    
 }
+
+button.manageButtons
+{
+    font-family: "Arial Black", Gadget, sans-serif;
+    color: white;
+    height:40px;
+    background-color: rgb(59, 59, 59);
+    margin-top: 10%;
+    margin-left: 25%;
+}
 div.trainings
 {
+    width:90%;
     margin-top: 5%;
     overflow-y: scroll; 
+    overflow-x:  hidden;
     height:600px;
+}
+
+div.sides
+{
+max-height:200px;
+
+}
+
+#notesNames
+{ 
+
+  margin-left:10%;
+  margin-top:1%;
+  font-family: "Comic Sans MS", cursive, sans-serif
+}
+#side
+{
+   font-size:7px;
+  margin-left:10%;
+  margin-top:1%;
+  font-family: "Comic Sans MS", cursive, sans-serif
+
+}
+#down{
+  margin-top:-10%;
+  margin-left:90%;
+}
+
+.maxlenght
+{
+  overflow-y: auto; 
+  overflow-x:  hidden;
+  max-height:150px;
+}
+
+input.setInput
+{
+  background-color: rgb(58, 57, 57);
+  color: white;
+  text-align: right; 
+}
+
+div.tikrinu
+{
+margin-left:0px;
+
 }

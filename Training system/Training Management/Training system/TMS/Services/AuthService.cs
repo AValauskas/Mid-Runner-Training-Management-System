@@ -43,6 +43,8 @@ namespace TMS
         {
             
            var consumer = await ConsumerRepository.FindConsumerByEmail(user.Email);
+            if (consumer!=null)
+            {           
             if (!consumer.EmailConfirmed)
             {
                 throw new Exception("email isn't confirmed yet");
@@ -63,6 +65,7 @@ namespace TMS
                 if (consumer.Role == "Admin")
                 {
                     return GenerateAdminToken(consumer.Id);
+                }
                 }
             }
             return null;

@@ -44,10 +44,31 @@ export class LoginComponent implements OnInit {
 
   HandleError()
   {
+    
     if(localStorage.getItem('error') !=null)
     {
+      console.log(localStorage.getItem('error' ).substring(18,23));
+      if(localStorage.getItem('error' ).substring(18,23)=="email")
+      {
+        this.error= "you should confirm your email first";
+        localStorage.removeItem('error');
+      }
+      else{
+       
+        if( localStorage.getItem('error' ) == "[object ProgressEvent]"  )
+        {
+          this.error= "Server is not working right now";
+          localStorage.removeItem('error');
+        }
+        else if(localStorage.getItem('error' ).length>100 || localStorage.getItem('error' ) == "[object ProgressEvent]"  )
+        {
+          localStorage.removeItem('error');
+        }
+        else{
       this.error= localStorage.getItem('error' );
       localStorage.removeItem('error');
+        }
+      }
     }
     else{
       this.error= null;      

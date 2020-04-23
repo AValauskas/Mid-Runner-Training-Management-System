@@ -53,7 +53,9 @@ export class HttpService {
       
     }else{
       localStorage.setItem('error', errorResponse.error )
+      console.log(errorResponse.error.message);
       console.log(errorResponse.error);
+      console.log(errorResponse);
     return "b";
     }
    

@@ -1,56 +1,95 @@
 
 <body>
-<div class="row w-100  back">
+<div class="row">
   <div class="left">
 
-    <div class="description" *ngIf="training  && !insertModalActive" onclick="this.style.height = '30%';  $('description').addClass('active');">
-     Description
-     
-    </div>
-    <div class="times" *ngIf="training  && !insertModalActive" onclick="this.style.height = '30%';">
-      Sets
- 
-     </div>
-     <div class="times" *ngIf="training  && !insertModalActive" onclick="this.style.height = '30%';">
-      Details
- 
-     </div>
-     <div  *ngIf="training  && !insertModalActive" class="form-group" id="description">
-      <label>{{training.description}}</label>
-      
-    </div>
-  <div class ="form-group "  *ngIf="training && !insertModalActive">
-    <div *ngFor="let trainingSet of training.sets; let i = index" name="sets">
-      
-      <div class ="form-group ">
-      <div class= "row" >
-        <div class="input-field col s3" >
-          <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingSet.distance"  name="distance{{i}}" placeholder="Distance/m" readonly>
+    <div *ngIf="training  && !insertModalActive"  (click)="ChangeDescriptionSize()" [class.descriptionBig]="descriptionClicked" [class.description]="!descriptionClicked">
+      <div  *ngIf="descriptionClicked" >
+        <div class = "row">
+          <p id ="side">Description</p>   
+          <span class=" glyphicon glyphicon-menu-up" id="down" aria-hidden="true"></span>      
         </div>
-        <div class="input-field col s3" >
-          <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingSet.pace" name="pace{{i}}" placeholder="Pace/s" readonly>                      
+        <div class = "maxlenght">
+        <p id ="notesNames">{{training.description}}</p>
+        </div>
+        </div>
+        <div  *ngIf="!descriptionClicked" >
+          <p></p>
+          <div class = "row">
+            <p id ="notesNames">Description</p>   
+            <span class=" glyphicon glyphicon-menu-down" id="down" aria-hidden="true"></span>      
+          </div>
         </div>  
-        <div class="input-field col s3" >
-          <input type="number" step="0.01" class="form-control"  [(ngModel)]="trainingSet.rest" name="rest{{i}}" placeholder="Rest/s" readonly>                      
-        </div>
-        
-        </div>
-        </div>
-    </div>                
- </div>
-  <div  *ngIf="training  && !insertModalActive" class="form-group">
-    <div class="row">
-      <div class="input-field col s6" >
-        <button  class="btn btn-success" (click)="OpenModal('update')" *ngIf="belongsToUser">Update</button>                    
-      </div>
-      <div class="input-field col s6" >
-      <button  class="btn btn-info" (click)="OpenModal('delete')" *ngIf="belongsToUser">Delete</button>  
-    </div>
-    </div>
+      </div>   
+<!-- /////////////////////////////////////////////////////////////-->
+      <div *ngIf="training  && !insertModalActive"  (click)="changeTimes()" [class.timesBig]="setsClicked" [class.times]="!setsClicked">
+        <div  *ngIf="setsClicked" >
+          <div class = "row">
+            <p id ="notesNames">Sets</p>   
+            <span class=" glyphicon glyphicon-menu-up" id="down" aria-hidden="true"></span>      
+          </div>
+          <div class = "maxlenght">
+            <div *ngFor="let trainingSet of training.sets; let i = index" name="sets">
+       
+              <div class ="form-group ">
+              <div class= "row" >
+                <div class="input-field col s1" >
+                  <input type="number" step="0.01" class="form-control setInput tikrinu" [(ngModel)]="trainingSet.distance"  name="distance{{i}}" placeholder="Distance/m" readonly>
+                </div>
+                <div class="input-field col s3" >
+                  <input type="number" step="0.01" class="form-control setInput tikrinu" [(ngModel)]="trainingSet.distance"  name="distance{{i}}" placeholder="Distance/m" readonly>
+                </div>
+                <div class="input-field col s3" >
+                  <input type="number" step="0.01" class="form-control setInput tikrinu" [(ngModel)]="trainingSet.pace" name="pace{{i}}" placeholder="Pace/s" readonly>                      
+                </div>  
+                <div class="input-field col s3" >
+                  <input type="number" step="0.01" class="form-control setInput tikrinu"  [(ngModel)]="trainingSet.rest" name="rest{{i}}" placeholder="Rest/s" readonly>                      
+                </div>
+                
+                </div>
+                </div>
+            </div>  
+          </div>
+          </div>
+          <div  *ngIf="!setsClicked" >
+            <p></p>
+            <div class = "row">
+              <p id ="notesNames">Sets</p>   
+              <span class=" glyphicon glyphicon-menu-down" id="down" aria-hidden="true"></span>      
+            </div>
+          </div>  
+        </div> 
+     <!-- /////////////////////////////////////////////////////////////-->
+
+          <div *ngIf="training  && !insertModalActive"  (click)="changeManage()" [class.timesBig]="manageClicked" [class.times]="!manageClicked">
+            <div  *ngIf="manageClicked" >
+              <div class = "row">
+                <p id ="notesNames">Manage</p>   
+                <span class=" glyphicon glyphicon-menu-up" id="down" aria-hidden="true"></span>      
+              </div>
+              <div class = "maxlenght">
+                <div class = "maxlenght">
+                  <div class="row">
+                    <div class="input-field col s6" >
+                      <button  class="btn btn-success manageButtons" (click)="OpenModal('update')" *ngIf="belongsToUser">Update</button>                    
+                    </div>
+                    <div class="input-field col s6" >
+                    <button  class="btn btn-info manageButtons" (click)="OpenModal('delete')" *ngIf="belongsToUser">Delete</button>  
+                  </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div  *ngIf="!manageClicked" >
+                <p></p>
+                <div class = "row">
+                  <p id ="notesNames">Manage</p>   
+                  <span class=" glyphicon glyphicon-menu-down" id="down" aria-hidden="true"></span>      
+                </div>
+              </div>  
+            </div>   
+   
     
-    
-  </div>
-  
   </div>
   <div class="right">
     <button class="btn btn-secondary float-right newTrain" (click)="OpenModal('insert')" *ngIf="Role==='Coach'||Role==='Admin'">New Training</button >
