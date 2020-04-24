@@ -14,12 +14,14 @@ namespace TMS
         public async Task SendEmailConfirmationEmail(string email, string token)
         {
             var message = new SendGridMessage();
-            message.SetFrom("aurimas.valauskas@ktu.edu", "aurimas");
-            message.AddTo("valauskas.aurimas@gmail.com");
-            message.SetTemplateId("d - b702ab0729b242398c66eebf6c4d7758");
+            message.SetFrom("aurimas.valauskas@ktu.edu", "Aurimas");
+            message.AddTo(email);
+            message.SetTemplateId("d-12425b91466e46149de263bc746efef4");
             message.SetTemplateData(new { token });
+            
+            var response = await Client.SendEmailAsync(message); 
 
-            _ = await Client.SendEmailAsync(message);
+           
         }
 
 

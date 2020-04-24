@@ -16,7 +16,8 @@ namespace TMS
             authService = new AuthService()
             {
                 AuthRepository = new AuthRepository(),
-                ConsumerRepository = new ConsumerRepository()
+                ConsumerRepository = new ConsumerRepository(),
+                EmailRepository = new EmailRepository()
             };
         }
 
@@ -49,7 +50,7 @@ namespace TMS
                 return BadRequest(response);
             }
         }
-        [HttpPost("confirm/{id}")]
+        [HttpGet("confirm/{id}")]
         public async Task<IActionResult> Register([FromRoute] string Id)
         {
              await authRepo.VerifyRegister(Id);

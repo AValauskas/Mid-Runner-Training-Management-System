@@ -14,7 +14,7 @@ namespace TMS
         //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
 
             public static string SendGridApiKeynežinau { get; set; } = "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";
-            public static string SendGridApiKey { get; set; } = "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";
+            public static string SendGridApiKey { get; set; } = "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";
             public static string EmailConfirmationTemplateId { get; set; } = "d-2adb5e065a824d11bcf7e3e99deb3871";
             public static string PasswordResetEmailTemplateId { get; set; } = "PasswordResetEmailTemplateId";       
             public static string SenderEmailAddress { get; set; } = "aurimas19970704@gmail.com";

@@ -7,7 +7,7 @@ namespace TMS
 {
     public interface IAuthRepository
     {
-        Task RegisterUser(User user);
+        Task<ConsumerEntity> RegisterUser(User user);
         Task<string> CheckIfEmailAlreadyExist(User user);
         Task LoginUser(string email, string password);
         Task ChangePassword(string ConsumerId, HashPasswordInfo hashedInfo);

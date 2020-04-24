@@ -13,6 +13,8 @@ namespace TMS
     {
         public IAuthRepository AuthRepository { get; set; }
         public IConsumerRepository ConsumerRepository { get; set; }
+
+        public IEmailRepository EmailRepository { get; set; }
         public async Task<string> Register(User user)
         {
             if (user.Password.Length<6)
@@ -33,8 +35,8 @@ namespace TMS
             var hash = PasswordHashing.HashNewPassword(user.Password);
             user.Password = hash.Password;
             user.Salt = hash.Salt;
-            await AuthRepository.RegisterUser(user);
-
+            var consumer = await AuthRepository.RegisterUser(user);
+            await EmailRepository.SendEmailConfirmationEmail(user.Email, consumer.Id);
             return null;
         }                     
         

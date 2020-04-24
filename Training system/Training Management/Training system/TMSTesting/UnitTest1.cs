@@ -20,9 +20,9 @@ namespace TMSTesting
         }
 
         [Test]
-        public void SendEmail()
+        public async Task SendEmail()
         {
-            emailRepo.SendEmailConfirmationEmail("valauskas.aurimas@gmail.com", "5e7b9bd0a04cca0001ffd0c2");
+           await emailRepo.SendEmailConfirmationEmail("valauskas.aurimas@gmail.com", "5e972ad851ae1a0001dde044");
          
         }
 

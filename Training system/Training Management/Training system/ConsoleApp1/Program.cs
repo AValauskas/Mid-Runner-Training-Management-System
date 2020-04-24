@@ -14,11 +14,11 @@ namespace ConsoleApp1
         }
         static async Task Execute()
         {
-            var apiKey = "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";
+            var apiKey = "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";
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("aurimas.valauskas@ktu.edu", "Aurimas");
             var subject = "Sending with SendGrid is Fun";
-            var to = new EmailAddress("aurimas.valauskas@ktu.lt", "kitas");
+            var to = new EmailAddress("aurimas19970704@gmail.com", "kitas");
             var plainTextContent = "and easy to do anywhere, even with C#";
             var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
