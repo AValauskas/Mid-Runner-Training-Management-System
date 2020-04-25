@@ -6,7 +6,7 @@
     <div *ngIf="training  && !insertModalActive"  (click)="ChangeDescriptionSize()" [class.descriptionBig]="descriptionClicked" [class.description]="!descriptionClicked">
       <div  *ngIf="descriptionClicked" >
         <div class = "row">
-          <p id ="side">Description</p>   
+          <p id ="notesNames">Description</p>   
           <span class=" glyphicon glyphicon-menu-up" id="down" aria-hidden="true"></span>      
         </div>
         <div class = "maxlenght">
@@ -61,7 +61,7 @@
         </div> 
      <!-- /////////////////////////////////////////////////////////////-->
 
-          <div *ngIf="training  && !insertModalActive"  (click)="changeManage()" [class.timesBig]="manageClicked" [class.times]="!manageClicked">
+          <div *ngIf="training  && !insertModalActive && Role==='Coach' "  (click)="changeManage()" [class.timesBig]="manageClicked" [class.times]="!manageClicked">
             <div  *ngIf="manageClicked" >
               <div class = "row">
                 <p id ="notesNames">Manage</p>   

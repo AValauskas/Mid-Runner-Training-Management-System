@@ -6,6 +6,7 @@ import { ITrainingTemplate } from 'src/app/Interfaces/ITrainingTemplate';
 import { ICoachAssignedTraining } from 'src/app/Interfaces/ICoachAssignedTraining';
 import { ISet } from 'src/app/Interfaces/ISet';
 import { IAthleteForm } from 'src/app/Interfaces/IAthleteForm';
+import { ISetToDisplay } from 'src/app/Interfaces/ISetToDisplay';
 
 @Component({
   selector: 'app-athlete-list',
@@ -14,31 +15,33 @@ import { IAthleteForm } from 'src/app/Interfaces/IAthleteForm';
 })
 export class AthleteListComponent implements OnInit {
   @Input() dateClicked :string;
+  @Input() AssignedTraining :ICoachAssignedTraining;
   @Output("renewTrainings") parentFun: EventEmitter<any> = new EventEmitter();
 
-  AssignedTrainings:ICoachAssignedTraining[];
-  AthleteTraininActive = false;
-  ListActive = true;
   alreadyPast = false;
   max=0;
-  exist = false;
   athlete:string;
 
   toDo:ITrainingTemplate;
   personalTraining: IPersonalTraining;
   trainingsToAdd: ISet[] = [];
-  athleteForm:IAthleteForm = new IAthleteForm()
+  athleteForm:IAthleteForm = new IAthleteForm();
+  setsToDisplay:ISetToDisplay[]=[];
   
   constructor(private _http: ProcessService,public _router:Router) { }
 
   ngOnInit(): void {
+    console.log(this.AssignedTraining)
+    console.log(this.AssignedTraining.personalTrainingId)
+    console.log(this.AssignedTraining.trainingTemplateId)
+    console.log(this.AssignedTraining.athlete)
+    
   }
 
 
   ngOnChanges() {
      
     var dateTraining=new Date(this.dateClicked);
-    this.GetData();
 
     if(dateTraining.getTime() <= Date.now() )    
     {
@@ -47,27 +50,52 @@ export class AthleteListComponent implements OnInit {
     else{
       this.alreadyPast=false;
     }
-    this.AthleteTraininActive = false;
-    this.ListActive = true;
-    this.exist = false;
     this.trainingsToAdd = [];
+    this.DisplayTrain()
   }
 
-  GetData(){
-    this._http.GetAllCoachAssignedTrainingsByDate(this.dateClicked).subscribe(data=>{   
-     this.AssignedTrainings= data;   
-     console.log(data)  
-      });  
-  }
-
-
-  TurnTrain(trainingTemplateid, personalTrainingId, athleteName)
+  FormSetsToDisplay()
   {
-    this.athlete = athleteName;
-    console.log( personalTrainingId);
-    this.AthleteTraininActive = true;
-    this.ListActive= false;
-    this._http.GetTrainingTemplateById(trainingTemplateid).subscribe(data=>{   
+      this.toDo.sets.forEach(element => {
+        
+        let set =  {} as ISetToDisplay;
+        set.distane =element.distance;
+
+        var paceMinNumb =Math.trunc(element.pace/60) ;
+        var restMinNumb =Math.trunc(element.rest/60);
+
+        if(paceMinNumb>=1)
+        {
+         var paceMin = paceMinNumb.toString()+"min "
+        }
+        else
+        {
+          paceMin="";
+        }
+        if(restMinNumb>=1)
+        {
+         var restMin = restMinNumb.toString()+"min "
+        }
+        else
+        {
+          restMin="";
+        }
+
+        set.rest=restMin+(element.rest - restMinNumb*60).toString()+"s"
+        set.runTime=paceMin+(element.pace - paceMinNumb*60).toString()+"s"
+        
+        this.setsToDisplay.push(set);
+      });
+console.log(this.setsToDisplay);
+  }
+
+
+  DisplayTrain()
+  {
+    this.athlete = this.AssignedTraining.athlete;
+    console.log( this.dateClicked);
+    console.log( this.AssignedTraining.personalTrainingId);
+    this._http.GetTrainingTemplateById( this.AssignedTraining.trainingTemplateId).subscribe(data=>{   
       this.toDo=data;
       console.log( this.toDo);
       if(typeof this.toDo !== 'undefined'){
@@ -77,29 +105,17 @@ export class AthleteListComponent implements OnInit {
         }
         else{
         this.max = this.toDo.repeats*this.toDo.sets.length
+        this.setsToDisplay=[];
+        this.FormSetsToDisplay();
         }
       }
     });
-    this._http.GetPersonalTrainingById(personalTrainingId).subscribe(data=>{   
+    this._http.GetPersonalTrainingById( this.AssignedTraining.personalTrainingId).subscribe(data=>{   
       this.personalTraining=data;
-      this.exist = true;
       this.trainingsToAdd =this.personalTraining.results
       console.log(this.trainingsToAdd)
       console.log( this.personalTraining);
     }); 
-  }
-
-
-  DeletePersonalTraining(id)
-  {
-    this._http.DeletePersonalTraining(id).subscribe(data=>{   
-       this._http.GetAllCoachAssignedTrainingsByDate(this.dateClicked).subscribe(data2=>{   
-        this.AssignedTrainings= data2;   
-        console.log(data2)  
-         }); 
-         this.parentFun.emit();
-       });  
-       
   }
 
   //----------------------------athleto redagavimo formos metodai-------------------
@@ -112,7 +128,6 @@ export class AthleteListComponent implements OnInit {
     this._http.UpdatePersonalTrainingResults(this.athleteForm, this.personalTraining.id).subscribe(data=>{   
       console.log(data);      
     })
-   this.ListActive=true;
   }
 
 

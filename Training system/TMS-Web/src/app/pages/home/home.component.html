@@ -1,16 +1,72 @@
 <body>
-<div class='app  calendar'>  
+<div class="messageGood d-flex " *ngIf="successMessage || failMessage">
+  <div [class.messageGood]="successMessage" [class.messageBad]="failMessage">
 
-  <full-calendar   #fullcalendar  deepChangeDetection="true"
-  [editable]="true"
-   [events]="calendarEvents"  
-   [firstDay]=1
-  (dateClick)="dateClick($event)"
-  
-  [plugins]="calendarPlugins" 
-  (eventClick)="eventClick($event)"  
- ></full-calendar>  
-</div>  
+    <p >{{message}}</p>   
+  </div>
+</div>
+    <div class="row">
+      <div class="left">          
+      
+          <div class="" *ngIf="Role==='Coach' && ListClicked && AssignedTrainingsByDate"  (click)="ChangeAthleteListSize()" [class.listBig]="listSizeBig" [class.list]="!listSizeBig" > 
+
+              <div  *ngIf="listSizeBig" >
+                <div class = "row">
+                  <p id ="notesNames">Athletes list {{dateClicked}}</p>   
+                  <span class=" glyphicon glyphicon-menu-up" id="down" aria-hidden="true"></span>      
+                </div>
+                <div class = "maxlenght">
+                  <div class="list-group" >
+        
+                  
+                    <tr *ngFor="let training of AssignedTrainingsByDate" > 
+                        <div class="row justify-content-between" >
+                       <div  class=" list-group-item-action col-md-9 athleteListElem" (click)="TurnOnTrain(training)">
+                      <td class="col-md-6 " >{{training.athlete}}</td>
+                      <td class="col-md-6 " ><div class= "scroolable">{{ training.definition}}</div></td> 
+                        </div>
+                      <div class="col-md-2 ">  <button type="button" class="btn btn-default" id="athleteDeleteButton" (click)="DeletePersonalTraining(training.personalTrainingId)">Delete</button></div>    
+                        </div>
+                      </tr>            
+                  </div>
+             </div>
+          </div>
+
+                <div  *ngIf="!listSizeBig" >
+                  <p></p>
+                  <div class = "row">
+                    <p id ="notesNames">Athletes list {{dateClicked}}</p>   
+                    <span class=" glyphicon glyphicon-menu-down" id="down" aria-hidden="true"></span>      
+                  </div>
+                </div>  
+              
+             
+           </div>
+           <div  *ngIf="Role ==='Coach' && ListClicked">
+            <button class="btn btn-secondary responsive newTrain"  *ngIf="Role==='Coach'||Role==='Admin'" (click)="OpenNewTrainingModal()">New Training</button >
+            </div>
+
+       
+        </div>
+        <div class="right">
+          <div class='app container calendar'>  
+
+            <full-calendar id ="full"   #fullcalendar  deepChangeDetection="true"
+            [editable]="true"
+             [events]="calendarEvents"  
+             [firstDay]=1
+            (dateClick)="dateClick($event)"
+            
+            [plugins]="calendarPlugins" 
+            (eventClick)="eventClick($event)"  
+           ></full-calendar>  
+          </div>  
+       </div>
+    </div>
+
+
+
+
 
 
 
@@ -19,32 +75,21 @@
     <div class="modal " id="myModal">
       <div class="modal-dialog ">
         <div class="modal-content">
-
-          <div class="card-tabs" *ngIf="Role==='Coach'">
-            <ul class="nav nav-pills nav-fill color" >
-              <li class="nav-item">
-                <a class="nav-link" [ngClass]="{'active': ListActive }" (click)="ChangeActive('athletes')" >Athletes</a>
-              </li>
-              <li class="nav-item" >
-                <a  class="nav-link" [ngClass]="{'active': TrainingFormActive}" (click)="ChangeActive('train')">Trainings</a>
-              </li>
-            </ul>
-          </div>
-                 
-          <!-- Modal body -->
           <div  >
             <app-personal-training-modal *ngIf="Role==='Athlete'"
             [toDo]="ToDoInTraining"
             [personalTraining]="ChosenTraining"
             [exist]="exist"
+            (TurnOnSuccesMessage)="TurnOnSuccesMessageAthlete()"
             ></app-personal-training-modal>     
             <app-coach-training-assign-modal *ngIf="Role==='Coach' && TrainingFormActive"
             [dateClicked]="dateClicked"
             (renewTrainings)="renewTrainings()"
             ></app-coach-training-assign-modal>
 
-            <app-athlete-list *ngIf="Role==='Coach' && ListActive"
+            <app-athlete-list *ngIf="Role==='Coach' && PersonalTrainActive"
             [dateClicked]="dateClicked"
+            [AssignedTraining]="TrainingToSendForModal"
             (renewTrainings)="renewTrainings()"
             >           
             </app-athlete-list>

@@ -1,0 +1,58 @@
+.tasks
+{
+    text-align: center;
+   margin-top: 10px;
+   background-color: khaki;
+   
+}
+p.heading
+{
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+div.form-group
+{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+div.separate
+{
+    border-top: rgb(233, 230, 230) 2px solid;
+}
+div.firstHeading
+{
+    margin-top: 0;
+}
+div.section
+{
+    border-top: rgb(83, 82, 82) 2px solid;
+    border-bottom: rgb(83, 82, 82) 2px solid;
+    margin-bottom: 15px;
+}
+div.trainInfo
+{
+    width:100%;
+    margin-left: 0.5%;
+}
+
+.num
+{
+    text-align: right; 
+}
+
+#delete
+{
+    color:white;
+  background-color:rgb(68, 67, 67);
+}
+
+#add
+{
+  background-color:khaki;
+}
+
+div.free{
+    text-align: center;
+    font-size: 150%;
+
+}

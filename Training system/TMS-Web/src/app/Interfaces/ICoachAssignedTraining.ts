@@ -3,5 +3,5 @@ export interface ICoachAssignedTraining{
     athledeId: string;
     definition: string;
     trainingTemplateId: string;
-    PersonalTrainingId: string;
+    personalTrainingId: string;
   }

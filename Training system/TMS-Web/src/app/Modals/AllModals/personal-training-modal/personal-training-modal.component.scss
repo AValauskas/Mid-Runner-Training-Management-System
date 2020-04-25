@@ -27,9 +27,32 @@ div.section
 {
     border-top: rgb(83, 82, 82) 2px solid;
     border-bottom: rgb(83, 82, 82) 2px solid;
+    margin-bottom: 15px;
 }
 div.trainInfo
 {
     width:100%;
     margin-left: 0.5%;
+}
+
+.num
+{
+    text-align: right; 
+}
+
+#delete
+{
+    color:white;
+  background-color:rgb(68, 67, 67);
+}
+
+#add
+{
+  background-color:khaki;
+}
+
+div.free{
+    text-align: center;
+    font-size: 150%;
+
 }

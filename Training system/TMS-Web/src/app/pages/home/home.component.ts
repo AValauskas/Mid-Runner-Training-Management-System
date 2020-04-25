@@ -13,6 +13,7 @@ import { IPersonalTraining } from '../../Interfaces/IPersonalTraining';
 import { ITrainingTemplate } from '../../Interfaces/ITrainingTemplate';
 import { ThrowStmt } from '@angular/compiler';
 import { ITrainingDefinition } from 'src/app/Interfaces/ITrainingDefinition';
+import { ICoachAssignedTraining } from 'src/app/Interfaces/ICoachAssignedTraining';
 
 
 @Component({
@@ -25,16 +26,17 @@ import { ITrainingDefinition } from 'src/app/Interfaces/ITrainingDefinition';
 export class HomeComponent implements OnInit {
   //Calendar stuff
   @ViewChild('calendar') calendarComponent: FullCalendarComponent; // the #calendar in the template  
-  private child: PersonalTrainingModalComponent;
-  calendarVisible = true;  
-  calendarWeekends = true;  
   exist = false;
   calendarPlugins = [dayGridPlugin, interactionPlugin, bootstrapPlugin, listPlugin];
   Role: string;
   calendarEvents: EventInput[] = [];  
-  ListActive= false;
-  TrainingFormActive= true;
-
+  ListClicked= false;
+  TrainingFormActive= false;
+  PersonalTrainActive= false;
+  listSizeBig= false;
+  successMessage=false;
+  failMessage = false;
+  message:string;
 
   //----------Athlete
   trainings: IPersonalTraining[]; 
@@ -45,14 +47,20 @@ export class HomeComponent implements OnInit {
   CoachAssignedTrainings: IPersonalTraining[];
   dateClicked:string;
   CoachBusy: ITrainingDefinition[];
- 
-
+  AssignedTrainingsByDate:ICoachAssignedTraining[];
+  TrainingToSendForModal:ICoachAssignedTraining=<ICoachAssignedTraining>{};
 
 
   constructor(private _http: ProcessService,public _router:Router) { }
 
   //-------------------------------Data to display-------------------------------------------
   ngOnInit() {  
+
+    if(localStorage.getItem('role')==null)
+    {
+      this._router.navigateByUrl('/login');
+    }   
+    
     this.Role=localStorage.getItem('role')
     if(this.Role=="Athlete")
     this.HttpCallAthlete();  
@@ -78,9 +86,6 @@ export class HomeComponent implements OnInit {
           var eventColor="blue";
           var firstNum = Number(splitted[0]);
           var secondNum = Number(splitted[1]);
-          console.log(firstNum);
-          console.log(secondNum);
-          console.log(firstNum/secondNum);
           if((firstNum/secondNum)>=0.75)
           {eventColor="green"}
           else if ((firstNum/secondNum)>=0.5)
@@ -91,14 +96,8 @@ export class HomeComponent implements OnInit {
           {eventColor="rgb(139,0,0)"}
           this.calendarEvents.push({ title: element.description, date: new Date(element.day), color:eventColor})
           });   
-      });
+      });    
      
-     
-      this._http.GetAllCoachAssignedTrainings().subscribe(data=>{   
-        
-      this.CoachAssignedTrainings = data;     
-            
-      });      
   }
 //---------------------------------Clicks-------------------------------------
     eventClick(model) {  
@@ -107,13 +106,13 @@ export class HomeComponent implements OnInit {
     }  
   
     dateClick(model) {  
+      this.dateClicked = model.dateStr;
       if(this.Role=="Athlete"){
-        this.AthleteDateClick(model)
-     
-    }
-    else if(this.Role=="Coach"){
-   this.CoachDateClick(model);
-    }
+        this.AthleteDateClick(model)     
+        }
+        else if(this.Role=="Coach"){
+      this.CoachDateClick(model);
+        }
     }  
 
 
@@ -139,43 +138,80 @@ export class HomeComponent implements OnInit {
     }
 
     CoachDateClick(model){
-      this.dateClicked =model.dateStr;
-      console.log(this.dateClicked);
-      $('#myModal').modal("show");
-
+      this.ListClicked = true;
+      this._http.GetAllCoachAssignedTrainingsByDate(model.dateStr).subscribe(data=>{   
+        this.AssignedTrainingsByDate= data;   
+        console.log(data)  
+         }); 
     }
     
+
+
+    //-----------------------other stugg
     renewTrainings()
     {
-      this._http.GetAllCoachAssignedTrainings().subscribe(data=>{   
         this.calendarEvents = []
-        this.CoachAssignedTrainings = data;
-        
-        this._http.GetPersonalTrainingsBusy().subscribe(data2=>{   
-          this.CoachBusy = data2;    
-          this.CoachBusy.forEach(element => {
-            this.calendarEvents.push({ title: element.description, date: new Date(element.day) })
-            });   
-        });        
-        }); 
-      console.log("atejo");
+        this.HttpCallCoach();
     }
 
-    ChangeActive(data)
-    {
-        if(data== "train")
-        {
-          this.TrainingFormActive= true;
-          this.ListActive = false;
-        }
-        if(data== "athletes"){
-          this.TrainingFormActive= false;
-          this.ListActive = true;
-        }
-    }
 
    FindByDate(train, date) { 
       return train.day === new Date(date);
     }
     
+
+    DeletePersonalTraining(id)
+    {
+      this._http.DeletePersonalTraining(id).subscribe(data=>{   
+      this._http.GetAllCoachAssignedTrainingsByDate(this.dateClicked).subscribe(data2=>{   
+       this.AssignedTrainingsByDate= data2;   
+       this.calendarEvents = [];
+       this.HttpCallCoach();
+        }); 
+      });       
+    
+    }
+    
+    OpenNewTrainingModal()
+    {
+      console.log("paspaude");
+      this.TrainingFormActive= true;
+      $('#myModal').modal("show");
+
+    }
+
+    TurnOnTrain(trainingToSend)
+    {
+      this.PersonalTrainActive= true;
+      this.TrainingFormActive=false;
+      this.TrainingToSendForModal = trainingToSend;
+        console.log(this.TrainingToSendForModal)
+
+        $('#myModal').modal("show");
+    }
+
+
+    ChangeAthleteListSize()
+    {
+      if(this.listSizeBig)
+      {this.listSizeBig= false;}
+      else{
+        this.listSizeBig= true;
+      }
+    }
+
+
+    async TurnOnSuccesMessageAthlete()
+    {
+      this.successMessage = true;
+      this.message = "You have succesfully updated your training"
+      await this.delay(3000);
+      this.successMessage = false;
+      this.message="";
+    }
+
+
+   delay(ms: number) {
+      return new Promise( resolve => setTimeout(resolve, ms) );
+  }
 }
