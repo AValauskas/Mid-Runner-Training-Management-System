@@ -73,3 +73,132 @@ div.formdiv
     text-align: center;
     vertical-align: middle;
 }
+
+div.coachTab
+{  
+    margin-left: 5%;
+    width: 90%;
+    margin-top: 10%;
+    height: 10%;
+   //height: 100px;
+    background-color: khaki;
+    border-radius: 15px;
+    transition: height 300ms;
+    overflow: hidden;
+}
+div.coachTab:hover,div.friends:hover, div.athletes:hover
+{
+    background-color: rgb(219, 209, 61);
+}
+div.coachTabBig
+{
+  overflow: hidden;
+  margin-left: 5%;
+  width: 90%;
+  margin-top: 10%;
+  height: 15%;
+// height: 300px;
+  background-color: khaki;
+  border-radius: 15px;
+  transition: height 300ms;
+  
+}
+
+
+
+div.friends
+{  
+    margin-left: 5%;
+    width: 90%;
+    margin-top: 5%;
+    height: 10%;
+   //height: 100px;
+    background-color: khaki;
+    border-radius: 15px;
+    transition: height 300ms;
+    overflow: hidden;
+}
+
+div.friendsBig
+{
+  overflow: hidden;
+  margin-left: 5%;
+  width: 90%;
+  margin-top: 5%;
+  max-height: 30%;
+// height: 300px;
+  background-color: khaki;
+  border-radius: 15px;
+  transition: height 300ms;
+  
+}
+
+
+
+div.athletes
+{  
+    margin-left: 5%;
+    width: 90%;
+    margin-top: 10%;
+    height: 10%;
+   //height: 100px;
+    background-color: khaki;
+    border-radius: 15px;
+    transition: height 300ms;
+    overflow: hidden;
+}
+
+div.athletesBig
+{
+  overflow: hidden;
+  margin-left: 5%;
+  width: 90%;
+  margin-top: 10%;
+  max-height: 30%;
+// height: 300px;
+  background-color: khaki;
+  border-radius: 15px;
+  transition: height 300ms;
+  
+}
+
+#notesNames
+{ 
+
+  margin-left:10%;
+  margin-top:1%;
+  font-family: "Comic Sans MS", cursive, sans-serif
+}
+#side
+{
+   font-size:7px;
+  margin-left:10%;
+  margin-top:1%;
+  font-family: "Comic Sans MS", cursive, sans-serif
+
+}
+#down{
+  margin-top:-10%;
+  margin-left:90%;
+}
+
+.maxlenght
+{
+  overflow-y: auto; 
+  overflow-x:  hidden;
+  max-height:150px;
+}
+
+div.athleteListElem
+{
+ border-bottom: 2px grey solid;
+ border-top: none;
+ border-right: none;
+}
+
+.maxlenght
+{
+  overflow-y: auto; 
+  overflow-x:  hidden;
+  max-height:350px;
+}

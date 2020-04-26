@@ -15,5 +15,6 @@ namespace TMS
         Task<List<PersonInfo>> GetAllCoachAthletesAggregate(string coachId);
         Task<List<PersonInfo>> GetAllInvitersAggregate(string consumerId);
         Task<List<PersonInfo>> FindOutIfAthleteHasCoachAggregate(string consumerId);
+        Task<List<PersonInfo>> GetUserFriendsAggregate(string consumerId);
     }
 }

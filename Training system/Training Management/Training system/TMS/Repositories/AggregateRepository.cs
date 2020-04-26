@@ -137,5 +137,18 @@ namespace TMS
             });
             return athletes;
         }
+
+        public async Task<List<PersonInfo>> GetUserFriendsAggregate(string consumerId)
+        {
+            var service = new CodeMashRepository<ConsumerEntity>(Client);
+            var athletes = await service.AggregateAsync<PersonInfo>(Guid.Parse("5b5a72e1-ecd6-4dc0-8f9e-4a859a166e85"), new AggregateOptions
+            {
+                Tokens = new Dictionary<string, string>()
+                {
+                       { "id", consumerId },
+                }
+            });
+            return athletes;
+        }
     }
 }

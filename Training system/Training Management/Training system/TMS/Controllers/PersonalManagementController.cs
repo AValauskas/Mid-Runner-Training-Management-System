@@ -111,8 +111,7 @@ namespace TMS
             }
             {
                 return BadRequest(result);
-            }
-            
+            }            
         }
 
 
@@ -205,5 +204,39 @@ namespace TMS
 
         }
 
+        //Coaches/friends----------------
+
+        [HttpGet("personalcoach")]
+        public async Task<IActionResult> GetConsumerCoach()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idConsumer = cla[1].Value;
+            var consumer = await aggregateRepo.FindOutIfAthleteHasCoachAggregate(idConsumer);
+
+            return Ok(consumer);
+        }
+
+        [HttpGet("friends")]
+        public async Task<IActionResult> GetConsumerFriends()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idConsumer = cla[1].Value;
+            var consumer = await aggregateRepo.GetUserFriendsAggregate(idConsumer);
+
+            return Ok(consumer);
+        }
+
+        [HttpGet("coachAthletes")]
+        public async Task<IActionResult> GetAthletes()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idConsumer = cla[1].Value;
+            var consumer = await aggregateRepo.GetAllCoachAthletesAggregate(idConsumer);
+
+            return Ok(consumer);
+        }
     }
 }

@@ -2,8 +2,100 @@
 <body>
     <div class="row">
       <div class="left">
-           
+
+        <!---------------------------------------COACH------------------------------------->
+            <div  (click)="ChangeCoachSize()" [class.coachTabBig]="CoachClicked" [class.coachTab]="!CoachClicked"  *ngIf="role==='Athlete'"> 
+        <div  *ngIf="CoachClicked" >
+            <div class = "row">
+            <p id ="notesNames">Coach</p>   
+            <span class=" glyphicon glyphicon-menu-up" id="down" aria-hidden="true"></span>      
+            </div>
+            <div class = "maxlenght">
+                <div class="list-group" *ngIf="coach" >       
+                  
+                    <tr *ngFor="let coach1 of coach" > 
+                        <div class="row justify-content-between" >
+                       <div  class=" list-group-item-action col-md-9 athleteListElem" >
+                      <td class="col-md-6 " >{{coach1.name}}</td>
+                      <td class="col-md-6 " ><div class= "scroolable">{{ coach1.surname}}</div></td> 
+                        </div>
+                     
+                        </div>
+                      </tr>            
+                  </div>
+            </div>
+            </div>
+            <div  *ngIf="!CoachClicked" >
+            <p></p>
+            <div class = "row">
+                <p id ="notesNames">Coach</p>   
+                <span class=" glyphicon glyphicon-menu-down" id="down" aria-hidden="true"></span>      
+            </div>
+            </div>  
+        </div>   
+         <!---------------------------------------FRIENDS------------------------------------->
+         <div  (click)="ChangeFriendsSize()" [class.friendsBig]="friendsClicked" [class.friends]="!friendsClicked"  *ngIf="role==='Athlete'"> 
+            <div  *ngIf="friendsClicked" >
+                <div class = "row">
+                <p id ="notesNames">Friends</p>   
+                <span class=" glyphicon glyphicon-menu-up" id="down" aria-hidden="true"></span>      
+                </div>
+                <div class = "maxlenght">
+                    <div class="list-group" *ngIf="friends" >       
+                      
+                        <tr *ngFor="let friend of friends" > 
+                            <div class="row justify-content-between" >
+                           <div  class=" list-group-item-action col-md-9 athleteListElem" >
+                          <td class="col-md-6 " >{{friend.name}}</td>
+                          <td class="col-md-6 " ><div class= "scroolable">{{ friend.surname}}</div></td> 
+                            </div>
+                         
+                            </div>
+                          </tr>            
+                      </div>
+                </div>
+                </div>
+                <div  *ngIf="!friendsClicked" >
+                <p></p>
+                <div class = "row">
+                    <p id ="notesNames">Friends</p>   
+                    <span class=" glyphicon glyphicon-menu-down" id="down" aria-hidden="true"></span>      
+                </div>
+                </div>  
+            </div>   
+
+             <!---------------------------------------Athletes for coach------------------------------------->
+         <div  (click)="ChangeAthleteSize()" [class.athletesBig]="athletesClicked" [class.athletes]="!athletesClicked"  *ngIf="role==='Coach'"> 
+            <div  *ngIf="athletesClicked" >
+                <div class = "row">
+                <p id ="notesNames">Athletes</p>   
+                <span class=" glyphicon glyphicon-menu-up" id="down" aria-hidden="true"></span>      
+                </div>
+                <div class = "maxlenght">
+                    <div class="list-group" *ngIf="athletes" >       
+                      
+                        <tr *ngFor="let athlete of athletes" > 
+                            <div class="row justify-content-between" >
+                           <div  class=" list-group-item-action col-md-9 athleteListElem" >
+                          <td class="col-md-6 " >{{athlete.name}}</td>
+                          <td class="col-md-6 " ><div class= "scroolable">{{ athlete.surname}}</div></td> 
+                            </div>
+                         
+                            </div>
+                          </tr>            
+                      </div>
+                </div>
+                </div>
+                <div  *ngIf="!athletesClicked" >
+                <p></p>
+                <div class = "row">
+                    <p id ="notesNames">Athletes</p>   
+                    <span class=" glyphicon glyphicon-menu-down" id="down" aria-hidden="true"></span>      
+                </div>
+                </div>  
+            </div> 
         </div>
+
         <div class="right">
             <div class="head ">
                 <p class="heading"> USER INFORMATION</p>

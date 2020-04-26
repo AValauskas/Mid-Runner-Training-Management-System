@@ -10,11 +10,23 @@ namespace TMSTesting
     {
 
         IEmailRepository emailRepo;
+        IAuthService authService;
+        IAuthRepository authRepository;
+        IConsumerRepository consumerRepo;
+
         [SetUp]
         public void Setup()
         {
             emailRepo = new EmailRepository();
+            authRepository = new AuthRepository();
+            consumerRepo = new ConsumerRepository();
 
+            authService = new AuthService()
+            { AuthRepository= authRepository,
+            EmailRepository= emailRepo,
+            ConsumerRepository= consumerRepo
+
+            };
 
 
         }
@@ -38,6 +50,13 @@ namespace TMSTesting
             var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
+
+        }
+
+        [Test]
+        public async Task ResetTry()
+        {
+            await authService.RequestForNewPassword("valauskas.aurimas@gmail.com");
 
         }
     }

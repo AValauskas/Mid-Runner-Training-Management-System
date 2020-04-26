@@ -26,7 +26,7 @@ export class InvitationsComponent implements OnInit {
   ngOnInit(): void {
     this._http.GetInvitations().subscribe(data=>{
       this.invitations = data
-      if( Object.keys(this.invitations).length== 0  )
+      if( Object.keys(this.invitations).length== 0)
       {
         this.isAnyInvite= false;
       }else{

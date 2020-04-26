@@ -158,12 +158,30 @@ namespace TMS
 
         }
 
-
         public async Task ChangePassword(string idConsumer, string password)
         {
             var hashedPassword = PasswordHashing.HashNewPassword(password);
             await AuthRepository.ChangePassword(idConsumer, hashedPassword);
+        }
 
+        public async Task<string> RequestForNewPassword(string email)
+        {
+           var consumer = await ConsumerRepository.FindConsumerByEmail(email);
+            if (consumer!=null)
+            {
+                await EmailRepository.SendPasswordResetEmail(email, consumer.Id);
+                return null;
+            }
+            return "email not exist";
+
+        }
+
+        public async Task ResetPassword(string idConsumer, string password)
+        {
+            var hashedPassword = PasswordHashing.HashNewPassword(password);
+            await AuthRepository.ChangePassword(idConsumer, hashedPassword);
+            var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
+            await EmailRepository.SendNewPassword(consumer.Email, password);
         }
     }
 }

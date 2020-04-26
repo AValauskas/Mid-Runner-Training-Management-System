@@ -9,5 +9,6 @@ namespace TMS
     {
         Task SendEmailConfirmationEmail(string email, string token);
         Task SendPasswordResetEmail(string email, string token);
+        Task SendNewPassword(string email, string token);
     }
 }

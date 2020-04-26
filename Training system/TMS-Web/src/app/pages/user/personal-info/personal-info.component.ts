@@ -14,6 +14,13 @@ export class PersonalInfoComponent implements OnInit {
   role:string;
   firstPass: string;
   secondPass: string;
+  coach:Iuser = new Iuser();
+  friends:Iuser[]=[];
+  athletes:Iuser[]=[];
+  CoachClicked= false;
+  friendsClicked= false;
+  athletesClicked= false;
+
   constructor(private _http: ProcessService,public _router:Router) { }
 
   ngOnInit(): void {
@@ -22,6 +29,22 @@ export class PersonalInfoComponent implements OnInit {
       this.user= data;
       console.log( this.user);
     })
+    if (this.role=="Athlete"){   
+      this._http.GetPersonalCoach().subscribe(data=>{
+        this.coach= data;
+        console.log( this.coach);
+      });
+      this._http.GetUserFriends().subscribe(data=>{
+        this.friends= data;
+        console.log( this.friends);
+      });
+    }
+    if (this.role=="Coach"){   
+      this._http.GetAthletesByCoach().subscribe(data=>{
+        this.athletes= data;
+        console.log( this.athletes);
+      });
+    }
 
   }
 
@@ -40,5 +63,43 @@ export class PersonalInfoComponent implements OnInit {
       console.log("nepavyko!")
     }
   }
+
+  ChangeCoachSize()
+  {
+    console.log("clicked");
+    if( this.CoachClicked)
+    {
+      this.CoachClicked= false;
+    }
+    else{
+      this.CoachClicked= true;
+    }
+  }
+
+  ChangeFriendsSize()
+  {
+    console.log("clicked");
+    if( this.friendsClicked)
+    {
+      this.friendsClicked= false;
+    }
+    else{
+      this.friendsClicked= true;
+    }
+  }
+
+  ChangeAthleteSize()
+  {
+    console.log("clicked");
+    if( this.athletesClicked)
+    {
+      this.athletesClicked= false;
+    }
+    else{
+      this.athletesClicked= true;
+    }
+  }
+
+
 
 }

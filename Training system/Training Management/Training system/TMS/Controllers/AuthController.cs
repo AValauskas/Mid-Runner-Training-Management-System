@@ -10,9 +10,11 @@ namespace TMS
     {
         private readonly IAuthRepository authRepo;
         private readonly IAuthService authService;
+        private readonly IConsumerRepository consumerRepository;
         public AuthController()
         {
             authRepo = new AuthRepository();
+            consumerRepository = new ConsumerRepository();
             authService = new AuthService()
             {
                 AuthRepository = new AuthRepository(),
@@ -55,10 +57,29 @@ namespace TMS
         {
              await authRepo.VerifyRegister(Id);
            
-             return Ok();
-            
+             return Ok();           
             
         }
 
+        [HttpPost("resetpassword/{id}")]
+        public async Task<IActionResult> SendReminderToEmail([FromBody] string email)
+        {
+            var response = await authService.RequestForNewPassword(email);
+            if (response != null)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok();
+        }
+
+        [HttpGet("confirmreset/{id}")]
+        public async Task<IActionResult> ConfirmResetPassword([FromRoute] string Id)
+        {
+            var pass = RandomWord.RandomString(10);
+            await authService.ResetPassword(Id, pass);
+
+            return Ok();
+        }
     }
 }

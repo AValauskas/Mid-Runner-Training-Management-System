@@ -259,7 +259,34 @@ export class ProcessService {
   }
 
 
+  GetPersonalCoach()
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/personalcoach/","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
 
+
+  GetUserFriends()
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/friends/","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+
+
+  GetAthletesByCoach()
+  {
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/coachAthletes/","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
   private HandleError(errorResponse: HttpErrorResponse){
     if(errorResponse.status!=200){
       return "error";
