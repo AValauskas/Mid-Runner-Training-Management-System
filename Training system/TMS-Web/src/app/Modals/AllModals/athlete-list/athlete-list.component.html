@@ -1,11 +1,12 @@
 <div class="container"></div>
         <div  *ngIf="personalTraining" >
             <div> 
-                  <div class ="tasks firstHeading">
+                  <div class = "tasks firstHeading">
                     <p class="heading">TRAINING TEMPLATE</p>  
                   </div>
                    
              <form #TrainingTemplateForm="ngForm" class="" >
+              <div class="form-group">    
               <div class = "row ">
                 <div class="input-field col-md-3" >
                <label for="descriptionTextArea">Description</label>
@@ -13,6 +14,8 @@
                 <div class="input-field col-md-9">        
                <textarea  type="text" class="form-control" [(ngModel)]="toDo.description" name="description" readonly > </textarea>
               </div>   
+              </div>
+
                </div>
                 <div class ="form-group separate" *ngIf="setsToDisplay.length>0">      
                     
@@ -21,10 +24,10 @@
                         <label for="descriptionTextArea">Distance</label>   
                       </div>
                       <div class="input-field col s3  d-flex justify-content-center" >
-                        <label for="descriptionTextArea">Time in seconds</label>                      
+                        <label for="descriptionTextArea">Time</label>                      
                       </div>  
                       <div class="input-field col s3  d-flex justify-content-center" >
-                        <label for="descriptionTextArea">Rest in seconds</label>                   
+                        <label for="descriptionTextArea">Rest</label>                   
                       </div>
           
                   <div *ngFor="let set of setsToDisplay; let i = index" name="sets">       

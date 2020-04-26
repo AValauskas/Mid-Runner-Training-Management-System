@@ -31,5 +31,7 @@ namespace TMS
         public List<string> Athletes { get; set; } = new List<string>();
         [Field("invitefrom")]
         public List<string> InviteFrom { get; set; } = new List<string>();
+        [Field("friends")]
+        public List<string> Friends { get; set; } = new List<string>();
     }
 }

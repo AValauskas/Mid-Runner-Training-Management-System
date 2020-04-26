@@ -7,6 +7,7 @@ import { ICoachAssignedTraining } from 'src/app/Interfaces/ICoachAssignedTrainin
 import { ISet } from 'src/app/Interfaces/ISet';
 import { IAthleteForm } from 'src/app/Interfaces/IAthleteForm';
 import { ISetToDisplay } from 'src/app/Interfaces/ISetToDisplay';
+declare var $ :any;
 
 @Component({
   selector: 'app-athlete-list',
@@ -16,7 +17,7 @@ import { ISetToDisplay } from 'src/app/Interfaces/ISetToDisplay';
 export class AthleteListComponent implements OnInit {
   @Input() dateClicked :string;
   @Input() AssignedTraining :ICoachAssignedTraining;
-  @Output("renewTrainings") parentFun: EventEmitter<any> = new EventEmitter();
+  @Output("SuccesfullyMadeByCoachMessage") parentFun: EventEmitter<any> = new EventEmitter();
 
   alreadyPast = false;
   max=0;
@@ -40,7 +41,11 @@ export class AthleteListComponent implements OnInit {
 
 
   ngOnChanges() {
-     
+    this.toDo=<any>{};
+    this.personalTraining=<any>{};
+    this.trainingsToAdd=[];
+    this.athleteForm=<any>{};
+    this.setsToDisplay=[];
     var dateTraining=new Date(this.dateClicked);
 
     if(dateTraining.getTime() <= Date.now() )    
@@ -126,8 +131,10 @@ console.log(this.setsToDisplay);
 
     console.log(this.athleteForm);
     this._http.UpdatePersonalTrainingResults(this.athleteForm, this.personalTraining.id).subscribe(data=>{   
-      console.log(data);      
+      console.log(data);           
     })
+    $('#myModal').modal("hide");
+      this.parentFun.emit("You have succesfully updated your athlete training");
   }
 
 

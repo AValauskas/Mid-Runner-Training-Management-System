@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ProcessService } from 'src/app/services/process/process.service';
 import { Router } from '@angular/router';
 
@@ -12,7 +12,12 @@ interface IInviter{
   styleUrls: ['./invitations.component.scss']
 })
 export class InvitationsComponent implements OnInit {
+
+  @Output("SendSuccesMessage") parentSuccess: EventEmitter<any> = new EventEmitter();
+  @Output("SendFailMessage") parentFail: EventEmitter<any> = new EventEmitter();
+
   invitations: Object;
+  isAnyInvite=false;
   error:string;
   success:string;
   inviter:IInviter = <any>{};
@@ -21,6 +26,12 @@ export class InvitationsComponent implements OnInit {
   ngOnInit(): void {
     this._http.GetInvitations().subscribe(data=>{
       this.invitations = data
+      if( Object.keys(this.invitations).length== 0  )
+      {
+        this.isAnyInvite= false;
+      }else{
+        this.isAnyInvite= true;
+      }
     console.log(data);
     })
   }
@@ -30,22 +41,27 @@ export class InvitationsComponent implements OnInit {
     this.inviter.Id =invaiterId;
     console.log(invaiterId);
     this._http.AcceptInvite(this.inviter).subscribe(data=>{      
-      this.invitations = data;
-        console.log(this.invitations);    
+      this.invitations = data;    
+
+        console.log(this.invitations);  
+        this.parentSuccess.emit("You have accepted invitation");
+        localStorage.removeItem("error");
+        this.inviter.Id="";   
+      
     })   
-    if(localStorage.getItem("error")==null)
-    {
-      this.inviter.Id="";    
-    }
+    
   }
 
   DeclineInvite(invaiterId:string)
   {
+    console.log(invaiterId);
     this.inviter.Id =invaiterId;
     console.log(invaiterId);
     this._http.DeclineInvitation(this.inviter).subscribe(data=>{      
       this.invitations = data;
         console.log(this.invitations); 
+        this.parentSuccess.emit("You have declined invitation");
+        localStorage.removeItem("error");
         if(localStorage.getItem("error")==null)
       {    
         invaiterId=null;  
@@ -61,12 +77,16 @@ export class InvitationsComponent implements OnInit {
     this._http.SendInvite(this.inviter).subscribe(data=>{    
       if(localStorage.getItem("error")==null)
       {  
+        this.parentSuccess.emit("Invitation sent succesfully");
         this.success= "Invitation sent succesfully"
         this.inviter.Id="";    
+        localStorage.removeItem("error");
       }
       else
       {
         this.error = localStorage.getItem("error");
+        this.parentFail.emit(localStorage.getItem("error"));
+        localStorage.removeItem("error");
       }
     })
   

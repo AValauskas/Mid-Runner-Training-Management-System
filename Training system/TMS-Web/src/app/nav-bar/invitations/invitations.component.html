@@ -1,6 +1,7 @@
- <form class="form-inline my-2 my-lg-0 " #InviteForm="ngForm"  (ngSubmit)="SendInvite()" id="invites">
-        <input class="form-control mr-sm-2" type="text" placeholder="Send Invite"  [(ngModel)]="inviter.Id" name="Id">
-        <button [disabled]="!InviteForm.valid" class="btn btn-outline-success my-2 my-sm-0" type="submit" >Send</button>
+     <form class="form-inline my-2 my-lg-0 " #InviteForm="ngForm"  (ngSubmit)="SendInvite()" id="invites">
+        <input class="form-control" id= "inputInvite" type="text" placeholder="Send Invite"  [(ngModel)]="inviter.Id" name="Id">
+        <div class="divider"></div>
+        <button [disabled]="!InviteForm.valid" class="btn sendInvite" type="submit" >Send</button>
       </form>
       <br>
 
@@ -13,13 +14,20 @@
           <tbody>
              
               <div class="overflow-auto allinvitations"  >
-            <tr *ngFor="let invitation of invitations">
+            <tr *ngFor="let invitation of invitations" id="oneinvite">
               <td >{{invitation.name}}</td>
               <td >{{ invitation.surname}}</td>   
-              <td><button class="btn btn-success "  id="roundbutton" (click)="AcceptInvite( invitation.idInvitationFrom)" >Accept</button ></td>    
-              <td><button class="btn btn-danger " id="roundbutton" (click)="DeclineInvite( invitation.idInvitationFrom)" >Decline</button ></td>    
-            </div>
+              <td><button class="btn "  id="acceptbutton" (click)="AcceptInvite( invitation.idPerson)" >Accept</button ></td>    
+              <td><button class="btn  " id="declinetbutton" (click)="DeclineInvite( invitation.idPerson)" >Decline</button ></td> 
+                <td><div class="divider2"></div>   </td>
+          </tr>
+              </div>
           </tbody>
-        </table>
+        </table>       
+        </div>
+        <div *ngIf="!isAnyInvite" class="noinv">
+          <p id="NoInvites"> there are no invitations</p>
+          </div>
+        
       
     

@@ -36,7 +36,10 @@ export class HomeComponent implements OnInit {
   listSizeBig= false;
   successMessage=false;
   failMessage = false;
+  deleteModalActive=false;
+
   message:string;
+  personalTrainingIdToDelete:string
 
   //----------Athlete
   trainings: IPersonalTraining[]; 
@@ -99,7 +102,7 @@ export class HomeComponent implements OnInit {
       });    
      
   }
-//---------------------------------Clicks-------------------------------------
+//---------------------------------Clicks on dates-------------------------------------
     eventClick(model) {  
       console.log(model);
     
@@ -138,20 +141,24 @@ export class HomeComponent implements OnInit {
     }
 
     CoachDateClick(model){
-      this.ListClicked = true;
+      
       this._http.GetAllCoachAssignedTrainingsByDate(model.dateStr).subscribe(data=>{   
         this.AssignedTrainingsByDate= data;   
+        this.ListClicked = true;
         console.log(data)  
          }); 
     }
     
 
 
-    //-----------------------other stugg
-    renewTrainings()
+    //-----------------------other stuff
+    renewTrainings(message)
     {
         this.calendarEvents = []
         this.HttpCallCoach();
+
+    this.SuccesfullyMadeByCoachMessage(message);
+        
     }
 
 
@@ -160,26 +167,38 @@ export class HomeComponent implements OnInit {
     }
     
 
-    DeletePersonalTraining(id)
+    //------------------deleting-----------------------
+    DeletePersonal(id)
     {
-      this._http.DeletePersonalTraining(id).subscribe(data=>{   
+      this.personalTrainingIdToDelete=id;
+      this.deleteModalActive=true;
+      $('#myModalDelete').modal("show");
+    }
+    DeletePersonalTraining()
+    {
+      this._http.DeletePersonalTraining(this.personalTrainingIdToDelete).subscribe(data=>{   
       this._http.GetAllCoachAssignedTrainingsByDate(this.dateClicked).subscribe(data2=>{   
        this.AssignedTrainingsByDate= data2;   
        this.calendarEvents = [];
+       $('#myModalDelete').modal("hide");  
+       this.SuccesfullyMadeByCoachMessage("Training was succesfully deleted")  
        this.HttpCallCoach();
         }); 
-      });       
+        this.deleteModalActive = false;
+      });  
+    
     
     }
-    
+    //-------------------------------Clicked to open new training modal---------------------------------
     OpenNewTrainingModal()
     {
       console.log("paspaude");
       this.TrainingFormActive= true;
+      this.PersonalTrainActive= false;
       $('#myModal').modal("show");
 
     }
-
+//---------------------Open personal training modal----------------
     TurnOnTrain(trainingToSend)
     {
       this.PersonalTrainActive= true;
@@ -200,7 +219,7 @@ export class HomeComponent implements OnInit {
       }
     }
 
-
+///----------------- messages------------
     async TurnOnSuccesMessageAthlete()
     {
       this.successMessage = true;
@@ -210,6 +229,15 @@ export class HomeComponent implements OnInit {
       this.message="";
     }
 
+    async SuccesfullyMadeByCoachMessage(message)
+    {
+      console.log(message);
+      this.successMessage = true;
+      this.message = message;
+      await this.delay(3000);
+      this.successMessage = false;
+      this.message="";
+    }
 
    delay(ms: number) {
       return new Promise( resolve => setTimeout(resolve, ms) );

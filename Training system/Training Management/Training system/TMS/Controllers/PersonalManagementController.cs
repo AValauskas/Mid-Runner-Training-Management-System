@@ -18,6 +18,7 @@ namespace TMS
         private readonly IConsumerRepository ConsumerRepository;
         private readonly IAuthService authService;
         private readonly IAggregateRepository aggregateRepo;
+        private readonly IPersonalTrainingsRepository personalTrainingsRepository;
         public PersonalManagementController()
         {
             aggregateRepo = new AggregateRepository();
@@ -30,6 +31,7 @@ namespace TMS
             ConsumerRepository = new ConsumerRepository();
             personalManagementService = new PersonalManagementService()
             {
+                AggregateRepository = aggregateRepo,
                 ConsumerRepository = new ConsumerRepository(),
                 PersonalTrainingsRepository= new PersonalTrainingRepository()               
             };
@@ -124,7 +126,8 @@ namespace TMS
             var receiverRole = cla[0].Value;
 
             await personalManagementService.AcceptInvitation(consumer.Id, receiverRole, receiverId);
-            var invites = await personalManagementService.GetInvitations( receiverId);
+            var invites = await aggregateRepo.GetAllInvitersAggregate(receiverId);
+
             return Ok(invites);
         }
         [Authorize(Roles = "Athlete, Coach")]
@@ -137,7 +140,8 @@ namespace TMS
             var receiverRole = cla[0].Value;
 
             await personalManagementService.DeclineInvitation(consumer.Id, receiverRole, receiverId);
-            var invites = await personalManagementService.GetInvitations(receiverId);
+            var invites = await aggregateRepo.GetAllInvitersAggregate(receiverId);
+
             return Ok(invites);
         }
 
@@ -147,8 +151,8 @@ namespace TMS
         {
             var claims = User.Claims;
             var cla = claims.ToList();
-            var idAthlete = cla[1].Value;
-            var invites = await personalManagementService.GetInvitations(idAthlete);
+            var idConsumer = cla[1].Value;
+            var invites = await aggregateRepo.GetAllInvitersAggregate(idConsumer);
 
             return Ok(invites);
         }
@@ -160,9 +164,19 @@ namespace TMS
         {
             var claims = User.Claims;
             var cla = claims.ToList();
-            var idAthlete = cla[1].Value;
-            var athletes = await personalManagementService.GetAthletes(idAthlete, date);
+            var idCoach = cla[1].Value;
+            var athletes = await aggregateRepo.GetFreeAthletesByDayAggregate(date, idCoach);
+            if (athletes.Count == 0)
+            {
+                athletes = await personalManagementService.GetAthletesIfFree(idCoach, date);
+                      
+               
+
+                    return Ok(athletes);
+                
+            }
             return Ok(athletes);
+
         }
 
 

@@ -9,6 +9,8 @@ namespace TMS
     {
         public IConsumerRepository ConsumerRepository { get; set; }       
         public IPersonalTrainingsRepository PersonalTrainingsRepository { get; set; }
+
+        public IAggregateRepository AggregateRepository { get; set; }
         public async Task AddCompetitionToListOrSetNewRecord(string AthleteId, CompetitionEntity competition)
         {
             competition.Time = double.Parse(String.Format("{0:0.00}", competition.Time));
@@ -41,28 +43,43 @@ namespace TMS
         {
             if (senderRole=="Athlete")
             {
-                var coach = await ConsumerRepository.FindConsumerById(receiverId);
-                if (coach.InviteFrom.Contains(senderId))
+                var receiver = await ConsumerRepository.FindConsumerById(receiverId);
+                if (receiver.InviteFrom.Contains(senderId))
                 {
                     return "You already sent invitation";
-                }
-                if (coach.Athletes.Contains(senderId))
+                }              
+                if (receiver.Athletes.Contains(senderId))
                 {
-                    return "You already belong to his trainer";
+                    return "You already belong to this trainer";
                 }
-                if (coach.Role =="Athlete")
+                if (receiver.Friends.Contains(senderId))
                 {
-                    return "You can invite only coaches";
+                    return "You are already friends with this athlete";
                 }
-                var athlete = await ConsumerRepository.FindConsumerById(senderId);
-                if (athlete.InviteFrom.Contains(receiverId))
+                if (receiver.Role == "Admin")
                 {
-                    return "You already have request from this coach";
+                    return "You can't invite admin";
                 }
+                var self = await ConsumerRepository.FindConsumerById(senderId);
+                if (self.InviteFrom.Contains(receiverId))
+                {
+                    return "You already have request from this user";
+                }
+               
+                if (receiver.Role=="Coach")
+                {
+                    var athlete = await AggregateRepository.FindOutIfAthleteHasCoachAggregate(senderId);
+                    if (athlete.Count != 0)
+                    {
+                        return "You already have coach";
+                    }
+                }             
+
             }
             if (senderRole == "Coach")
             {
                 var coach = await ConsumerRepository.FindConsumerById(senderId);
+
                 if (coach.Athletes.Contains(receiverId))
                 {
                     return "You already train this athlete";
@@ -71,21 +88,26 @@ namespace TMS
                 {
                     return "Athlete already sent you invitation";
                 }
-                var athlete = await ConsumerRepository.FindConsumerById(receiverId);
+                var athlete = await ConsumerRepository.FindConsumerById(receiverId);               
                 if (athlete.InviteFrom.Contains(senderId))
                 {
-                    return "Athlete already sent invitation";
+                    return "You have already sent invitation";
                 }
                 if (athlete.Role == "Coach")
                 {
                     return "You can invite only athletes";
                 }
-            }
-            var consumer = await ConsumerRepository.FindConsumerById(receiverId);
-            if (consumer.Role == "Admin")
-            {
-                return "You can't invite admin, only another coach is available";
-            }
+                if (athlete.Role == "Admin")
+                {
+                    return "You can't invite admin";
+                }
+                var athlete2 = await AggregateRepository.FindOutIfAthleteHasCoachAggregate(receiverId);
+                if (athlete2.Count != 0)
+                {
+                    return "This athlete already have coach";
+                }
+            }       
+
             await ConsumerRepository.SendInviteToAnother(senderId, receiverId);
             return null;
         }
@@ -93,13 +115,21 @@ namespace TMS
         {
             if (role == "Athlete")
             {
-                await ConsumerRepository.AceptInvitation(senderId, receiverId);
+                var consumer = await ConsumerRepository.FindConsumerById(senderId);
+
+                if (consumer.Role == "Coach")
+                {
+                    await ConsumerRepository.AceptInvitationCoach(senderId, receiverId);
+                }
+                else {
+                    await ConsumerRepository.AceptInvitationAthlete(senderId, receiverId);
+                }              
 
                 await ConsumerRepository.DeleteInvitation(receiverId, senderId);
             }
             else if (role == "Coach")
             {
-                await ConsumerRepository.AceptInvitation(receiverId, senderId);
+                await ConsumerRepository.AceptInvitationCoach(receiverId, senderId);
                 await ConsumerRepository.DeleteInvitation(receiverId, senderId);
             }         
         }
@@ -134,28 +164,20 @@ namespace TMS
             return invites;
         }
 
-        public async Task<List<PersonInfo>> GetAthletes(string idCoach, string date)
+        public async Task<List<PersonInfo>> GetAthletesIfFree(string idCoach, string date)
         {
-            var trainDate = DateTime.Parse(date);
-            var trainDateStart = trainDate.AddHours(-4);
-            List<PersonInfo> athletes = new List<PersonInfo>();
-            var consumer = await ConsumerRepository.FindConsumerById(idCoach);            
-            foreach (var athleteId in consumer.Athletes)
-            {             
-                var isAdded = await PersonalTrainingsRepository.CheckIfAthleteisAddedInChoosenDay(trainDate, athleteId);
-                if (!isAdded)
-                {
-                    var athlete = await ConsumerRepository.FindConsumerById(athleteId);
-                    athletes.Add(new PersonInfo()
-                    {
-                        Name = athlete.Name,
-                        Surname = athlete.Surname,
-                        IdPerson = athleteId
-                    });
-
-                }              
+             var trainDate = DateTime.Parse(date);                   
+            var exist = await PersonalTrainingsRepository.CheckIfCoachHasTrainingInChoosenDay(trainDate, idCoach);
+            if (exist)
+            {
+                return new List<PersonInfo>();
             }
-            return athletes;
+            else
+            {
+
+                return await AggregateRepository.GetAllCoachAthletesAggregate(idCoach);
+            }
+
         }
 
       

@@ -9,7 +9,7 @@
 
 }
 
-.modal-content{
+.all{
     border-radius: 0;
     background-clip: border-box;
     background-color: white;
@@ -162,3 +162,29 @@ height: 10%;
 background-color: rgb(179, 116, 114);
 }
 
+div.head
+{
+text-align: center;
+
+}
+
+.modalDelete
+{
+margin-top: 40%;
+width: 80%;
+}
+.buttons
+{
+  margin-top: 10%;
+margin-left: 50%;
+}
+button.btnclose
+{
+  margin-left: 3%;
+}
+
+.divider{
+  width:5px;
+  height:auto;
+  display:inline-block;
+}

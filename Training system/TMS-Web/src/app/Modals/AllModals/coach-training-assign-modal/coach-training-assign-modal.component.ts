@@ -16,13 +16,17 @@ import { IPersonalTrainingFew } from 'src/app/Interfaces/IPersonalTrainingFew';
 })
 export class CoachTrainingAssignModalComponent implements OnInit {
 
-  @Input() dateClicked :string;
+  @Input() dateClicked :string;  
   @Output("renewTrainings") parentFun: EventEmitter<any> = new EventEmitter();
   canFillForm:boolean;
 
   PersonalTrainin:IPersonalTrainingFew= new IPersonalTrainingFew();
   Trainings:ITrainingTemplate[];
   Athletes:IAthlete[];
+
+
+   IsAnyAthleteFree =false;
+
 
   oldDate:string;
   Description="";
@@ -54,6 +58,7 @@ export class CoachTrainingAssignModalComponent implements OnInit {
         this.trainingsCount=0;
         this.Description="";
         this.selectedType = "";
+        this.selectedType="";
         this.Athletes=[];
         this.Trainings=[];
         this.oldDate=this.dateClicked;
@@ -68,7 +73,10 @@ export class CoachTrainingAssignModalComponent implements OnInit {
   GetData(){
     this._http.GetAthletesWhichStillFree(this.dateClicked).subscribe(data=>{   
       this.Athletes=data
-       
+       if(this.Athletes.length!=0)
+       {
+         this.IsAnyAthleteFree= true;
+       } 
       });  
   }
 
@@ -102,7 +110,7 @@ export class CoachTrainingAssignModalComponent implements OnInit {
 
     this._http.InsertPersonalTraining( this.PersonalTrainin).subscribe(data=>{   
       $('#myModal').modal("hide");
-      this.parentFun.emit();
+      this.parentFun.emit("You have succesfully assigned trainings");
       });    
   }
 }

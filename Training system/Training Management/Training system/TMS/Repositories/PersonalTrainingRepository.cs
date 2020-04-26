@@ -138,7 +138,7 @@ namespace TMS
             await trainingRepo.UpdateOneAsync(x => x.Id == id, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
         }
 
-        public async Task<bool> CheckIfAthleteisAddedInChoosenDay(DateTime day, string AthleteId)
+        public async Task<bool> CheckIfCoachHasTrainingInChoosenDay(DateTime day, string coachId)
         {
             var dayStart = day.AddHours(-6);
             var dayEnd = day.AddHours(6);
@@ -151,7 +151,7 @@ namespace TMS
 
             var filter = filterBuilder.Gte(x => x.Day, dayStart) &
                 filterBuilder.Lte(x=>x.Day, dayEnd) 
-                & filterBuilder.Eq("athlete", ObjectId.Parse(AthleteId));
+                & filterBuilder.Eq("coach", ObjectId.Parse(coachId));
 
             var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions());
 

@@ -56,3 +56,30 @@ div.free{
     font-size: 150%;
 
 }
+div.choose
+{
+   background-color: khaki;
+}
+
+#typeSelect
+{
+    color: white;
+ background-color: rgb(56, 56, 56);
+ height: 50px;
+ border-radius: 5%;
+}
+
+select option:disabled {
+    color: grey;
+
+}
+.bodyDiv
+{
+    background-color: rgb(241, 236, 205); ;
+ 
+}
+
+#firstRow
+{
+    margin-top: 5%;
+}

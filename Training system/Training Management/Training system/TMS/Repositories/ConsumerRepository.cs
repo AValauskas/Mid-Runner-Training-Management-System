@@ -42,12 +42,23 @@ namespace TMS
             return consumer;
         }
 
-        public async Task AceptInvitation(string coachId, string AthleteId)
+        public async Task AceptInvitationCoach(string coachId, string AthleteId)
         {
             var consumerRepo = new CodeMashRepository<ConsumerEntity>(Client);
 
             var filter = Builders<ConsumerEntity>.Update.AddToSet(x => x.Athletes, AthleteId);
             await consumerRepo.UpdateOneAsync(x => x.Id == coachId, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
+
+        }
+
+        public async Task AceptInvitationAthlete(string sender, string receiver)
+        {
+            var consumerRepo = new CodeMashRepository<ConsumerEntity>(Client);
+
+            var filter = Builders<ConsumerEntity>.Update.AddToSet(x => x.Friends, sender);
+            await consumerRepo.UpdateOneAsync(x => x.Id == receiver, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
+            var filter2 = Builders<ConsumerEntity>.Update.AddToSet(x => x.Friends, receiver);
+            await consumerRepo.UpdateOneAsync(x => x.Id == sender, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
 
         }
         public async Task DeleteInvitation(string receiverId, string senderId)

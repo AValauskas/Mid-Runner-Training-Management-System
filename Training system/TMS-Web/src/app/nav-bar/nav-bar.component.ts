@@ -10,6 +10,9 @@ export class NavBarComponent implements OnInit {
 
   Role: string;
   changeDetected:Boolean;
+  successMessage=false;
+  failMessage = false;
+  message="";
   constructor(public _auth: AuthService) { }
 
   ngOnInit(): void {
@@ -32,4 +35,30 @@ export class NavBarComponent implements OnInit {
    console.log(localStorage.getItem('role'))
   }
 
+
+  async TurnOnSuccesMessage(message)
+  {
+    console.log(message);
+    this.failMessage = false;
+    this.successMessage = true;
+    this.message = message;
+    await this.delay(3000);
+    this.successMessage = false;
+    this.message="";
+  }
+
+  async TurnOnFailMessage(message)
+  {
+    console.log("atieji");
+    this.successMessage = false;
+    this.failMessage = true;
+    this.message = message;
+    await this.delay(3000);
+    this.failMessage = false;
+    this.message="";
+  }
+
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
 }
