@@ -39,9 +39,9 @@
                         <label for="descriptionTextArea">Choose Training</label>  
                       </div>
                       <div class="input-field col-md-9">   
-                <select  id ="typeSelect"  (change)="onChangeTraining($event)" name="trainingChoose" required>
+                <select  id ="typeSelect"  (change)="onChangeTraining($event.target.value)" name="trainingChoose" required>
                     <option selected disabled id="firstChoose">Choose Training</option>
-                    <option [ngValue]="i" *ngFor="let i of Trainings">{{i.toDisplay}}</option>
+                    <option value="{{i.id}}" *ngFor="let i of Trainings">{{i.toDisplay}}</option>
                 </select>
                 </div>
 

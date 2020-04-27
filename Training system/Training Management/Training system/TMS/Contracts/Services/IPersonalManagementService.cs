@@ -12,6 +12,6 @@ namespace TMS
         Task AcceptInvitation(string senderId, string role, string receiverId);
         Task DeclineInvitation(string senderId, string role, string receiverId);
         Task<List<InviteForm>> GetInvitations(string idMainUser);
-        Task<List<PersonInfo>> GetAthletesIfFree(string idCoach, string date);
+        Task<List<PersonInForCoach>> GetAthletesIfFree(string idCoach, string date);
     }
 }

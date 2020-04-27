@@ -31,7 +31,7 @@ export class CoachTrainingAssignModalComponent implements OnInit {
   oldDate:string;
   Description="";
   selectedType = "";
-  selectedTraining:ITrainingTemplate;
+  selectedTraining:string;
   Place="";
   trainingsCount=0;
   selectAthletes: IAthlete[];
@@ -105,7 +105,7 @@ export class CoachTrainingAssignModalComponent implements OnInit {
     this.PersonalTrainin.description = this.Description;
     this.PersonalTrainin.place = this.Place;
     this.PersonalTrainin.day=new Date(this.dateClicked);
-    this.PersonalTrainin.trainTemplateId = this.selectedTraining.id;
+    this.PersonalTrainin.trainTemplateId = this.selectedTraining;
     console.log(this.PersonalTrainin);
 
     this._http.InsertPersonalTraining( this.PersonalTrainin).subscribe(data=>{   

@@ -201,6 +201,7 @@ export class HomeComponent implements OnInit {
 //---------------------Open personal training modal----------------
     TurnOnTrain(trainingToSend)
     {
+      console.log(trainingToSend);
       this.PersonalTrainActive= true;
       this.TrainingFormActive=false;
       this.TrainingToSendForModal = trainingToSend;

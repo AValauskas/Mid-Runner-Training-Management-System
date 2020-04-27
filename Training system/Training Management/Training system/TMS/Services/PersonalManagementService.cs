@@ -164,13 +164,13 @@ namespace TMS
             return invites;
         }
 
-        public async Task<List<PersonInfo>> GetAthletesIfFree(string idCoach, string date)
+        public async Task<List<PersonInForCoach>> GetAthletesIfFree(string idCoach, string date)
         {
              var trainDate = DateTime.Parse(date);                   
             var exist = await PersonalTrainingsRepository.CheckIfCoachHasTrainingInChoosenDay(trainDate, idCoach);
             if (exist)
             {
-                return new List<PersonInfo>();
+                return new List<PersonInForCoach>();
             }
             else
             {

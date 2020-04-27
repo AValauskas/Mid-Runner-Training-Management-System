@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProcessService } from 'src/app/services/process/process.service';
 import { ITrainingTemplate } from '../../../Interfaces/ITrainingTemplate';
+import { ISetToDisplay } from 'src/app/Interfaces/ISetToDisplay';
 declare var $ :any;
 
 
@@ -25,9 +26,13 @@ export class TrainingTemplatesComponent implements OnInit {
   descriptionClicked = false;
   setsClicked = false;
   manageClicked = false;
+  successMessage= false;
+  failMessage= false;
+  message:string;
 
 
-
+  setsToDisplay:ISetToDisplay[]=[];
+  
   constructor(private _http: ProcessService,public _router:Router) { }
 
   ngOnInit(): void {
@@ -37,19 +42,28 @@ export class TrainingTemplatesComponent implements OnInit {
   ngAfterViewInit(): void
   {
     this.Role=localStorage.getItem('role')
-    if( this.Role=="Athlete")
-    {
-      this._http.GetTrainingTemplates().subscribe(data=>{
-        this.trainings = data
-        console.log(this.trainings)
-      });
-    }else{
-    this._http.GetTrainingTemplatesIncludedPersonal().subscribe(data=>{
+    this.UploadTraining();
+  }
+
+
+UploadTraining()
+{
+  if( this.Role=="Athlete")
+  {
+    this._http.GetTrainingTemplates().subscribe(data=>{
       this.trainings = data
       console.log(this.trainings)
-    })
-  }
-  }
+    });
+  }else{
+  this._http.GetTrainingTemplatesIncludedPersonal().subscribe(data=>{
+    this.trainings = data
+    console.log(this.trainings)
+  })
+}
+
+}
+
+
   OnSubmit()
   {
     this.FillData();
@@ -65,9 +79,11 @@ export class TrainingTemplatesComponent implements OnInit {
   UpdateAction()
   {
     this._http.UpdateTrainingTemplate(this.training).subscribe(data=>{
+      this.SuccesfullyMadeByCoachMessage("You have succesfully updated training");
       this._http.GetTrainingTemplatesIncludedPersonal().subscribe(data=>{
         this.trainings = data
         console.log(this.trainings)
+       
       })
     });
   }
@@ -78,12 +94,13 @@ export class TrainingTemplatesComponent implements OnInit {
       if(localStorage.getItem("error")==null)
       {
       console.log("good")
-        
+     
       }
       else{
         this.error=localStorage.getItem("error");
         localStorage.removeItem("error");
       }
+      this.SuccesfullyMadeByCoachMessage("You have succesfully inserted training");
       this._http.GetTrainingTemplatesIncludedPersonal().subscribe(data=>{
         this.trainings = data
         console.log(this.trainings)
@@ -122,7 +139,9 @@ export class TrainingTemplatesComponent implements OnInit {
       if(this.training.owner == localStorage.getItem('user'))
       {this.belongsToUser= true;}
       else{this.belongsToUser= false;}
-      console.log(this.belongsToUser);
+      this.setsToDisplay=[];
+      this.FormSetsToDisplay();
+      
   }
 
   UpdateTemplate()
@@ -140,6 +159,7 @@ export class TrainingTemplatesComponent implements OnInit {
     this.insertModalActive= true;
     this.updateModalActive= false;
     this.deleteModalActive = false;
+    $('#myModal').modal("show");
     }
     else if(modal=="update")
     {    
@@ -148,27 +168,29 @@ export class TrainingTemplatesComponent implements OnInit {
     this.updateModalActive= true;
     this.deleteModalActive = false;
     this.training.sets.forEach(val =>  this.trainingsToAdd.push(Object.assign({}, val)));
+    $('#myModal').modal("show");
     }
     else{
       this.insertModalActive= false;
       this.updateModalActive= false;
       this.deleteModalActive = true;
+      $('#myModalDelete').modal("show");
     }
-    $('#myModal').modal("show");
+    
 
   }
   DeleteTemplate()
   {
     this._http.DeleteTrainingTemplate(this.training.id).subscribe(data=>{
       console.log(data)
+      this.SuccesfullyMadeByCoachMessage("You have succesfully deleted item");
       this._http.GetTrainingTemplatesIncludedPersonal().subscribe(data=>{
         this.trainings = data
         console.log(this.trainings)
+        
       })
-    })
-   
-    $('#myModal').modal("hide");
-
+    })    
+    $('#myModalDelete').modal("hide");
   }
 
   ChangeDescriptionSize()
@@ -193,6 +215,7 @@ export class TrainingTemplatesComponent implements OnInit {
     }
     else{
       this.setsClicked= true;
+      
     }
   }
 
@@ -207,5 +230,70 @@ export class TrainingTemplatesComponent implements OnInit {
       this.manageClicked= true;
     }
   }
+
+  onChangeType(newType)
+  {
+    if(newType=="All")
+    {
+      this.UploadTraining();
+    }   
+    else{
+    this._http.GetTrainingsByType(newType).subscribe(data=>{   
+      this.trainings=data;
+      //this.trainings=this.Trainings.length;
+      });   
+    }
+  }
+
+  async SuccesfullyMadeByCoachMessage(message)
+    {
+      console.log(message);
+      this.successMessage = true;
+      this.message = message;
+      await this.delay(3000);
+      this.successMessage = false;
+      this.message="";
+    }
+
+   delay(ms: number) {
+      return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
+
+  FormSetsToDisplay()
+  {
+    this.training.sets.forEach(element => {
+        
+        let set =  {} as ISetToDisplay;
+        set.distane =element.distance;
+
+        var paceMinNumb =Math.trunc(element.pace/60) ;
+        var restMinNumb =Math.trunc(element.rest/60);
+
+        if(paceMinNumb>=1)
+        {
+         var paceMin = paceMinNumb.toString()+"min "
+        }
+        else
+        {
+          paceMin="";
+        }
+        if(restMinNumb>=1)
+        {
+         var restMin = restMinNumb.toString()+"min "
+        }
+        else
+        {
+          restMin="";
+        }
+
+        set.rest=restMin+(element.rest - restMinNumb*60).toString()+"s"
+        set.runTime=paceMin+(element.pace - paceMinNumb*60).toString()+"s"
+        
+        this.setsToDisplay.push(set);
+      });
+    console.log(this.setsToDisplay);
+  }
+
 }
 
