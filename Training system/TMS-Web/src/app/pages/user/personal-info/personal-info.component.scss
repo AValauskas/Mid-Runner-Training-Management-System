@@ -47,7 +47,7 @@ div.left{
   }
   button.edit
 {
-    border-radius: 10%;
+    border-radius: 15px;
     font-family: "Arial Black", Gadget, sans-serif;
     color: white;
     height:50px;
@@ -201,4 +201,28 @@ div.athleteListElem
   overflow-y: auto; 
   overflow-x:  hidden;
   max-height:350px;
+}
+
+
+
+.messageGood
+{
+  text-align: center;
+  font-size: 250%;
+opacity: 0.9;
+width: 100%;
+position: absolute;
+height: 10%;
+background-color: rgb(114, 179, 114);
+}
+
+.messageBad
+{
+  text-align: center;
+  font-size: 250%;
+opacity: 0.9;
+width: 100%;
+position: absolute;
+height: 10%;
+background-color: rgb(179, 116, 114);
 }

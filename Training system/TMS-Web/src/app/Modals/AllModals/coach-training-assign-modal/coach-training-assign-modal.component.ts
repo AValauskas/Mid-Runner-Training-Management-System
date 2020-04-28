@@ -111,6 +111,7 @@ export class CoachTrainingAssignModalComponent implements OnInit {
     this._http.InsertPersonalTraining( this.PersonalTrainin).subscribe(data=>{   
       $('#myModal').modal("hide");
       this.parentFun.emit("You have succesfully assigned trainings");
+      this.GetData();
       });    
   }
 }

@@ -8,14 +8,14 @@
            <div class="choose">
             <p class="heading"[ngClass]="{'active': CompetitionsActive}" (click)="TurnCompetitions()" > Competitions</p>
            </div>
-           <div class="choose">
+           <div class="choose" *ngIf="!isFriend">
             <p class="heading" [ngClass]="{'active': TrainingsActive}" (click)="TurnTrainings()"> Trainings</p>
            </div>
 
         </div>
         <div class="right">
             <div class="head ">
-                <p class="heading"> {{Chosen}}</p>
+                <p class="heading"> {{friendName}} {{Chosen}}</p>
             </div>
             <div class="action">     
                     <div *ngIf="RecordsActive">

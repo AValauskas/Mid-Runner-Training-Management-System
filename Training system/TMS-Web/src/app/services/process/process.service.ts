@@ -117,6 +117,16 @@ export class ProcessService {
     })    
     return this.httpserv.requestCall(this.personalManagement+"/records","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
+
+  GetRecordsOther(id)
+  { 
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/records/"+id,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+
   GetCompetitions()
   { 
     const HeadersForProductAPI = new HttpHeaders({
@@ -124,6 +134,14 @@ export class ProcessService {
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     })    
     return this.httpserv.requestCall(this.personalManagement+"/competitions","Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
+  }
+  GetOtherCompetitions(id)
+  { 
+    const HeadersForProductAPI = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    })    
+    return this.httpserv.requestCall(this.personalManagement+"/competitions/"+id,"Get",null,HeadersForProductAPI).pipe(catchError(this.HandleError)); 
   }
   GetAthletesWhichStillFree(date)
   { 

@@ -63,7 +63,9 @@ export class HomeComponent implements OnInit {
     {
       this._router.navigateByUrl('/login');
     }   
-    
+    localStorage.removeItem("friend");
+    localStorage.removeItem("friendId");   
+    localStorage.removeItem("visit");
     this.Role=localStorage.getItem('role')
     if(this.Role=="Athlete")
     this.HttpCallAthlete();  

@@ -1,5 +1,12 @@
 
 <body>
+    <div class="d-flex " *ngIf="successMessage || failMessage">
+        <div [class.messageGood]="successMessage" [class.messageBad]="failMessage">
+      
+          <p >{{message}}</p>   
+        </div>
+      </div>
+
     <div class="row">
       <div class="left">
 
@@ -15,9 +22,9 @@
                   
                     <tr *ngFor="let coach1 of coach" > 
                         <div class="row justify-content-between" >
-                       <div  class=" list-group-item-action col-md-9 athleteListElem" >
+                       <div  class=" list-group-item-action col-md-9 athleteListElem" (click)="CheckFriend(coach1)" >
                       <td class="col-md-6 " >{{coach1.name}}</td>
-                      <td class="col-md-6 " ><div class= "scroolable">{{ coach1.surname}}</div></td> 
+                      <td class="col-md-6 " >{{ coach1.surname}}</td> 
                         </div>
                      
                         </div>
@@ -44,10 +51,10 @@
                     <div class="list-group" *ngIf="friends" >       
                       
                         <tr *ngFor="let friend of friends" > 
-                            <div class="row justify-content-between" >
-                           <div  class=" list-group-item-action col-md-9 athleteListElem" >
+                            <div class="row justify-content-between"  >
+                           <div  class=" list-group-item-action col-md-9 athleteListElem" (click)="CheckFriend(friend)">
                           <td class="col-md-6 " >{{friend.name}}</td>
-                          <td class="col-md-6 " ><div class= "scroolable">{{ friend.surname}}</div></td> 
+                          <td class="col-md-6 " >{{ friend.surname}}</td> 
                             </div>
                          
                             </div>
@@ -76,9 +83,9 @@
                       
                         <tr *ngFor="let athlete of athletes" > 
                             <div class="row justify-content-between" >
-                           <div  class=" list-group-item-action col-md-9 athleteListElem" >
+                           <div  class=" list-group-item-action col-md-9 athleteListElem" (click)="CheckFriend(athlete)">
                           <td class="col-md-6 " >{{athlete.name}}</td>
-                          <td class="col-md-6 " ><div class= "scroolable">{{ athlete.surname}}</div></td> 
+                          <td class="col-md-6 " >{{ athlete.surname}}</td> 
                             </div>
                          
                             </div>

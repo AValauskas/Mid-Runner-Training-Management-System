@@ -6,7 +6,7 @@
 <div *ngIf="canFillForm">
     
     <div class = "tasks firstHeading">
-        <select id ="typeSelect"  [ngModel]="selectedType" (change)="onChangeType($event.target.value)" name="typeChoose">
+        <select id ="typeSelect"  [ngModel]="selectedType" (change)="onChangeType($event.target.value)" name="typeChoose" >
             <option selected value="" disabled id="firstChoose">Choose type</option>
             <option value="5e59010597e81d0001a5cded">Speed endurance</option>
             <option value="5e59011297e81d0001a5cdee">Speed endurance II</option>
@@ -18,7 +18,7 @@
         </select>
     </div>
     <div *ngIf="selectedType!=''&& trainingsCount>0" class="bodyNewTrain">
-        <form #PersonalTrain="ngForm" class="" >
+        <form #PersonalTrain="ngForm" class="" (ngSubmit)="OnSubmit()">
 
             <div class="form-group">    
                 <div class = "row " id="firstRow">
@@ -35,12 +35,10 @@
            
             <div class="form-group">    
                 <div class = "row ">
-                    <div class="input-field col-md-3" >
-                        <label for="descriptionTextArea">Choose Training</label>  
-                      </div>
+                    
                       <div class="input-field col-md-9">   
-                <select  id ="typeSelect"  (change)="onChangeTraining($event.target.value)" name="trainingChoose" required>
-                    <option selected disabled id="firstChoose">Choose Training</option>
+                <select  id ="typeSelect"  (change)="onChangeTraining($event.target.value)" name="trainingChoose" >
+                    <option value="" selected disabled hidden id="firstChoose"> Choose Training</option>
                     <option value="{{i.id}}" *ngFor="let i of Trainings">{{i.toDisplay}}</option>
                 </select>
                 </div>
@@ -62,7 +60,7 @@
                 </label>   
             </div>
             <div class="form-group">
-                <button [disabled]="!PersonalTrain.valid" class="btn btn-secondary" type="submit" (click)="OnSubmit()">Confirm</button>
+                <button [disabled]="!PersonalTrain.valid" class="btn btn-secondary" type="submit" >Confirm</button>
                 </div>
         </form>
     </div>

@@ -14,10 +14,27 @@ export class PersonalBestComponent implements OnInit {
   Records: IRecords[];
   Inside:IRecordsByPlace[];
   Outside:IRecordsByPlace[];
+  isFriend = false;
+  friend:string
 
   constructor(private _http: ProcessService,public _router:Router) { }
 
   ngOnInit(): void {
+    if(localStorage.getItem("friend")!=null)
+    {
+        this.isFriend = true;
+        this.friend=localStorage.getItem("friendId");
+        console.log(this.friend);
+        this.FillFormOther();  
+    }
+    else{
+      this.isFriend= false;
+      this.FillFormOwn();   
+    }
+  }
+
+  FillFormOwn()
+  {
     this._http.GetRecords().subscribe(data=>{    
       this.Records = data
       if( this.Records.length>0)
@@ -39,6 +56,34 @@ export class PersonalBestComponent implements OnInit {
         this.FixTimeToNormal();
       }      
     })
+
+  }
+
+
+  FillFormOther()
+  {
+    this._http.GetRecordsOther(this.friend).subscribe(data=>{    
+      this.Records = data
+      if( this.Records.length>0)
+      {
+        if(this.Records.length==1)
+        {
+            if(this.Records[0].records[0].place=="Outside")
+            {
+              this.Outside =this.Records[0].records;
+            }
+            else{
+              this.Inside =this.Records[0].records;
+            }
+        }
+        else{
+        this.Outside =this.Records[0].records;
+        this.Inside =this.Records[1].records;    
+        }
+        this.FixTimeToNormal();
+      }      
+    })
+
   }
 
   FixTimeToNormal()

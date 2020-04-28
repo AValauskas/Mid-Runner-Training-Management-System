@@ -5,6 +5,7 @@ export class Iuser{
     id: string;
     password: string;
     role:string;
+    idPerson:string;
   }
 
   

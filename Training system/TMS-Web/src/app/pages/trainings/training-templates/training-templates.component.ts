@@ -37,6 +37,9 @@ export class TrainingTemplatesComponent implements OnInit {
 
   ngOnInit(): void {
     this.Role=localStorage.getItem('role')
+    localStorage.removeItem("friend");
+    localStorage.removeItem("friendId");   
+    localStorage.removeItem("visit");
   }
 
   ngAfterViewInit(): void

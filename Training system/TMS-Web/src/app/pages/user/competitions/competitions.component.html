@@ -2,7 +2,7 @@
 <body>
 
     <div class="container">
-      <button class="btn btn-secondary float-right newCompetition" (click)="OpenModal()" *ngIf="Role==='Coach'|| Role==='Athlete'">New Competition</button >
+      <button class="btn btn-secondary float-right newCompetition" (click)="OpenModal()" *ngIf="(Role==='Coach'|| Role==='Athlete')&& !isFriend">New Competition</button >
       <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-6 " *ngIf="Outside" > 
           <div>
@@ -74,7 +74,7 @@
          
          
           <app-new-competition-modal
-          (FillForms)="FillForms()"
+          (FillForms)="FillFormsOwn()"
           ></app-new-competition-modal>
           <!-- Modal footer -->
           <div class="modal-footer">

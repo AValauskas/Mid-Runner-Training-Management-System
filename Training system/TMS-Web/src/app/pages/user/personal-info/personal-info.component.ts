@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Iuser } from 'src/app/Interfaces/IUser';
 import { ProcessService } from 'src/app/services/process/process.service';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 
 @Component({
   selector: 'app-personal-info',
@@ -20,10 +20,21 @@ export class PersonalInfoComponent implements OnInit {
   CoachClicked= false;
   friendsClicked= false;
   athletesClicked= false;
+  successMessage= false;
+  failMessage= false;
+  message:string;
 
   constructor(private _http: ProcessService,public _router:Router) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {                
+    if(localStorage.getItem('role')==null)
+    {
+      this._router.navigateByUrl('/login');
+    }   
+    localStorage.removeItem("friend");
+    localStorage.removeItem("friendId");   
+    localStorage.removeItem("visit");   
+
     this.role= localStorage.getItem('role')
     this._http.GetPersonalInfo().subscribe(data=>{
       this.user= data;
@@ -57,10 +68,11 @@ export class PersonalInfoComponent implements OnInit {
         this.firstPass="";
         this.secondPass="";
         console.log( this.user);
+        this.SuccesfullyMessage("Password succesfully changed")
       })
     }
     else{
-      console.log("nepavyko!")
+      this.FailMessage("Password missmatch")
     }
   }
 
@@ -100,6 +112,35 @@ export class PersonalInfoComponent implements OnInit {
     }
   }
 
+  CheckFriend(other:Iuser)
+  {
+    console.log(other);
+   localStorage.setItem("friendId", other.idPerson);
+   localStorage.setItem("friend", other.name+ " " + other.surname);
+   this._router.navigateByUrl('/personal');
+  }
 
 
+  async SuccesfullyMessage(message)
+  {
+    console.log(message);
+    this.successMessage = true;
+    this.message = message;
+    await this.delay(3000);
+    this.successMessage = false;
+    this.message="";
+  }
+
+  async FailMessage(message)
+  {
+    console.log(message);
+    this.failMessage = true;
+    this.message = message;
+    await this.delay(3000);
+    this.failMessage = false;
+    this.message="";
+  }
+ delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
 }

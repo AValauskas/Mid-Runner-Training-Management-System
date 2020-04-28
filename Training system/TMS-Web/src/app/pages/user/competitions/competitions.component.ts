@@ -16,19 +16,61 @@ export class CompetitionsComponent implements OnInit {
   Inside:IRecordsByPlace[];
   Outside:IRecordsByPlace[];
   Role:string;
+  isFriend = false;
+  friend:string
 
   constructor(private _http: ProcessService,public _router:Router) { }
 
   ngOnInit(): void {
+    if(localStorage.getItem("friend")!=null)
+    {
+        this.isFriend = true;
+        this.friend=localStorage.getItem("friendId");
+        console.log(this.friend);
+        this.FillFormsOther();  
+    }
+    else{
+      this.isFriend= false;
+      this.FillFormsOwn();   
+    }
     this.Role=localStorage.getItem('role')
-    this.FillForms();
-    
+   
+  }
+
+
+  FillFormsOwn()
+  {
+    this._http.GetCompetitions().subscribe(data=>{
+      this.Competitions = data
+      console.log(this.Competitions)
+      if( this.Competitions.length>0)
+      {
+        if(this.Competitions.length==1)
+        {
+            if(this.Competitions[0].records[0].place=="Outside")
+            {
+              this.Outside =this.Competitions[0].records;
+            }
+            else{
+              this.Inside =this.Competitions[0].records;
+            }
+        }
+       else {
+        this.Outside =this.Competitions[0].records;
+        this.Inside =this.Competitions[1].records;
+       
+        }
+        this.FixTimeToNormal();
+      }
+    })
 
   }
 
-  FillForms()
+
+  
+  FillFormsOther()
   {
-    this._http.GetCompetitions().subscribe(data=>{
+    this._http.GetOtherCompetitions(this.friend).subscribe(data=>{
       this.Competitions = data
       console.log(this.Competitions)
       if( this.Competitions.length>0)

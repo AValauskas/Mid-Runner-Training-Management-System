@@ -37,24 +37,9 @@ namespace TMS
             };
         }
 
-        //--------------------------------Competition/personal results-------------------------
-
+        //-------------------------------Competition/personal results-------------------------
+              
        
-        
-
-       /* [Authorize(Roles = "Athlete,Coach")]
-        [HttpGet("record/outside")]
-        public async Task<IActionResult> GetRecordsOutside()
-        {
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idAthlete = cla[1].Value;
-            var consumer = await ConsumerRepository.FindConsumerById(idAthlete);
-
-            return Ok(consumer.Records);
-
-
-        }*/
         [Authorize(Roles = "Athlete,Coach")]
         [HttpGet("records")]
         public async Task<IActionResult> GetRecords()
@@ -65,6 +50,16 @@ namespace TMS
             var records = await aggregateRepo.RecordAggregate(idConsumer);
             records.Select(x => { x.Records.Select(y => { y.DateString = y.Date.ToString("yyyy-MM-dd"); return y; }).ToList(); return x;}).ToList();
             return Ok(records);
+        }
+
+
+        [Authorize(Roles = "Athlete,Coach")]
+        [HttpGet("records/{id}")]
+        public async Task<IActionResult> GetOtherRecords([FromRoute] string id)
+        {
+            var competitions = await aggregateRepo.RecordAggregate(id);
+            competitions.Select(x => { x.Records.Select(y => { y.DateString = y.Date.ToString("yyyy-MM-dd"); return y; }).ToList(); return x; }).ToList();
+            return Ok(competitions);
         }
 
         [Authorize(Roles = "Athlete,Coach")]
@@ -78,7 +73,16 @@ namespace TMS
             competitions.Select(x => { x.Records.Select(y => { y.DateString = y.Date.ToString("yyyy-MM-dd"); return y; }).ToList(); return x; }).ToList();
             return Ok(competitions);
         }
-        
+
+        [Authorize(Roles = "Athlete,Coach")]
+        [HttpGet("competitions/{id}")]
+        public async Task<IActionResult> GetOtherCompetition([FromRoute] string id)
+        {
+            var competitions = await aggregateRepo.CompetitionsAggregate(id);
+            competitions.Select(x => { x.Records.Select(y => { y.DateString = y.Date.ToString("yyyy-MM-dd"); return y; }).ToList(); return x; }).ToList();
+            return Ok(competitions);
+        }
+
         [Authorize(Roles = "Athlete, Coach")]
         [HttpPatch("newcompetition")]
         public async Task<IActionResult> AddCompetitionTime ([FromBody] CompetitionEntity competition)
@@ -167,10 +171,8 @@ namespace TMS
             var athletes = await aggregateRepo.GetFreeAthletesByDayAggregate(date, idCoach);
             if (athletes.Count == 0)
             {
-                athletes = await personalManagementService.GetAthletesIfFree(idCoach, date);
-                      
+                athletes = await personalManagementService.GetAthletesIfFree(idCoach, date);                     
                
-
                     return Ok(athletes);
                 
             }
