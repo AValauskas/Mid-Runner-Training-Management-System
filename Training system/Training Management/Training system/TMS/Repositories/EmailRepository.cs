@@ -14,7 +14,7 @@ namespace TMS
         public async Task SendEmailConfirmationEmail(string email, string token)
         {
             var message = new SendGridMessage();
-            message.SetFrom("aurimas.valauskas@ktu.edu", Settings.SenderEmailAddressName);
+            message.SetFrom(Settings.SenderEmailAddress, Settings.SenderEmailAddressName);
             message.AddTo(email);
             message.SetTemplateId(Settings.EmailConfirmationTemplateId);
             message.SetTemplateData(new { token });
