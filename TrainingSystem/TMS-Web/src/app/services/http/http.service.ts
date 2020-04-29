@@ -9,7 +9,7 @@ import { TokenParams } from 'src/app/user/login/TokenParams';
   providedIn: 'root'
 })
 export class HttpService {
-  private apiUrl = "https://localhost:44391/api/";
+  private apiUrl = "https://tmsback-end.herokuapp.com/api/";
 
   constructor(private http: HttpClient, public _router:Router) { }
 
