@@ -14,7 +14,7 @@ namespace ConsoleApp1
         }
         static async Task Execute()
         {
-            var apiKey = "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";
+            var apiKey = "";
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("aurimas.valauskas@ktu.edu", "Aurimas");
             var subject = "Sending with SendGrid is Fun";
