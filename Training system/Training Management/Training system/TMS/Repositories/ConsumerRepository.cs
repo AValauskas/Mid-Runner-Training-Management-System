@@ -24,22 +24,41 @@ namespace TMS
             return consumer;
         }
 
+        public async Task<ConsumerEntity> FindConsumerByEmail(string email)
+        {
+            var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
+            var filterBuilder = Builders<ConsumerEntity>.Filter;
+            var filter = filterBuilder.Eq(x => x.Email, email);
+
+            var consumer = await ConsumerRepository.FindOneAsync(filter);
+
+            return consumer;
+        }
         public async Task<ConsumerEntity> FindConsumerById(string id)
         {
             var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
-
-
             var consumer = await ConsumerRepository.FindOneByIdAsync(id);
 
             return consumer;
         }
 
-        public async Task AceptInvitation(string coachId, string AthleteId)
+        public async Task AceptInvitationCoach(string coachId, string AthleteId)
         {
             var consumerRepo = new CodeMashRepository<ConsumerEntity>(Client);
 
             var filter = Builders<ConsumerEntity>.Update.AddToSet(x => x.Athletes, AthleteId);
             await consumerRepo.UpdateOneAsync(x => x.Id == coachId, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
+
+        }
+
+        public async Task AceptInvitationAthlete(string sender, string receiver)
+        {
+            var consumerRepo = new CodeMashRepository<ConsumerEntity>(Client);
+
+            var filter = Builders<ConsumerEntity>.Update.AddToSet(x => x.Friends, sender);
+            await consumerRepo.UpdateOneAsync(x => x.Id == receiver, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
+            var filter2 = Builders<ConsumerEntity>.Update.AddToSet(x => x.Friends, receiver);
+            await consumerRepo.UpdateOneAsync(x => x.Id == sender, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
 
         }
         public async Task DeleteInvitation(string receiverId, string senderId)
@@ -65,8 +84,10 @@ namespace TMS
         {
             var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
 
-            var filterBuilder = Builders<ConsumerEntity>.Filter;            
-            var filter = filterBuilder.Eq(x => x.Id, athleteId) & filterBuilder.Eq("records.distance", competition.Distance);                
+            var filterBuilder = Builders<ConsumerEntity>.Filter;
+            var subfilter = filterBuilder.Eq("distance", competition.Distance) & filterBuilder.Eq("place", competition.Place);
+            var filter = filterBuilder.Eq(x => x.Id, athleteId) & filterBuilder.ElemMatch("records", subfilter);
+           // var filter = filterBuilder.Eq(x => x.Id, athleteId) & filterBuilder.Eq("records.distance", competition.Distance) & filterBuilder.Eq("records.place", competition.Place);                
 
             var updateBuilder = Builders<ConsumerEntity>.Update;
             
@@ -79,9 +100,15 @@ namespace TMS
             var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
 
             var filterBuilder = Builders<ConsumerEntity>.Filter;
-            var filter = filterBuilder.Eq(x => x.Id, athleteId) 
-                & filterBuilder.Eq("records.distance", competition.Distance) 
-                & filterBuilder.Lte("records.time", competition.Time);
+            var subfilter = filterBuilder.Eq("distance", competition.Distance)
+                & filterBuilder.Eq("place", competition.Place)
+                 & filterBuilder.Lte("time", competition.Time);
+
+            var filter = filterBuilder.Eq(x => x.Id, athleteId) & filterBuilder.ElemMatch("records", subfilter);
+            /* var filter = filterBuilder.Eq(x => x.Id, athleteId) 
+                  & filterBuilder.Eq("records.distance", competition.Distance)
+                   & filterBuilder.Eq("records.place", competition.Place)
+                  & filterBuilder.Lte("records.time", competition.Time);*/
 
             var updateBuilder = Builders<ConsumerEntity>.Update;
 
@@ -95,7 +122,7 @@ namespace TMS
             var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
 
             var filterBuilder = Builders<ConsumerEntity>.Filter;
-            var subfilter = filterBuilder.Eq("distance", competition.Distance) & filterBuilder.Gte("time", competition.Time);
+            var subfilter = filterBuilder.Eq("distance", competition.Distance) & filterBuilder.Eq("place", competition.Place) & filterBuilder.Gte("time", competition.Time);
             var filter = filterBuilder.Eq(x => x.Id, athleteId) &
                 (filterBuilder.ElemMatch("records", subfilter));
 
@@ -131,6 +158,10 @@ namespace TMS
             var result = await ConsumerRepository.UpdateOneAsync(x => x.Id == receiverId, update);
 
         }
+
+       
+
+
 
 
 

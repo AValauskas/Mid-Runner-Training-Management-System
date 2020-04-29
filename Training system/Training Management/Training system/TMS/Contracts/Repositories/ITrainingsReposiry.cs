@@ -14,6 +14,7 @@ namespace TMS
         Task<TrainingEntity> GetTrainingByID(string id);
         Task ReplaceTraining(TrainingEntity training);
         Task DeleteTraining(string id);
-
+        Task<List<TrainingEntity>> GetAllTrainingsIncludedPersonal(string owner);
+        Task<List<TrainingEntity>> GetTrainingsByType(string typeId, string owner);
     }
 }

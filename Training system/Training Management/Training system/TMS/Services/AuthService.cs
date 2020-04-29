@@ -12,9 +12,9 @@ namespace TMS
     public class AuthService: IAuthService
     {
         public IAuthRepository AuthRepository { get; set; }
-        public IAthleteRepository AthleteRepository { get; set; }
         public IConsumerRepository ConsumerRepository { get; set; }
-        public ICoachRepository CoachRepository { get; set; }
+
+        public IEmailRepository EmailRepository { get; set; }
         public async Task<string> Register(User user)
         {
             if (user.Password.Length<6)
@@ -32,29 +32,42 @@ namespace TMS
                 return response;
             }
 
-            await AuthRepository.RegisterUser(user);
-
+            var hash = PasswordHashing.HashNewPassword(user.Password);
+            user.Password = hash.Password;
+            user.Salt = hash.Salt;
+            var consumer = await AuthRepository.RegisterUser(user);
+            await EmailRepository.SendEmailConfirmationEmail(user.Email, consumer.Id);
             return null;
         }                     
         
 
         public async Task<JwtSecurityToken> Login(User user)
         {
-            user = await DoExistLogin(user);
-
-            if (user.Id!=null)
+            
+           var consumer = await ConsumerRepository.FindConsumerByEmail(user.Email);
+            if (consumer!=null)
+            {           
+            if (!consumer.EmailConfirmed)
             {
-                if (user.Role == "Athlete")
+                throw new Exception("email isn't confirmed yet");
+            }
+            var hash = PasswordHashing.HashOldPassword(user.Password, consumer.Salt);         
+
+            if (hash.Password == consumer.Password)
+            {
+                
+                if (consumer.Role == "Athlete")
                 {
-                   return GenerateAthleteToken(user.Id);
+                   return GenerateAthleteToken(consumer.Id);
                 }
-                if (user.Role == "Coach")
+                if (consumer.Role == "Coach")
                 {
-                    return GenerateCoachToken(user.Id);
+                    return GenerateCoachToken(consumer.Id);
                 }
-                if (user.Role == "Admin")
+                if (consumer.Role == "Admin")
                 {
-                    return GenerateAdminToken(user.Id);
+                    return GenerateAdminToken(consumer.Id);
+                }
                 }
             }
             return null;
@@ -145,7 +158,30 @@ namespace TMS
 
         }
 
+        public async Task ChangePassword(string idConsumer, string password)
+        {
+            var hashedPassword = PasswordHashing.HashNewPassword(password);
+            await AuthRepository.ChangePassword(idConsumer, hashedPassword);
+        }
 
+        public async Task<string> RequestForNewPassword(string email)
+        {
+           var consumer = await ConsumerRepository.FindConsumerByEmail(email);
+            if (consumer!=null)
+            {
+                await EmailRepository.SendPasswordResetEmail(email, consumer.Id);
+                return null;
+            }
+            return "email not exist";
 
+        }
+
+        public async Task ResetPassword(string idConsumer, string password)
+        {
+            var hashedPassword = PasswordHashing.HashNewPassword(password);
+            await AuthRepository.ChangePassword(idConsumer, hashedPassword);
+            var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
+            await EmailRepository.SendNewPassword(consumer.Email, password);
+        }
     }
 }

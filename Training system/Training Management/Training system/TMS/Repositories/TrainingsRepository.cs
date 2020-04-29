@@ -22,7 +22,7 @@ namespace TMS
         public async Task<List<TrainingEntity>> GetAllAvailableTrainings()
         {
             var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
-            var response = await trainingRepo.FindAsync(x => x.IsPersonal == false, new DatabaseFindOptions());
+            var response = await trainingRepo.FindAsync(x => x.IsPersonal == false, new DatabaseFindOptions( ) { IncludeTermNames = true });
 
             return response.Items;
         }
@@ -31,6 +31,27 @@ namespace TMS
         {
             var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
             var response = await trainingRepo.FindAsync(x =>true, new DatabaseFindOptions());
+
+            return response.Items;
+        }
+        public async Task<List<TrainingEntity>> GetAllTrainingsIncludedPersonal(string owner)
+        {
+            var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
+            var filterBuilder = Builders<TrainingEntity>.Filter;
+            var filter = filterBuilder.Eq("owner", ObjectId.Parse(owner)) | filterBuilder.Eq(x=>x.IsPersonal, false);
+
+            var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions() { IncludeTermNames = true }) ;
+
+            return response.Items;
+        }
+        public async Task<List<TrainingEntity>> GetTrainingsByType(string typeId,string owner)
+        {
+            var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
+            var filterBuilder = Builders<TrainingEntity>.Filter;
+            var filter = (filterBuilder.Eq("trainingtype", ObjectId.Parse(typeId)) & filterBuilder.Eq(x => x.IsPersonal, false))|
+                (filterBuilder.Eq("trainingtype", ObjectId.Parse(typeId))&filterBuilder.Eq("owner", ObjectId.Parse(owner)) & filterBuilder.Eq(x => x.IsPersonal, true));
+
+            var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions() { IncludeTermNames = true });
 
             return response.Items;
         }

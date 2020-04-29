@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" *ngIf="Role" id = "navb">
+    
+    <button class="navbar-toggler newTrain" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/trainingTemplates" href="#">Training templates</a>          
+        </li>    
+      
+        <li class="nav-item dropdown" *ngIf="Role==='Athlete' ||Role==='Coach' ">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Invitations
+          </a>
+          <div class="dropdown-menu invitation ">            
+            <app-invitations
+            (SendSuccesMessage)="TurnOnSuccesMessage($event)"
+            (SendFailMessage)="TurnOnFailMessage($event)"
+            ></app-invitations>
+          </div>
+        </li>    
+      </ul>      
+    </div>
+    
+    <ul class="navbar-nav ml-auto"> 
+           <li class="nav-item dropdown" id="personal">
+          <a class="nav-link  glyphicon glyphicon-user" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{Role}}</a>
+          <div class="dropdown-menu personal" aria-labelledby="dropdownMenuLink">      
+            <a class="dropdown-item person" href="personalInfo">Account Info</a>
+            <a class="dropdown-item person" href="personal" *ngIf="Role==='Athlete' ||Role==='Coach' ">Personal times</a>
+          
+          </div>
+        </li>  
+      <li class="nav-item"  >                 
+        <a class="nav-link" (click)="_auth.logoutUser()">
+          <span class="glyphicon glyphicon-log-out"></span>
+        </a>
+      </li>        
+  </ul>
+  </nav>
+  <div  [class.messageGood]="successMessage && !failMessage" [class.messageBad]=" !successMessage && failMessage" *ngIf="successMessage || failMessage">
+    <div>
+  
+      <p >{{message}}</p>   
+    </div>
+  </div>

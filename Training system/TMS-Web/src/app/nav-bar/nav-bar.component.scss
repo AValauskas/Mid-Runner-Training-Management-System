@@ -1,0 +1,57 @@
+.invitation { 
+  min-width: 350px;
+  max-height: 250px;
+  background-color: rgb(75, 73, 73);
+  overflow: hidden;
+  }
+
+#personal{
+  margin-right: 30px;
+
+}
+
+#navb{
+  margin-bottom: 0px;
+  border-radius: 0px;
+}
+
+.personal
+{
+background-color: rgb(56, 55, 55);
+border-radius: 5px;
+}
+
+.person
+{
+  color: white;
+  font-size: 20px;
+}
+
+.person:hover
+{
+  background-color: grey
+}
+
+
+.messageGood
+{
+  text-align: center;
+  font-size: 250%;
+opacity: 0.9;
+width: 100%;
+position: absolute;
+height: 10%;
+background-color: rgb(114, 179, 114);
+}
+
+.messageBad
+{
+  text-align: center;
+  font-size: 250%;
+opacity: 0.9;
+width: 100%;
+position: absolute;
+height: 10%;
+background-color: rgb(179, 116, 114);
+}
+

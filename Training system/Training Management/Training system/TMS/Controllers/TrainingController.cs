@@ -27,6 +27,10 @@ namespace TMS
         [HttpPost]
         public async Task<IActionResult> PostTraining([FromBody] TrainingEntity training)
         {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idTraining = cla[1].Value;
+            training.Owner = idTraining;
             await trainingRepo.InsertTraining(training);
 
             return Ok(training);
@@ -37,13 +41,20 @@ namespace TMS
         {
             var training = await trainingRepo.GetAllAvailableTrainings();
 
+
             if (training == null)
             {
                 return NotFound();
             }
-
+            training.Select(x => {
+                var Start = x.TrainingType.IndexOf("name");
+                var End = x.TrainingType.IndexOf("taxonomy");
+                x.TrainingType = x.TrainingType.Substring(Start + 8, End - Start - 15);
+                return x;
+            }).ToList();
             return Ok(training);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpGet("availableTrainings")]
         public async Task<IActionResult> GetAllTrainings()
@@ -56,6 +67,56 @@ namespace TMS
             }
             return Ok(training);
         }
+
+        [Authorize(Roles = "Coach")]
+        [HttpGet("allTrainings")]
+        public async Task<IActionResult> GetAllTrainingsIncludedPersonal()
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idCoach = cla[1].Value;
+
+            var training = await trainingRepo.GetAllTrainingsIncludedPersonal(idCoach);
+
+            if (training == null)
+            {
+                return NotFound();
+            }
+            training.Select(x => {
+                var StartN= x.TrainingType.IndexOf("name");
+                var EndN = x.TrainingType.IndexOf("taxonomy");
+                x.TrainingTypeName = x.TrainingType.Substring(StartN + 8, EndN - StartN - 15);
+                 StartN = x.TrainingType.IndexOf("id");
+                 EndN = x.TrainingType.IndexOf("name");
+                x.TrainingType = x.TrainingType.Substring(StartN + 6, EndN - StartN - 13);
+                return x; }).ToList();
+            
+            return Ok(training);
+        }
+
+        
+        [HttpGet("TrainingsByType/{date}")]
+        public async Task<IActionResult> GetTrainingsByTaxonomy([FromRoute] string date)
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idCoach = cla[1].Value;
+
+            var training = await trainingRepo.GetTrainingsByType(date, idCoach);
+
+            if (training == null)
+            {
+                return NotFound();
+            }
+            training.Select(x => {
+                var Start = x.TrainingType.IndexOf("name");
+                var End = x.TrainingType.IndexOf("taxonomy");
+                x.TrainingType = x.TrainingType.Substring(Start + 8, End - Start - 15);
+                return x;
+            }).ToList();
+            return Ok(training);
+        }
+
         [Authorize(Roles = "Coach, Admin")]
         [HttpGet("personalTrainings")]
         public async Task<IActionResult> GetPersonalTrainings()

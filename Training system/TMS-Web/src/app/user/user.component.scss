@@ -1,0 +1,28 @@
+
+.color .active  {
+    background-color: #DAA520;
+}
+
+#cont { 
+  position : absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 20%;
+
+  opacity: 0.9;
+  
+}
+#form { 
+  margin-top: 5%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+  .image{
+    
+    height: 100vh; background-size:cover; width:auto;
+    background-image:url("https://media-manager.starsinsider.com/1920/na_5e160cff95882.jpg");
+    background-position:50% 50%;
+   // background-repeat: no-repeat; background-size: cover; background-position: center center;
+  }

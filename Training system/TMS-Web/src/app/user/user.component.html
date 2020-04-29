@@ -1,0 +1,37 @@
+<body>
+
+  <div class="image" >
+
+  <div class="container responsive w-50 "  id="cont" >
+    
+     
+        <div class="card grey lighten-2">
+          <div class="card-tabs">
+            <ul class="nav nav-pills nav-fill color" >
+              <li class="nav-item">
+                <a routerLink='/login' class="nav-link" [ngClass]="{'active': LoginActive }" (click)="ChangeActive()" >Sign In</a>
+              </li>
+              <li class="nav-item" >
+                <a  routerLink='/register' class="nav-link" [ngClass]="{'active': RegisterActive}" (click)="ChangeActive()">Sign Up</a>
+              </li>
+            </ul>
+          </div>
+          <div class=" " >
+            <div  id ="form">
+              <router-outlet></router-outlet>
+            </div>
+           </div> 
+          
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+</body>
+
+
+

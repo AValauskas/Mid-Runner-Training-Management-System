@@ -2,6 +2,7 @@
 using CodeMash.Membership.Services;
 using CodeMash.Repository;
 using Isidos.CodeMash.ServiceContracts;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace TMS
     public class AuthRepository: IAuthRepository
     {
         private static CodeMashClient Client => new CodeMashClient(Settings.ApiKey, Settings.ProjectId);
-        public async Task RegisterUser(User user)
+        public async Task<ConsumerEntity> RegisterUser(User user)
         {
             var registerService = new CodeMashRepository<ConsumerEntity>(Client);
 
@@ -22,37 +23,12 @@ namespace TMS
                 Name = user.Name,
                 Password = user.Password,
                 Surname = user.Surname,
-                Role =user.Role
+                Role =user.Role,
+                Salt = user.Salt
             };
-            await registerService.InsertOneAsync(consumer);
+            consumer = await registerService.InsertOneAsync(consumer);
 
-
-            /* if (user.Role == "Athlete")
-             {
-                 var registerService = new CodeMashRepository<AthleteEntity>(Client);
-
-                 var consumer = new AthleteEntity()
-                 {
-                     Email = user.Email,
-                     Name = user.Name,
-                     Password = user.Password,
-                     Surname = user.Surname
-                 };
-                 await registerService.InsertOneAsync(consumer);
-             }
-             else if (user.Role == "Coach")
-             {
-                 var registerService = new CodeMashRepository<CoachEntity>(Client);
-
-                 var consumer = new CoachEntity()
-                 {
-                     Email = user.Email,
-                     Name = user.Name,
-                     Password = user.Password,
-                     Surname = user.Surname                    
-             };
-                 await registerService.InsertOneAsync(consumer);
-             }   */
+            return consumer;
         }
 
         public async Task<string> CheckIfEmailAlreadyExist(User user)
@@ -65,43 +41,46 @@ namespace TMS
                 return "email already exist";
             }
 
-            /*
-            var registerServiceAthlete = new CodeMashRepository<AthleteEntity>(Client);
-            var athleteEmail = await registerServiceAthlete.FindOneAsync(x => x.Email == user.Email);
-            var athletePassword= await registerServiceAthlete.FindOneAsync(x => x.Password == user.Password);
-
-            var registerServiceCoach= new CodeMashRepository<CoachEntity>(Client);
-            var coachEmail = await registerServiceAthlete.FindOneAsync(x => x.Email == user.Email);
-            var coachPassword = await registerServiceAthlete.FindOneAsync(x => x.Email == user.Email);
-
-            if (athleteEmail != null)
-            {
-                return "email already exist";
-            }
-            else if (athletePassword != null)
-            {
-                return "password already exist";
-            }
-            else if (athletePassword != null)
-            {
-                return "email already exist";
-            }else if (athletePassword != null)
-            {
-                return "password already exist";
-            }*/
             return null;
         }
 
             public async Task LoginUser(string email, string password)
+            {
+                // 3. Create a service object
+                var membershipService = new CodeMashMembershipService(Client);
+
+               var result = await membershipService.AuthenticateCredentialsAsync(
+                email,
+                password,
+                permanentSession: true
+                );
+                //return result;
+            }
+
+        public async Task ChangePassword(string ConsumerId, HashPasswordInfo hashedInfo)
         {
             // 3. Create a service object
             var membershipService = new CodeMashMembershipService(Client);
 
-           var result = await membershipService.AuthenticateCredentialsAsync(
-            email,
-            password,
-            permanentSession: true
-            );
+            var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
+
+            var updateBuilder = Builders<ConsumerEntity>.Update;
+            var update = updateBuilder.Set(x => x.Password, hashedInfo.Password).Set(x => x.Salt, hashedInfo.Salt);
+
+            var result = await ConsumerRepository.UpdateOneAsync(x => x.Id == ConsumerId, update);
+            //return result;
+        }
+
+        public async Task VerifyRegister(string ConsumerId)
+        {
+            // 3. Create a service object
+            var membershipService = new CodeMashMembershipService(Client);
+
+            var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
+
+            var updateBuilder = Builders<ConsumerEntity>.Update;
+            var update = updateBuilder.Set(x => x.EmailConfirmed, true);
+            var result = await ConsumerRepository.UpdateOneAsync(x => x.Id == ConsumerId, update);
             //return result;
         }
     }

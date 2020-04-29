@@ -1,0 +1,130 @@
+<div class="container"></div>
+        <div  *ngIf="personalTraining" >
+            <div> 
+                  <div class = "tasks firstHeading">
+                    <p class="heading">TRAINING TEMPLATE</p>  
+                  </div>
+                   
+             <form #TrainingTemplateForm="ngForm" class="" >
+              <div class="form-group">    
+              <div class = "row ">
+                <div class="input-field col-md-3" >
+               <label for="descriptionTextArea">Description</label>
+                </div>
+                <div class="input-field col-md-9">        
+               <textarea  type="text" class="form-control" [(ngModel)]="toDo.description" name="description" readonly > </textarea>
+              </div>   
+              </div>
+
+               </div>
+                <div class ="form-group separate" *ngIf="setsToDisplay.length>0">      
+                    
+                    <div class= "row trainInfo" >
+                      <div class="input-field col s3  d-flex justify-content-center" >
+                        <label for="descriptionTextArea">Distance</label>   
+                      </div>
+                      <div class="input-field col s3  d-flex justify-content-center" >
+                        <label for="descriptionTextArea">Time</label>                      
+                      </div>  
+                      <div class="input-field col s3  d-flex justify-content-center" >
+                        <label for="descriptionTextArea">Rest</label>                   
+                      </div>
+          
+                  <div *ngFor="let set of setsToDisplay; let i = index" name="sets">       
+                   
+                    <div class= "row" >
+                      <div class="input-field col s3" >
+                        <input type="number" step="0.01" class="form-control num" [(ngModel)]="set.distane"  name="distance{{i}}" readonly>
+                      </div>
+                      <div class="input-field col s3" >
+                        <input type="text" class="form-control num" [(ngModel)]="set.runTime" name="pace{{i}}"  readonly>                      
+                      </div>  
+                      <div class="input-field col s3" >
+                        <input type="text"  class="form-control num"  [(ngModel)]="set.rest" name="rest{{i}}" readonly>                      
+                      </div>
+                      
+                      </div>
+                      </div>
+                  </div>                
+               </div>
+               
+               <div class ="form-group separate">    
+                <label>Repeats: {{toDo.repeats}}</label>   
+               </div>     
+             </form>  
+            </div>
+          <div>
+            <div class = "tasks section" >
+              <p class="heading"> {{athlete}} TRAINING</p>   
+              </div>
+          
+             <form #PersonalTrain="ngForm" class="" >
+              <div class="form-group">   
+                <div class = "row ">
+                  <div class="input-field col-md-3" >
+                    <label for="descriptionTextArea">Coach Tasks</label>   
+                  </div>
+                  <div class="input-field col-md-9">        
+                    <textarea  type="text" class="form-control" [(ngModel)]="personalTraining.description" name="description" readonly > </textarea>
+                </div>   
+                 </div>
+                              
+              
+               </div>   
+               <div class ="form-group separate">    
+                <label>Place: {{personalTraining.place}}</label>   
+               </div> 
+               
+               <div class ="form-group separate" *ngIf="alreadyPast">    
+                <label>Fill Athlete training:</label>   
+               </div>  
+               <div class ="form-group " *ngIf="alreadyPast">
+                <div *ngFor="let trainingtoAdd of trainingsToAdd; let i = index" name="sets" >
+                            
+                  <div class ="form-group ">
+                  <div class= "row" >
+                    <div class="input-field col s3" >
+                      <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingtoAdd.distance"  name="distance{{i}}" placeholder="Distance/m" required>
+                    </div>
+                    <div class="input-field col s3" >
+                      <input type="number" step="0.01" class="form-control" [(ngModel)]="trainingtoAdd.pace" name="pace{{i}}" placeholder="Pace/s" required>                      
+                    </div>  
+                    <div class="input-field col s3" >
+                      <input type="number" step="0.01" class="form-control"  [(ngModel)]="trainingtoAdd.rest" name="rest{{i}}" placeholder="Rest/s" required>                      
+                    </div>
+                    <div class="input-field col s1" >
+                      <button  class="btn btn-info" id="delete" (click)="OnDelete(i)">-</button>                     
+                    </div>
+                    </div>
+                    </div>
+                </div>             
+             </div>
+             <div class="form-group" *ngIf="alreadyPast">
+              <button  class="btn btn-info" id ="add"  (click)="OnClick()">+</button>
+              </div>
+
+
+              <div class="form-group separate">    
+                <div class = "row ">
+                 <div class="input-field col-md-3" >
+                <label for="descriptionTextArea">Athlete report</label>
+                 </div>
+                 <div class="input-field col-md-9">        
+                  <textarea  type="text" class="form-control" [(ngModel)]="personalTraining.athleteReport" name="Report" readonly> </textarea>
+               </div>   
+                </div>
+                 
+               </div>  
+
+
+
+              <div class="form-group" *ngIf="alreadyPast">
+                <button [disabled]="!PersonalTrain.valid" class="btn btn-secondary" type="submit" (click)="OnSubmit()" >Confirm</button>
+                </div>
+            </form> 
+             
+          </div>
+
+
+
+  </div>

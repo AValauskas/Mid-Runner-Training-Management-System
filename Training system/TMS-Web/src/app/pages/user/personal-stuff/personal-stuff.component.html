@@ -1,0 +1,96 @@
+
+<body>
+    <div class="row">
+      <div class="left">
+           <div class="choose">
+            <p class="heading" [ngClass]="{'active': RecordsActive }" (click)="TurnRecords()" > Records</p>
+           </div>
+           <div class="choose">
+            <p class="heading"[ngClass]="{'active': CompetitionsActive}" (click)="TurnCompetitions()" > Competitions</p>
+           </div>
+           <div class="choose" *ngIf="!isFriend">
+            <p class="heading" [ngClass]="{'active': TrainingsActive}" (click)="TurnTrainings()"> Trainings</p>
+           </div>
+
+        </div>
+        <div class="right">
+            <div class="head ">
+                <p class="heading"> {{friendName}} {{Chosen}}</p>
+            </div>
+            <div class="action">     
+                    <div *ngIf="RecordsActive">
+                        <app-personal-best></app-personal-best>
+                    </div>
+                    <div *ngIf="CompetitionsActive">
+                        <app-competitions></app-competitions>
+                    </div>
+                    <div *ngIf="TrainingsActive">
+                        <app-trainings></app-trainings>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+
+
+<!--
+<body>
+    <div class="back" >
+    
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-4 col-xs-4">
+            
+
+            <div class="container responsive w-75 "  id="cont" >
+    
+     
+                <div class="card responsive" id ="tab-radius">
+                 <div>
+                     <p class = " text-center mt-3" id="title">My Times</p>
+                </div>     
+                    <ul class="nav flex-column" >
+                      <li class="nav-item">
+                        <a  [ngClass]="{'active': RecordsActive }" (click)="TurnRecords()" >Records</a>
+                      </li>
+                      <li class="nav-item" >
+                        <a  [ngClass]="{'active': CompetitionsActive}" (click)="TurnCompetitions()">Competitions</a>
+                      </li>
+                      <li class="nav-item" >
+                        <a  [ngClass]="{'active': TrainingsActive}" (click)="TurnTrainings()">Trainings</a>
+                      </li>
+                    </ul>
+                  </div>
+                 
+              </div>
+            
+        </div>
+        <div class=" col-sm-8 col-xs-8">
+            <div class="container responsive w-100 "  id="cont" >
+                <div class="card responsive" id ="tab-radius">
+                <div>
+                    <p class = " text-center mt-3" id="title">{{Chosen}}</p>
+               </div>     
+                <div *ngIf="RecordsActive">
+                    <app-personal-best></app-personal-best>
+                </div>
+                <div *ngIf="CompetitionsActive">
+                    <app-competitions></app-competitions>
+                </div>
+                <div *ngIf="TrainingsActive">
+                    <app-trainings></app-trainings>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</body>
+-->

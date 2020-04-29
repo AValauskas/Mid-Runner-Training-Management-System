@@ -7,5 +7,6 @@ namespace TMS
 {
     public interface IPersonalTrainingService
     {
+        Task ProcessPersonalTraining(PersonalTraining training);
     }
 }
