@@ -1,0 +1,284 @@
+html, body {
+  height: 92.3vh;
+  background-color: grey;
+}
+.row {
+  width: 100%;
+}
+
+
+div.left{    
+  margin-top: 15%;
+  width:25%;    
+  float:left;
+  background-color: grey;
+  box-sizing: border-box;
+}
+
+div.right{
+  width:75%;
+  height: 92.3vh;
+  background-color: khaki;
+  box-sizing: border-box;
+}
+
+.btn-new {
+  background-color: #2A3F54;
+}
+
+div.transformable {
+  -webkit-transition: height 5000ms linear;
+  -moz-transition: height 5000ms linear;
+  -o-transition: height 5000ms linear;
+  -ms-transition: height 5000ms linear;
+  transition: height 5000ms linear;
+
+}
+div.description
+{  
+    margin-left: 5%;
+    width: 90%;
+    margin-top: -30%;
+    min-height: 50px;
+    max-height: 10%;
+   //height: 100px;
+    background-color: khaki;
+    border-radius: 15px;
+    transition: height 300ms;
+    overflow: hidden;
+}
+div.description:hover,div.times:hover
+{
+    background-color: rgb(219, 209, 61);
+}
+div.descriptionBig
+{
+  overflow: hidden;
+  margin-left: 5%;
+  width: 90%;
+  margin-top: -30%;
+  min-height: 80px;
+  max-height: 30%;
+// height: 300px;
+  background-color: khaki;
+  border-radius: 15px;
+  transition: height 300ms;
+  
+}
+
+div.times
+{
+  margin-left: 5%;
+  width: 90%;
+  margin-top: 5%;
+  min-height: 50px;
+  max-height: 10%;
+ //height: 100px;
+  background-color: khaki;
+  border-radius: 15px;
+  transition: height 300ms;
+  overflow: hidden;
+}
+
+div.timesBig
+{
+  overflow: hidden;
+  margin-left: 5%;
+  width: 90%;
+  margin-top: 5%;
+  min-height: 80px;
+  max-height: 40%;
+// height: 300px;
+  background-color: khaki;
+  border-radius: 15px;
+  transition: height 300ms;  
+}
+
+select.type
+{
+    font-family: "Arial Black", Gadget, sans-serif;
+    color: white;
+    border-radius: 7px;
+    min-height: 30px;
+    height:5%;
+    margin-top: 2%;
+    margin-left: 2%;
+    background-color: rgb(59, 59, 59);
+}
+
+button.newTrain
+{
+    font-family: "Arial Black", Gadget, sans-serif;
+    color: white;
+    min-height: 30px;
+    height:5%;
+    background-color: rgb(59, 59, 59);
+    margin-top: 2%;
+    margin-right: 10%;    
+}
+
+button.manageButtons
+{
+    font-family: "Arial Black", Gadget, sans-serif;
+    color: white;
+    height:40px;
+    background-color: rgb(59, 59, 59);
+    margin-top: 10%;
+    margin-left: 25%;
+}
+div.trainings
+{
+    width:90%;
+    margin-top: 5%;
+    overflow-y: scroll; 
+    overflow-x:  hidden;
+    max-height:75%;
+}
+
+div.sides
+{
+max-height:200px;
+
+}
+
+#notesNames
+{ 
+
+  margin-left:10%;
+  margin-top:1%;
+  font-family: "Comic Sans MS", cursive, sans-serif
+}
+#side
+{
+   font-size:7px;
+  margin-left:10%;
+  margin-top:1%;
+  font-family: "Comic Sans MS", cursive, sans-serif
+
+}
+#down{
+  margin-top:-10%;
+  margin-left:90%;
+}
+
+.maxlenght
+{
+  overflow-y: auto; 
+  overflow-x:  hidden;
+  max-height:150px;
+}
+div.setss
+{
+margin-left: 3%;
+background-color: black;
+color: white;
+}
+input.setInput
+{
+  background-color: rgb(58, 57, 57);
+  color: white;
+  width: 80%;
+  text-align: right; 
+}
+
+
+.messageGood
+{
+  text-align: center;
+  font-size: 150%;
+opacity: 0.9;
+width: 100%;
+position: absolute;
+height: 10%;
+background-color: rgb(114, 179, 114);
+}
+
+.messageBad
+{
+  text-align: center;
+  font-size: 150%;
+opacity: 0.9;
+width: 100%;
+position: absolute;
+height: 10%;
+background-color: rgb(179, 116, 114);
+}
+
+.modalDelete
+{
+margin-top: 40%;
+width: 80%;
+}
+.buttons
+{
+  margin-top: 10%;
+margin-left: 50%;
+}
+button.btnclose
+{
+  margin-left: 3%;
+}
+
+.divider{
+  width:5px;
+  height:auto;
+  display:inline-block;
+}
+
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 20px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(46, 45, 45); 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background:  rgb(46, 45, 45); 
+  }
+
+  div.tableRow
+  {
+    margin-left: 5%;
+    background-color: white;
+    height:40px;
+    border: solid grey 0.3px;
+  }
+  div.tableRow:hover
+  {
+    margin-left: 5%;
+    background-color: rgb(212, 209, 209);
+    height:40px;
+    border: solid grey 0.3px
+  }
+
+  div.rightside
+  {
+      margin-left: 20%;
+
+  }
+
+  #truefalse
+  {
+    margin-top: 1%;
+    font-size: 200%;
+  }
+  div.trains
+  {
+   max-width: 25%;
+   max-height: 40px;
+    overflow: hidden;
+  }
+
+  
