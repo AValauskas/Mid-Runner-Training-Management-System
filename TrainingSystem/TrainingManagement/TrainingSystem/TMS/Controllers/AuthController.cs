@@ -18,7 +18,7 @@ namespace TMS
             authService = new AuthService()
             {
                 AuthRepository = new AuthRepository(),
-                ConsumerRepository = new ConsumerRepository(),
+                ConsumerRepository = consumerRepository,
                 EmailRepository = new EmailRepository()
             };
         }
@@ -26,7 +26,7 @@ namespace TMS
 
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] ConsumerEntity user)
         {
 
             var jwt = await authService.Login(user);
@@ -40,7 +40,7 @@ namespace TMS
             return Ok(json); 
         }
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] User user)
+        public async Task<IActionResult> Register([FromBody] ConsumerEntity user)
         {
            var response = await authService.Register(user);
             if (response == null)
@@ -53,7 +53,7 @@ namespace TMS
             }
         }
         [HttpGet("confirm/{id}")]
-        public async Task<IActionResult> Register([FromRoute] string Id)
+        public async Task<IActionResult> CompleteRegister([FromRoute] string Id)
         {
              await authRepo.VerifyRegister(Id);
            
@@ -62,7 +62,7 @@ namespace TMS
         }
 
         [HttpPost("resetpassword/{id}")]
-        public async Task<IActionResult> SendReminderToEmail([FromBody] string email)
+        public async Task<IActionResult> RequestForNewPassword([FromBody] string email)
         {
             var response = await authService.RequestForNewPassword(email);
             if (response != null)
@@ -74,7 +74,7 @@ namespace TMS
         }
 
         [HttpGet("confirmreset/{id}")]
-        public async Task<IActionResult> ConfirmResetPassword([FromRoute] string Id)
+        public async Task<IActionResult> ConfirmPasswordReset([FromRoute] string Id)
         {
             var pass = RandomWord.RandomString(10);
             await authService.ResetPassword(Id, pass);

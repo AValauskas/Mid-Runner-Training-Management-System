@@ -18,7 +18,6 @@ namespace TMS
         private readonly IConsumerRepository ConsumerRepository;
         private readonly IAuthService authService;
         private readonly IAggregateRepository aggregateRepo;
-        private readonly IPersonalTrainingsRepository personalTrainingsRepository;
         public PersonalManagementController()
         {
             aggregateRepo = new AggregateRepository();
@@ -163,7 +162,7 @@ namespace TMS
         ////----------PersonalTraining--------------
         [Authorize(Roles = "Coach")]
         [HttpGet("athleteList/{date}")]
-        public async Task<IActionResult> GetAthletesWhoAreStillWithoutTrain([FromRoute] string date)
+        public async Task<IActionResult> GetFreeAthletes([FromRoute] string date) ////athletes who still doesn't have any training
         {
             var claims = User.Claims;
             var cla = claims.ToList();
@@ -195,7 +194,7 @@ namespace TMS
 
 
         [HttpPatch("password")]
-        public async Task<IActionResult> ChangePassword(User user)
+        public async Task<IActionResult> ChangePassword(ConsumerEntity user)
         {
             var claims = User.Claims;
             var cla = claims.ToList();
@@ -209,7 +208,7 @@ namespace TMS
         //Coaches/friends----------------
 
         [HttpGet("personalcoach")]
-        public async Task<IActionResult> GetConsumerCoach()
+        public async Task<IActionResult> GetAthleteCoach()//Get Coach for athlete
         {
             var claims = User.Claims;
             var cla = claims.ToList();
@@ -231,7 +230,7 @@ namespace TMS
         }
 
         [HttpGet("coachAthletes")]
-        public async Task<IActionResult> GetAthletes()
+        public async Task<IActionResult> GetAthletes()//Get all athletes which belongs to coach
         {
             var claims = User.Claims;
             var cla = claims.ToList();

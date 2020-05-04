@@ -13,25 +13,25 @@ namespace TMS
     public class AuthRepository: IAuthRepository
     {
         private static CodeMashClient Client => new CodeMashClient(Settings.ApiKey, Settings.ProjectId);
-        public async Task<ConsumerEntity> RegisterUser(User user)
+        public async Task<ConsumerEntity> RegisterUser(ConsumerEntity consumer)
         {
             var registerService = new CodeMashRepository<ConsumerEntity>(Client);
 
-            var consumer = new ConsumerEntity()
-            {
-                Email = user.Email,
-                Name = user.Name,
-                Password = user.Password,
-                Surname = user.Surname,
-                Role =user.Role,
-                Salt = user.Salt
-            };
+            //var consumer = new ConsumerEntity()
+            //{
+            //    Email = user.Email,
+            //    Name = user.Name,
+            //    Password = user.Password,
+            //    Surname = user.Surname,
+            //    Role =user.Role,
+            //    Salt = user.Salt
+            //};
             consumer = await registerService.InsertOneAsync(consumer);
 
             return consumer;
         }
 
-        public async Task<string> CheckIfEmailAlreadyExist(User user)
+        public async Task<string> CheckIfEmailAlreadyExist(ConsumerEntity user)
         {
             var registerService = new CodeMashRepository<ConsumerEntity>(Client);
             var email = await registerService.FindOneAsync(x => x.Email == user.Email);

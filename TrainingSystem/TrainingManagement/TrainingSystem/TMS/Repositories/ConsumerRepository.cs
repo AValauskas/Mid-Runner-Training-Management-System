@@ -12,7 +12,7 @@ namespace TMS
     public class ConsumerRepository : IConsumerRepository
     {
         private static CodeMashClient Client => new CodeMashClient(Settings.ApiKey, Settings.ProjectId);
-        public async Task<ConsumerEntity> FindConsumer(User user)
+        public async Task<ConsumerEntity> FindConsumer(ConsumerEntity user)
         {
             var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
             var filterBuilder = Builders<ConsumerEntity>.Filter;

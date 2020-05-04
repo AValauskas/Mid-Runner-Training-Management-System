@@ -23,19 +23,37 @@ namespace TMS
                 TrainingRepo = trainingRepo
             };
         }
+        /// <summary>
+        /// Insert training
+        /// </summary>
+        /// <param name="training"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Coach, Admin")]
         [HttpPost]
+       
         public async Task<IActionResult> PostTraining([FromBody] TrainingEntity training)
         {
             var claims = User.Claims;
             var cla = claims.ToList();
             var idTraining = cla[1].Value;
             training.Owner = idTraining;
-            await trainingRepo.InsertTraining(training);
+            // await trainingRepo.InsertTraining(training);
 
-            return Ok(training);
+            var train = await trainingService.InsertTraining(training, idTraining);
+
+            if (train == null)
+            {
+                return NotFound();
+            }
+          
+
+            return Ok(train);
+           
         }
-
+        /// <summary>
+        /// Get trainings for athlete
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetAllAvailableTrainings()
         {
@@ -54,7 +72,7 @@ namespace TMS
             }).ToList();
             return Ok(training);
         }
-
+        
         [Authorize(Roles = "Admin")]
         [HttpGet("availableTrainings")]
         public async Task<IActionResult> GetAllTrainings()
@@ -67,7 +85,10 @@ namespace TMS
             }
             return Ok(training);
         }
-
+        /// <summary>
+        /// get trainings included personal
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = "Coach")]
         [HttpGet("allTrainings")]
         public async Task<IActionResult> GetAllTrainingsIncludedPersonal()
@@ -147,7 +168,11 @@ namespace TMS
             }
             return Ok(training);
         }
-
+        /// <summary>
+        /// Delete training
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Coach, Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTraining([FromRoute] string id)
@@ -162,11 +187,15 @@ namespace TMS
             }
             
 
-            await trainingRepo.DeleteTraining(id);
+           var train = await trainingService.DeleteTraining(id, idPerson);
 
-            return Ok("Succesfully deleted");
+            return Ok(train);
         }
-
+        /// <summary>
+        /// update training
+        /// </summary>
+        /// <param name="training"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Coach, Admin")]
         [HttpPut()]
         public async Task<IActionResult> UpdateTraining([FromBody] TrainingEntity training)
@@ -180,10 +209,9 @@ namespace TMS
                 return Unauthorized("This isn't yours training");
             }
             training.Owner = idPerson;
-            await trainingRepo.ReplaceTraining(training);
+            var train = await trainingService.UpdateTraining(training, idPerson);
 
-
-            return Ok(training);
+            return Ok(train);
         }
 
 

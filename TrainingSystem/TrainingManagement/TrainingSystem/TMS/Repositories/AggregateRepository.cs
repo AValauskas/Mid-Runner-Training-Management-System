@@ -73,7 +73,7 @@ namespace TMS
 
             return trains;
         }
-        public async Task<List<PersonInForCoach>> GetFreeAthletesByDayAggregate(string date, string coachId)
+        public async Task<List<PersonInfoForCoach>> GetFreeAthletesByDayAggregate(string date, string coachId)
         {
             var startTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
@@ -83,7 +83,7 @@ namespace TMS
             var dateToFloat = dateToDate.Subtract(startTime).TotalMilliseconds;
 
             var service = new CodeMashRepository<PersonalTrainingEntity>(Client);
-            var athletes = await service.AggregateAsync<PersonInForCoach>(Guid.Parse("1bc53f87-423e-44cb-8faa-d7ee4f5aba6d"), new AggregateOptions
+            var athletes = await service.AggregateAsync<PersonInfoForCoach>(Guid.Parse("1bc53f87-423e-44cb-8faa-d7ee4f5aba6d"), new AggregateOptions
             {
                 Tokens = new Dictionary<string, string>()
                 {
@@ -97,10 +97,10 @@ namespace TMS
 
         }
 
-        public async Task<List<PersonInForCoach>> GetAllCoachAthletesAggregate( string coachId)
+        public async Task<List<PersonInfoForCoach>> GetAllCoachAthletesAggregate( string coachId)
         {
             var service = new CodeMashRepository<ConsumerEntity>(Client);
-            var athletes = await service.AggregateAsync<PersonInForCoach>(Guid.Parse("6d2bf19f-1296-4ab8-9301-923f94eeb2bf"), new AggregateOptions
+            var athletes = await service.AggregateAsync<PersonInfoForCoach>(Guid.Parse("6d2bf19f-1296-4ab8-9301-923f94eeb2bf"), new AggregateOptions
             {
                 Tokens = new Dictionary<string, string>()
                 {

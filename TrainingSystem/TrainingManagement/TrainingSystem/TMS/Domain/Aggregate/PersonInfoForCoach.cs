@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TMS
 {
-    public class PersonInForCoach
+    public class PersonInfoForCoach
     {
         public string Name { get; set; }
         public string Surname { get; set; }

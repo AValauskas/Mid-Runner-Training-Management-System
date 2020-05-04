@@ -9,8 +9,8 @@ namespace TMS
     {
         public IConsumerRepository ConsumerRepository { get; set; }       
         public IPersonalTrainingsRepository PersonalTrainingsRepository { get; set; }
-
         public IAggregateRepository AggregateRepository { get; set; }
+
         public async Task AddCompetitionToListOrSetNewRecord(string AthleteId, CompetitionEntity competition)
         {
             competition.Time = double.Parse(String.Format("{0:0.00}", competition.Time));
@@ -44,6 +44,7 @@ namespace TMS
             if (senderRole=="Athlete")
             {
                 var receiver = await ConsumerRepository.FindConsumerById(receiverId);
+
                 if (receiver.InviteFrom.Contains(senderId))
                 {
                     return "You already sent invitation";
@@ -146,31 +147,13 @@ namespace TMS
             }
         }
 
-        public async Task<List<InviteForm>> GetInvitations(string idMainUser)
-        {
-            List<InviteForm> invites = new List<InviteForm>();
-            var consumer = await ConsumerRepository.FindConsumerById(idMainUser);
-            foreach (var inviterId in consumer.InviteFrom)
-            {
-                var invaiter = await ConsumerRepository.FindConsumerById(inviterId);
-                invites.Add(new InviteForm()
-                {
-                    Name = invaiter.Name,
-                    Surname = invaiter.Surname,
-                    IDInvitationFrom = inviterId
-                });
-            }
-
-            return invites;
-        }
-
-        public async Task<List<PersonInForCoach>> GetAthletesIfFree(string idCoach, string date)
+        public async Task<List<PersonInfoForCoach>> GetAthletesIfFree(string idCoach, string date)
         {
              var trainDate = DateTime.Parse(date);                   
             var exist = await PersonalTrainingsRepository.CheckIfCoachHasTrainingInChoosenDay(trainDate, idCoach);
             if (exist)
             {
-                return new List<PersonInForCoach>();
+                return new List<PersonInfoForCoach>();
             }
             else
             {

@@ -79,7 +79,7 @@ namespace TMS
 
         [Authorize(Roles = "Coach")]
         [HttpGet("coach/{date}")]
-        public async Task<IActionResult> GetPersonalAssignedPersonalTrainingsByCoach([FromRoute] string date)
+        public async Task<IActionResult> GetAssignedPersonalTrainingsByCoach([FromRoute] string date)
         {
             var claims = User.Claims;
             var cla = claims.ToList();

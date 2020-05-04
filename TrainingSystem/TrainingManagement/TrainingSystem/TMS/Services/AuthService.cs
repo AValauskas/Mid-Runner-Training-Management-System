@@ -1,9 +1,11 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +17,7 @@ namespace TMS
         public IConsumerRepository ConsumerRepository { get; set; }
 
         public IEmailRepository EmailRepository { get; set; }
-        public async Task<string> Register(User user)
+        public async Task<string> Register(ConsumerEntity user)
         {
             if (user.Password.Length<6)
             {
@@ -32,7 +34,7 @@ namespace TMS
                 return response;
             }
 
-            var hash = PasswordHashing.HashNewPassword(user.Password);
+            var hash = HashNewPassword(user.Password);
             user.Password = hash.Password;
             user.Salt = hash.Salt;
             var consumer = await AuthRepository.RegisterUser(user);
@@ -41,7 +43,7 @@ namespace TMS
         }                     
         
 
-        public async Task<JwtSecurityToken> Login(User user)
+        public async Task<JwtSecurityToken> Login(ConsumerEntity user)
         {
             
            var consumer = await ConsumerRepository.FindConsumerByEmail(user.Email);
@@ -51,7 +53,7 @@ namespace TMS
             {
                 throw new Exception("email isn't confirmed yet");
             }
-            var hash = PasswordHashing.HashOldPassword(user.Password, consumer.Salt);         
+            var hash = HashOldPassword(user.Password, consumer.Salt);         
 
             if (hash.Password == consumer.Password)
             {
@@ -145,22 +147,10 @@ namespace TMS
             // return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        public async Task<User> DoExistLogin(User user)
-        {
-            var consumer = await ConsumerRepository.FindConsumer(user);
-             if (consumer != null)
-             {
-                user.Id = consumer.Id;
-                user.Role = consumer.Role;
-             }
-
-            return user;
-
-        }
 
         public async Task ChangePassword(string idConsumer, string password)
         {
-            var hashedPassword = PasswordHashing.HashNewPassword(password);
+            var hashedPassword = HashNewPassword(password);
             await AuthRepository.ChangePassword(idConsumer, hashedPassword);
         }
 
@@ -178,10 +168,47 @@ namespace TMS
 
         public async Task ResetPassword(string idConsumer, string password)
         {
-            var hashedPassword = PasswordHashing.HashNewPassword(password);
+            var hashedPassword = HashNewPassword(password);
             await AuthRepository.ChangePassword(idConsumer, hashedPassword);
             var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
             await EmailRepository.SendNewPassword(consumer.Email, password);
+        }
+
+
+        public static HashPasswordInfo HashNewPassword(string password)
+        {
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+            string hashedPass = Convert.ToBase64String(
+                KeyDerivation.Pbkdf2(
+                    password: password,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 10000,
+                    numBytesRequested: 256 / 8
+                )
+            );
+            var hashPw = new HashPasswordInfo() { Password = hashedPass, Salt = Convert.ToBase64String(salt) };
+            return hashPw;
+        }
+        public static HashPasswordInfo HashOldPassword(string password, string saltString)
+        {
+            byte[] salt = Convert.FromBase64String(saltString);
+            string hashedPass = Convert.ToBase64String(
+                KeyDerivation.Pbkdf2(
+                    password: password,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 10000,
+                    numBytesRequested: 256 / 8
+                )
+            );
+            var hashPw = new HashPasswordInfo() { Password = hashedPass, Salt = Convert.ToBase64String(salt) };
+            return hashPw;
+
         }
     }
 }
