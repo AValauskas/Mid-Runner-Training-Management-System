@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace TMS
 {
@@ -23,7 +28,17 @@ namespace TMS
             };
         }
 
+        [HttpPatch("password")]
+        public async Task<IActionResult> ChangePassword(ConsumerEntity user)
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idConsumer = cla[1].Value;
+            await authService.ChangePassword(idConsumer, user.Password);
 
+            return Ok();
+
+        }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] ConsumerEntity user)
@@ -52,17 +67,22 @@ namespace TMS
                 return BadRequest(response);
             }
         }
-        [HttpGet("confirm/{id}")]
+        [HttpPatch("confirm/{id}")]
         public async Task<IActionResult> CompleteRegister([FromRoute] string Id)
         {
-             await authRepo.VerifyRegister(Id);
+            if (Id.Length != 24)
+            {
+                BadRequest("Wrong id given");
+            }           
+
+            await authRepo.VerifyRegister(Id);
            
              return Ok();           
             
         }
 
-        [HttpPost("resetpassword/{id}")]
-        public async Task<IActionResult> RequestForNewPassword([FromBody] string email)
+        [HttpPost("resetpassword/{email}")]
+        public async Task<IActionResult> RequestForNewPassword([FromRoute] string email)
         {
             var response = await authService.RequestForNewPassword(email);
             if (response != null)
@@ -73,9 +93,13 @@ namespace TMS
             return Ok();
         }
 
-        [HttpGet("confirmreset/{id}")]
+        [HttpPatch("confirmreset/{id}")]
         public async Task<IActionResult> ConfirmPasswordReset([FromRoute] string Id)
         {
+            if (Id.Length != 24)
+            {
+                BadRequest("Wrong id given");
+            }
             var pass = RandomWord.RandomString(10);
             await authService.ResetPassword(Id, pass);
 

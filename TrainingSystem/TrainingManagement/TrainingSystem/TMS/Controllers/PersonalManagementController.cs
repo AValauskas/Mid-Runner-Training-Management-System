@@ -140,13 +140,12 @@ namespace TMS
             var cla = claims.ToList();
             var receiverId = cla[1].Value;
             var receiverRole = cla[0].Value;
-
-            await personalManagementService.DeclineInvitation(consumer.Id, receiverRole, receiverId);
+            await ConsumerRepository.DeleteInvitation(receiverId,consumer.Id);
             var invites = await aggregateRepo.GetAllInvitersAggregate(receiverId);
 
             return Ok(invites);
         }
-
+        ///
         [Authorize(Roles = "Athlete, Coach")]
         [HttpGet("invitations")]
         public async Task<IActionResult> GetInvitations()
@@ -213,7 +212,7 @@ namespace TMS
             var claims = User.Claims;
             var cla = claims.ToList();
             var idConsumer = cla[1].Value;
-            var consumer = await aggregateRepo.FindOutIfAthleteHasCoachAggregate(idConsumer);
+            var consumer = await aggregateRepo.AthletePersonalCoachAggregate(idConsumer);
 
             return Ok(consumer);
         }

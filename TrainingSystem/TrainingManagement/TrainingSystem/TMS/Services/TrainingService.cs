@@ -52,7 +52,7 @@ namespace TMS
         {
             await TrainingRepo.InsertTraining(training);
 
-            var train = await TrainingRepo.GetAllTrainingsIncludedPersonal(id);
+            var train = await TrainingRepo.GetAllAvailableTrainings(id);
             train.Select(x => {
                 var StartN = x.TrainingType.IndexOf("name");
                 var EndN = x.TrainingType.IndexOf("taxonomy");
@@ -70,7 +70,7 @@ namespace TMS
         {
             await TrainingRepo.ReplaceTraining(training);
 
-            var train = await TrainingRepo.GetAllTrainingsIncludedPersonal(id);
+            var train = await TrainingRepo.GetAllAvailableTrainings(id);
             train.Select(x => {
                 var StartN = x.TrainingType.IndexOf("name");
                 var EndN = x.TrainingType.IndexOf("taxonomy");
@@ -88,7 +88,7 @@ namespace TMS
         {
             await TrainingRepo.DeleteTraining(training);
 
-            var train = await TrainingRepo.GetAllTrainingsIncludedPersonal(id);
+            var train = await TrainingRepo.GetAllAvailableTrainings(id);
             train.Select(x => {
                 var StartN = x.TrainingType.IndexOf("name");
                 var EndN = x.TrainingType.IndexOf("taxonomy");

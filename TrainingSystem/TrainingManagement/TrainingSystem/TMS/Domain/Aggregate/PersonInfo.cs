@@ -11,7 +11,7 @@ namespace TMS
         public string Name { get; set; }
         public string Surname { get; set; }
         public string IdPerson { get; set; }
-        [Field("_id")]
-        public string Id { get; set; }
+       // [Field("_id")]
+      //  public string Id { get; set; }
     }
 }

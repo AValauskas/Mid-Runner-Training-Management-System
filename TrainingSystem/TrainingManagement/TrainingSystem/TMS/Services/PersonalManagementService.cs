@@ -21,11 +21,7 @@ namespace TMS
             if (consumer!= null)
             {
                 consumer = await ConsumerRepository.CheckIfBiggerPersonalTimeExist(AthleteId, competition);
-                if (consumer != null)
-                {
-
-                }
-                else
+                if (consumer == null)
                 {
                     await ConsumerRepository.UpdatePersonalRecord(AthleteId, competition);
                 }
@@ -41,9 +37,21 @@ namespace TMS
 
         public async Task<string> SendInviteToAnother(string senderId, string senderRole, string receiverId)
         {
+            if (receiverId== senderId)
+            {
+                return "you can't invite yourself";
+            }
+            if (receiverId.Length!=24)
+            {
+                return "wrong code was written";
+            }
             if (senderRole=="Athlete")
             {
                 var receiver = await ConsumerRepository.FindConsumerById(receiverId);
+                if (receiver==null)
+                {
+                    return "this person not exist";
+                }
 
                 if (receiver.InviteFrom.Contains(senderId))
                 {
@@ -69,7 +77,7 @@ namespace TMS
                
                 if (receiver.Role=="Coach")
                 {
-                    var athlete = await AggregateRepository.FindOutIfAthleteHasCoachAggregate(senderId);
+                    var athlete = await AggregateRepository.AthletePersonalCoachAggregate(senderId);
                     if (athlete.Count != 0)
                     {
                         return "You already have coach";
@@ -89,7 +97,12 @@ namespace TMS
                 {
                     return "Athlete already sent you invitation";
                 }
-                var athlete = await ConsumerRepository.FindConsumerById(receiverId);               
+                var athlete = await ConsumerRepository.FindConsumerById(receiverId);
+                var receiver = await ConsumerRepository.FindConsumerById(receiverId);
+                if (receiver == null)
+                {
+                    return "this person not exist";
+                }
                 if (athlete.InviteFrom.Contains(senderId))
                 {
                     return "You have already sent invitation";
@@ -102,7 +115,7 @@ namespace TMS
                 {
                     return "You can't invite admin";
                 }
-                var athlete2 = await AggregateRepository.FindOutIfAthleteHasCoachAggregate(receiverId);
+                var athlete2 = await AggregateRepository.AthletePersonalCoachAggregate(receiverId);
                 if (athlete2.Count != 0)
                 {
                     return "This athlete already have coach";
@@ -114,6 +127,7 @@ namespace TMS
         }
         public async Task AcceptInvitation(string senderId,string role, string receiverId)
         {
+            
             if (role == "Athlete")
             {
                 var consumer = await ConsumerRepository.FindConsumerById(senderId);
@@ -125,39 +139,25 @@ namespace TMS
                 else {
                     await ConsumerRepository.AceptInvitationAthlete(senderId, receiverId);
                 }              
-
-                await ConsumerRepository.DeleteInvitation(receiverId, senderId);
             }
             else if (role == "Coach")
             {
                 await ConsumerRepository.AceptInvitationCoach(receiverId, senderId);
-                await ConsumerRepository.DeleteInvitation(receiverId, senderId);
-            }         
+               
+            }
+            await ConsumerRepository.DeleteInvitation(receiverId, senderId);
         }
 
-        public async Task DeclineInvitation(string senderId, string role, string receiverId)
-        {
-            if (role == "Athlete")
-            {
-                await ConsumerRepository.DeleteInvitation(receiverId, senderId);
-            }
-            else if (role == "Coach")
-            {
-                await ConsumerRepository.DeleteInvitation(receiverId, senderId);
-            }
-        }
-
-        public async Task<List<PersonInfoForCoach>> GetAthletesIfFree(string idCoach, string date)
+        public async Task<List<PersonInfo>> GetAthletesIfFree(string idCoach, string date)
         {
              var trainDate = DateTime.Parse(date);                   
             var exist = await PersonalTrainingsRepository.CheckIfCoachHasTrainingInChoosenDay(trainDate, idCoach);
             if (exist)
             {
-                return new List<PersonInfoForCoach>();
+                return new List<PersonInfo>();
             }
             else
             {
-
                 return await AggregateRepository.GetAllCoachAthletesAggregate(idCoach);
             }
 

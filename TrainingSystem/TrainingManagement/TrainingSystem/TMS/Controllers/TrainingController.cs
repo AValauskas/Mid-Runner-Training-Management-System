@@ -51,13 +51,16 @@ namespace TMS
            
         }
         /// <summary>
-        /// Get trainings for athlete
+        /// Get trainings for athlete and coach first step
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetAllAvailableTrainings()
         {
-            var training = await trainingRepo.GetAllAvailableTrainings();
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idConsumer = cla[1].Value;
+            var training = await trainingRepo.GetAllAvailableTrainings(idConsumer);
 
 
             if (training == null)
@@ -85,45 +88,20 @@ namespace TMS
             }
             return Ok(training);
         }
-        /// <summary>
-        /// get trainings included personal
-        /// </summary>
-        /// <returns></returns>
-        [Authorize(Roles = "Coach")]
-        [HttpGet("allTrainings")]
-        public async Task<IActionResult> GetAllTrainingsIncludedPersonal()
-        {
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idCoach = cla[1].Value;
-
-            var training = await trainingRepo.GetAllTrainingsIncludedPersonal(idCoach);
-
-            if (training == null)
-            {
-                return NotFound();
-            }
-            training.Select(x => {
-                var StartN= x.TrainingType.IndexOf("name");
-                var EndN = x.TrainingType.IndexOf("taxonomy");
-                x.TrainingTypeName = x.TrainingType.Substring(StartN + 8, EndN - StartN - 15);
-                 StartN = x.TrainingType.IndexOf("id");
-                 EndN = x.TrainingType.IndexOf("name");
-                x.TrainingType = x.TrainingType.Substring(StartN + 6, EndN - StartN - 13);
-                return x; }).ToList();
-            
-            return Ok(training);
-        }
-
+     /// <summary>
+     /// training given by type
+     /// </summary>
+     /// <param name="id"></param>
+     /// <returns></returns>
         
-        [HttpGet("TrainingsByType/{date}")]
-        public async Task<IActionResult> GetTrainingsByTaxonomy([FromRoute] string date)
+        [HttpGet("TrainingsByType/{id}")]
+        public async Task<IActionResult> GetTrainingsByTaxonomy([FromRoute] string id)
         {
             var claims = User.Claims;
             var cla = claims.ToList();
             var idCoach = cla[1].Value;
 
-            var training = await trainingRepo.GetTrainingsByType(date, idCoach);
+            var training = await trainingRepo.GetTrainingsByType(id, idCoach);
 
             if (training == null)
             {

@@ -117,14 +117,14 @@ namespace TMS
         {
             var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
 
-            var filter = Builders<PersonalTrainingEntity>.Update.AddToSetEach(x => x.Results, result);
+            var filter = Builders<PersonalTrainingEntity>.Update.PushEach(x => x.Results, result);
             await trainingRepo.UpdateOneAsync(x => x.Id == id, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true }) ;
         }
         public async Task AddResultsAndReport(string id, Results result)
         {
             var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);           
 
-            var filter = Builders<PersonalTrainingEntity>.Update.AddToSetEach(x => x.Results, result.results)
+            var filter = Builders<PersonalTrainingEntity>.Update.PushEach(x => x.Results, result.results)
                 .Set(x => x.AthleteReport, result.report);
             await trainingRepo.UpdateOneAsync(x => x.Id == id, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
         }
@@ -133,7 +133,7 @@ namespace TMS
         {
             var trainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
 
-            var filter = Builders<PersonalTrainingEntity>.Update.Unset(x => x.Results);
+            var filter = Builders<PersonalTrainingEntity>.Update.Set(x => x.Results, new List<SetEntity>());
                 
             await trainingRepo.UpdateOneAsync(x => x.Id == id, filter, new DatabaseUpdateOneOptions() { BypassDocumentValidation = true });
         }

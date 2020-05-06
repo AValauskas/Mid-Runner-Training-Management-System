@@ -68,7 +68,7 @@ namespace TMS
         [Authorize(Roles = "Coach")]
         [HttpGet("countByBusy")]
         //gaunama dienos ir atvaizduojama kiek atletų iš kiek atitinkamą dieną jau yra užimti
-        public async Task<IActionResult> GetPersonalTrainingsCountByCoach()
+        public async Task<IActionResult> GetPersonalTrainingsCount()
         {
             var claims = User.Claims;
             var cla = claims.ToList();
@@ -96,7 +96,7 @@ namespace TMS
         [Authorize(Roles = "Coach")]
         [HttpGet("coach")]
 
-        public async Task<IActionResult> GetPersonalTrainingsWhicAlreadyGiven()
+        public async Task<IActionResult> GetPersonalTrainingsWhichGiven()
         {
             var claims = User.Claims;
             var cla = claims.ToList();

@@ -19,10 +19,14 @@ namespace TMS
             await athleteRepository.InsertOneAsync(training);
         }
 
-        public async Task<List<TrainingEntity>> GetAllAvailableTrainings()
+        public async Task<List<TrainingEntity>> GetAllAvailableTrainings(string owner)
         {
             var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
-            var response = await trainingRepo.FindAsync(x => x.IsPersonal == false, new DatabaseFindOptions( ) { IncludeTermNames = true });
+            var filterBuilder = Builders<TrainingEntity>.Filter;
+            var filter =  filterBuilder.Eq(x => x.IsPersonal, false) |
+            (filterBuilder.Eq("owner", ObjectId.Parse(owner)) & filterBuilder.Eq(x => x.IsPersonal, true));
+
+            var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions( ) { IncludeTermNames = true });
 
             return response.Items;
         }
@@ -34,7 +38,7 @@ namespace TMS
 
             return response.Items;
         }
-        public async Task<List<TrainingEntity>> GetAllTrainingsIncludedPersonal(string owner)
+     /*   public async Task<List<TrainingEntity>> GetAllTrainingsIncludedPersonal(string owner)
         {
             var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
             var filterBuilder = Builders<TrainingEntity>.Filter;
@@ -43,7 +47,7 @@ namespace TMS
             var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions() { IncludeTermNames = true }) ;
 
             return response.Items;
-        }
+        }*/
         public async Task<List<TrainingEntity>> GetTrainingsByType(string typeId,string owner)
         {
             var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);

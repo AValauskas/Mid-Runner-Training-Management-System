@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TMS
@@ -21,11 +22,12 @@ namespace TMS
         {
             if (user.Password.Length<6)
             {
-                return "Password is too short";
+                throw new Exception("Password must be atleast 6 symbols length");
             }
-            if (!user.Password.Any(char.IsDigit))
+            if (!Regex.IsMatch(user.Password, @"^(?=.*[a-zA-Z])(?=.*[0-9])"))
             {
-                return "Password must contain atleast one number";
+                throw new Exception("Password must contain atleast one number and atleast one letter");
+
             }
             //var pwd = new PasswordHash("some pwd");
             var response = await AuthRepository.CheckIfEmailAlreadyExist(user);
@@ -150,6 +152,16 @@ namespace TMS
 
         public async Task ChangePassword(string idConsumer, string password)
         {
+
+            if (password.Length < 6)
+            {
+                throw new Exception( "Password is too short");
+            }
+            if (!Regex.IsMatch(password, @"^(?=.*[a-zA-Z])(?=.*[0-9])"))
+            {
+                throw new Exception("Password must contain atleast one number and atleast one letter");                
+            }
+
             var hashedPassword = HashNewPassword(password);
             await AuthRepository.ChangePassword(idConsumer, hashedPassword);
         }
@@ -168,9 +180,14 @@ namespace TMS
 
         public async Task ResetPassword(string idConsumer, string password)
         {
+            if (idConsumer.Length != 24)
+            {
+                throw new Exception("Wrong id was given");
+            }
+            var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
             var hashedPassword = HashNewPassword(password);
             await AuthRepository.ChangePassword(idConsumer, hashedPassword);
-            var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
+           // var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
             await EmailRepository.SendNewPassword(consumer.Email, password);
         }
 
