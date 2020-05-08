@@ -38,16 +38,6 @@ namespace TMS
 
             return response.Items;
         }
-     /*   public async Task<List<TrainingEntity>> GetAllTrainingsIncludedPersonal(string owner)
-        {
-            var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);
-            var filterBuilder = Builders<TrainingEntity>.Filter;
-            var filter = filterBuilder.Eq("owner", ObjectId.Parse(owner)) | filterBuilder.Eq(x=>x.IsPersonal, false);
-
-            var response = await trainingRepo.FindAsync(filter, new DatabaseFindOptions() { IncludeTermNames = true }) ;
-
-            return response.Items;
-        }*/
         public async Task<List<TrainingEntity>> GetTrainingsByType(string typeId,string owner)
         {
             var trainingRepo = new CodeMashRepository<TrainingEntity>(Client);

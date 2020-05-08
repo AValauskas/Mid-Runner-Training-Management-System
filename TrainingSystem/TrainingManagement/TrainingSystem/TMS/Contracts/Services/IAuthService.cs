@@ -9,6 +9,7 @@ namespace TMS
    public interface IAuthService
     {
         Task<string> Register(ConsumerEntity user);
+        Task<string> InsertNewAdmin(ConsumerEntity user);
         Task<JwtSecurityToken> Login(ConsumerEntity user);
 
         JwtSecurityToken GenerateCoachToken(string id);

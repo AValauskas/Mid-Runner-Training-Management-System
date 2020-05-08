@@ -23,6 +23,14 @@ namespace TMS
 
             return consumer;
         }
+        public async Task<List<ConsumerEntity>> GetAllUsers()
+        {
+            var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);     
+
+            var consumer = await ConsumerRepository.FindAsync();
+            return consumer.Items;
+        }
+
 
         public async Task<ConsumerEntity> FindConsumerByEmail(string email)
         {
@@ -159,11 +167,10 @@ namespace TMS
 
         }
 
-       
-
-
-
-
-
+        public async Task DeleteUser(string userId)
+        {
+            var ConsumerRepository = new CodeMashRepository<ConsumerEntity>(Client);
+            var result = await ConsumerRepository.DeleteOneAsync(x => x.Id == userId);
+        }
     }
 }

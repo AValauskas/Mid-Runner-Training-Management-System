@@ -11,10 +11,13 @@ using Microsoft.AspNetCore.Http;
 namespace TMS
 {
     [Route("api/[controller]")]
+    [ApiController]
+  
     public class AuthController : ControllerBase
     {
-        private readonly IAuthRepository authRepo;
-        private readonly IAuthService authService;
+        public IAuthRepository authRepo;
+        public IAuthService authService;
+        private readonly IEmailRepository emailRepo;
         private readonly IConsumerRepository consumerRepository;
         public AuthController()
         {
@@ -22,23 +25,13 @@ namespace TMS
             consumerRepository = new ConsumerRepository();
             authService = new AuthService()
             {
-                AuthRepository = new AuthRepository(),
+                AuthRepository = authRepo,
                 ConsumerRepository = consumerRepository,
-                EmailRepository = new EmailRepository()
+                EmailRepository = emailRepo,
             };
         }
 
-        [HttpPatch("password")]
-        public async Task<IActionResult> ChangePassword(ConsumerEntity user)
-        {
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idConsumer = cla[1].Value;
-            await authService.ChangePassword(idConsumer, user.Password);
-
-            return Ok();
-
-        }
+      
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] ConsumerEntity user)
@@ -72,7 +65,7 @@ namespace TMS
         {
             if (Id.Length != 24)
             {
-                BadRequest("Wrong id given");
+                return BadRequest("Wrong id given");
             }           
 
             await authRepo.VerifyRegister(Id);
@@ -98,12 +91,14 @@ namespace TMS
         {
             if (Id.Length != 24)
             {
-                BadRequest("Wrong id given");
+               return BadRequest("Wrong id given");
             }
             var pass = RandomWord.RandomString(10);
             await authService.ResetPassword(Id, pass);
 
             return Ok();
         }
+
+
     }
 }

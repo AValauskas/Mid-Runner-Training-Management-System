@@ -13,8 +13,8 @@ namespace TMS
     [Authorize(Roles = "Coach, Athlete, Admin", AuthenticationSchemes = "coach, athlete, admin")]
     public class TrainingController : ControllerBase
     {
-        private readonly ITrainingsReposiry trainingRepo;
-        private readonly ITrainingService trainingService;
+        public ITrainingsReposiry trainingRepo;
+        public ITrainingService trainingService;
         public TrainingController()
         {
             trainingRepo = new TrainingsRepository();
@@ -40,12 +40,7 @@ namespace TMS
             // await trainingRepo.InsertTraining(training);
 
             var train = await trainingService.InsertTraining(training, idTraining);
-
-            if (train == null)
-            {
-                return NotFound();
-            }
-          
+                       
 
             return Ok(train);
            
@@ -63,10 +58,7 @@ namespace TMS
             var training = await trainingRepo.GetAllAvailableTrainings(idConsumer);
 
 
-            if (training == null)
-            {
-                return NotFound();
-            }
+          
             training.Select(x => {
                 var Start = x.TrainingType.IndexOf("name");
                 var End = x.TrainingType.IndexOf("taxonomy");
@@ -82,10 +74,6 @@ namespace TMS
         {
             var training = await trainingRepo.GetAllTrainings();
 
-            if (training == null)
-            {
-                return NotFound();
-            }
             return Ok(training);
         }
      /// <summary>
@@ -103,10 +91,6 @@ namespace TMS
 
             var training = await trainingRepo.GetTrainingsByType(id, idCoach);
 
-            if (training == null)
-            {
-                return NotFound();
-            }
             training.Select(x => {
                 var Start = x.TrainingType.IndexOf("name");
                 var End = x.TrainingType.IndexOf("taxonomy");
@@ -116,34 +100,12 @@ namespace TMS
             return Ok(training);
         }
 
-        [Authorize(Roles = "Coach, Admin")]
-        [HttpGet("personalTrainings")]
-        public async Task<IActionResult> GetPersonalTrainings()
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idTraining= cla[1].Value;
-            var training = await trainingRepo.GetPersonalTrainings(idTraining);
-            if (training == null)
-            {
-                return NotFound();
-            }
-            return Ok(training);
-        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTraining([FromRoute] string id)
         {
             var training = await trainingRepo.GetTrainingByID(id);
-            if (training == null)
-            {
-                return NotFound();
-            }
+          
             return Ok(training);
         }
         /// <summary>

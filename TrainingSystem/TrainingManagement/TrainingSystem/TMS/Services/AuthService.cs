@@ -29,7 +29,6 @@ namespace TMS
                 throw new Exception("Password must contain atleast one number and atleast one letter");
 
             }
-            //var pwd = new PasswordHash("some pwd");
             var response = await AuthRepository.CheckIfEmailAlreadyExist(user);
             if(response != null)
             {
@@ -123,7 +122,6 @@ namespace TMS
                 claims: claims
                 );
             return token;
-            // return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
         public JwtSecurityToken GenerateAdminToken(string id)
         {
@@ -146,7 +144,6 @@ namespace TMS
                 claims: claims
                 );
             return token;
-            // return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
 
@@ -226,6 +223,27 @@ namespace TMS
             var hashPw = new HashPasswordInfo() { Password = hashedPass, Salt = Convert.ToBase64String(salt) };
             return hashPw;
 
+        }
+
+        public async Task<string> InsertNewAdmin(ConsumerEntity user)
+        {
+            if (!Regex.IsMatch(user.Password, @"^(?=.*[a-zA-Z])(?=.*[0-9])"))
+            {
+                throw new Exception("Password must contain atleast one number and atleast one letter");
+
+            }
+            var response = await AuthRepository.CheckIfEmailAlreadyExist(user);
+            if (response != null)
+            {
+                return response;
+            }
+
+            var hash = HashNewPassword(user.Password);
+            user.Password = hash.Password;
+            user.Salt = hash.Salt;
+            user.EmailConfirmed = true;
+            var consumer = await AuthRepository.RegisterUser(user);          
+            return null;
         }
     }
 }

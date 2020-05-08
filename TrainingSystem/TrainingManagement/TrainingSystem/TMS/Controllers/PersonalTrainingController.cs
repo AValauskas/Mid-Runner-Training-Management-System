@@ -13,22 +13,17 @@ namespace TMS
     [Authorize(Roles = "Coach, Athlete, Admin", AuthenticationSchemes = "coach, athlete, admin")]
     public class PersonalTrainingController : ControllerBase
     {
-        private readonly IPersonalTrainingsRepository trainingRepo;
-        private readonly IAggregateRepository aggregateRepo;
-        private readonly ITrainingService trainingService;
-        private readonly IPersonalTrainingService personalTrainingService;
+        public IPersonalTrainingsRepository trainingRepo;
+        public IAggregateRepository aggregateRepo;
+        public IPersonalTrainingService personalTrainingService;
         public PersonalTrainingController()
         {
             aggregateRepo = new AggregateRepository();
             trainingRepo = new PersonalTrainingRepository();
-            trainingService = new TrainingService()
-            {
-                PersonalTrainingsRepository = new PersonalTrainingRepository(),
-                TrainingRepo= new TrainingsRepository()
-                
-            };
+
             personalTrainingService = new PersonalTrainingService()
             {
+                AggregateRepository = aggregateRepo,
                 PersonalTrainingRepo = trainingRepo
             };
         }
@@ -58,10 +53,6 @@ namespace TMS
             
 
             var training = await trainingRepo.GetAllPersonalTrainingsAthlete(idAthlete);
-            if (training == null)
-            {
-                return NotFound();
-            }
             return Ok(training);
         }
 
@@ -79,16 +70,12 @@ namespace TMS
 
         [Authorize(Roles = "Coach")]
         [HttpGet("coach/{date}")]
-        public async Task<IActionResult> GetAssignedPersonalTrainingsByCoach([FromRoute] string date)
+        public async Task<IActionResult> GetAssignedPersonalTrainings([FromRoute] string date)
         {
             var claims = User.Claims;
             var cla = claims.ToList();
             var idCoach = cla[1].Value;
             var training = await aggregateRepo.TrainingsWhichAssignedByDate(date, idCoach);
-            if (training == null)
-            {
-                return NotFound();
-            }
             return Ok(training);
         }
 
@@ -102,29 +89,11 @@ namespace TMS
             var cla = claims.ToList();
             var idCoach= cla[1].Value;
             var training = await trainingRepo.GetAllPersonalTrainingsCoach(idCoach);
-            if (training == null)
-            {
-                return NotFound();
-            }
+           
             return Ok(training);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("admin")]
-        public async Task<IActionResult> GetAllPersonalTrainings()
-        {
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idAdmin = cla[1].Value;
-
-
-            var training = await trainingRepo.GetAllPersonalTrainings();
-            if (training == null)
-            {
-                return NotFound();
-            }
-            return Ok(training);
-        }
+  
         
 
 
@@ -132,10 +101,6 @@ namespace TMS
         public async Task<IActionResult> GetPersonalTraining([FromRoute] string id)
         {
             var training = await trainingRepo.GetPersonalTrainingByID(id);
-            if (training == null)
-            {
-                return NotFound();
-            }
             return Ok(training);
         }
 
@@ -161,15 +126,17 @@ namespace TMS
             var cla = claims.ToList();
             var idConsumer = cla[1].Value;
 
-            if (!await trainingService.CheckIfPersonalTrainingBelongToRightPerson(idConsumer, id))
+            var trainings = await personalTrainingService.DeletePersonalTrain(idConsumer, id);
+            if (trainings == null)
             {
                 return Unauthorized("This isn't yours training");
             }
 
-            await trainingRepo.DeleteTraining(id);
+           
 
-            return Ok();
+            return Ok(trainings);
         }
+        ///------------------------------------ištrinti blaiviam-----------------
         [Authorize(Roles = "Athlete")]
         [HttpPatch("Report/{id}")]
         public async Task<IActionResult> UpdateTrainingReport([FromRoute] string id, [FromBody] Results report )
@@ -179,7 +146,7 @@ namespace TMS
             var cla = claims.ToList();
             var idConsumer = cla[1].Value;
 
-            if (!await trainingService.CheckIfPersonCanUpdatePersonalTrainingReport(idConsumer, id))
+            if (!await personalTrainingService.CheckIfPersonCanUpdatePersonalTrainingReport(idConsumer, id))
             {
                 return Unauthorized("This isn't yours training");
             }
@@ -188,6 +155,8 @@ namespace TMS
 
             return Ok();
         }
+
+        ///-------------------------permesti į servisą blaiviam---------------------------
         [Authorize(Roles = "Coach, Athlete")]
         [HttpPatch("Results/{id}")]
         public async Task<IActionResult> UpdateTrainingResults([FromRoute] string id, [FromBody] Results report)
@@ -196,7 +165,7 @@ namespace TMS
             var cla = claims.ToList();
             var idConsumer = cla[1].Value;
 
-            if (!await trainingService.CheckIfPersonCanUpdatePersonalTrainingReport(idConsumer, id))
+            if (!await personalTrainingService.CheckIfPersonCanUpdatePersonalTrainingReport(idConsumer, id))
             {
                 return Unauthorized("This isn't yours training");
             }
@@ -216,6 +185,26 @@ namespace TMS
             }
 
             return Ok();
+        }
+
+        ////----------PersonalTraining--------------
+        [Authorize(Roles = "Coach")]
+        [HttpGet("athleteList/{date}")]
+        public async Task<IActionResult> GetFreeAthletes([FromRoute] string date) ////athletes who still doesn't have any training
+        {
+            var claims = User.Claims;
+            var cla = claims.ToList();
+            var idCoach = cla[1].Value;
+            var athletes = await aggregateRepo.GetFreeAthletesByDayAggregate(date, idCoach);
+            if (athletes.Count == 0)
+            {
+                athletes = await personalTrainingService.GetAthletesIfFree(idCoach, date);
+
+                return Ok(athletes);
+
+            }
+            return Ok(athletes);
+
         }
     }
 }

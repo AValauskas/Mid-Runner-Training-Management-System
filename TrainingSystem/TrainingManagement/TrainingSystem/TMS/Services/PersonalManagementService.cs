@@ -98,8 +98,7 @@ namespace TMS
                     return "Athlete already sent you invitation";
                 }
                 var athlete = await ConsumerRepository.FindConsumerById(receiverId);
-                var receiver = await ConsumerRepository.FindConsumerById(receiverId);
-                if (receiver == null)
+                if (athlete == null)
                 {
                     return "this person not exist";
                 }
@@ -148,21 +147,7 @@ namespace TMS
             await ConsumerRepository.DeleteInvitation(receiverId, senderId);
         }
 
-        public async Task<List<PersonInfo>> GetAthletesIfFree(string idCoach, string date)
-        {
-             var trainDate = DateTime.Parse(date);                   
-            var exist = await PersonalTrainingsRepository.CheckIfCoachHasTrainingInChoosenDay(trainDate, idCoach);
-            if (exist)
-            {
-                return new List<PersonInfo>();
-            }
-            else
-            {
-                return await AggregateRepository.GetAllCoachAthletesAggregate(idCoach);
-            }
-
-        }
-
+     
       
     }
 }

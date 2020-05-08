@@ -16,16 +16,6 @@ namespace TMS
         public async Task<ConsumerEntity> RegisterUser(ConsumerEntity consumer)
         {
             var registerService = new CodeMashRepository<ConsumerEntity>(Client);
-
-            //var consumer = new ConsumerEntity()
-            //{
-            //    Email = user.Email,
-            //    Name = user.Name,
-            //    Password = user.Password,
-            //    Surname = user.Surname,
-            //    Role =user.Role,
-            //    Salt = user.Salt
-            //};
             consumer = await registerService.InsertOneAsync(consumer);
 
             return consumer;
@@ -44,18 +34,6 @@ namespace TMS
             return null;
         }
 
-            public async Task LoginUser(string email, string password)
-            {
-                // 3. Create a service object
-                var membershipService = new CodeMashMembershipService(Client);
-
-               var result = await membershipService.AuthenticateCredentialsAsync(
-                email,
-                password,
-                permanentSession: true
-                );
-                //return result;
-            }
 
         public async Task ChangePassword(string ConsumerId, HashPasswordInfo hashedInfo)
         {

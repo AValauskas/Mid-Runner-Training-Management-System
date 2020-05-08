@@ -19,8 +19,10 @@ namespace TMS
         Task AceptInvitationCoach(string coachId, string AthleteId);
         Task AceptInvitationAthlete(string sender, string receiver);
         Task DeleteInvitation(string receiverId, string senderId);
+        Task<List<ConsumerEntity>> GetAllUsers();
+        Task DeleteUser(string userId);
 
-        
+
 
     }
 }

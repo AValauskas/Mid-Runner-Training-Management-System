@@ -14,10 +14,10 @@ namespace TMS
     public class PersonalManagementController : ControllerBase
     {
 
-        private readonly IPersonalManagementService personalManagementService;
-        private readonly IConsumerRepository ConsumerRepository;
-        private readonly IAuthService authService;
-        private readonly IAggregateRepository aggregateRepo;
+        public IPersonalManagementService personalManagementService;
+        public IConsumerRepository ConsumerRepository;
+        public IAuthService authService;
+        public IAggregateRepository aggregateRepo;
         public PersonalManagementController()
         {
             aggregateRepo = new AggregateRepository();
@@ -158,25 +158,6 @@ namespace TMS
             return Ok(invites);
         }
 
-        ////----------PersonalTraining--------------
-        [Authorize(Roles = "Coach")]
-        [HttpGet("athleteList/{date}")]
-        public async Task<IActionResult> GetFreeAthletes([FromRoute] string date) ////athletes who still doesn't have any training
-        {
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idCoach = cla[1].Value;
-            var athletes = await aggregateRepo.GetFreeAthletesByDayAggregate(date, idCoach);
-            if (athletes.Count == 0)
-            {
-                athletes = await personalManagementService.GetAthletesIfFree(idCoach, date);                     
-               
-                    return Ok(athletes);
-                
-            }
-            return Ok(athletes);
-
-        }
 
 
         //-----------------------------PersonalInfo     

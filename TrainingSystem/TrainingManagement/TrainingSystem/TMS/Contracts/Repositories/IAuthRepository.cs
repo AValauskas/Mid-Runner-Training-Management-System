@@ -9,7 +9,6 @@ namespace TMS
     {
         Task<ConsumerEntity> RegisterUser(ConsumerEntity user);
         Task<string> CheckIfEmailAlreadyExist(ConsumerEntity user);
-        Task LoginUser(string email, string password);
         Task ChangePassword(string ConsumerId, HashPasswordInfo hashedInfo);
         Task VerifyRegister(string ConsumerId);
     }

@@ -26,7 +26,50 @@ namespace TMS
             }
              await PersonalTrainingRepo.InsertManyPersonalTrainings(personalTraining);          
         }
+        public async Task<List<TrainingsWhichAreAssignedByDate>> DeletePersonalTrain(string personId, string trainingId)
+        {
+            var train = await PersonalTrainingRepo.GetPersonalTrainingByID(trainingId);
 
-       
+            if (train.CoachId != personId)
+            {
+                return null;
+            }
+            await PersonalTrainingRepo.DeleteTraining(trainingId);
+            var trainings = await AggregateRepository.TrainingsWhichAssignedByDate(train.Day.ToString(), train.CoachId);
+
+            return trainings;
+        }
+
+
+        public async Task<bool> CheckIfPersonCanUpdatePersonalTrainingReport(string personId, string trainingId)
+        {
+            var train = await PersonalTrainingRepo.GetPersonalTrainingByID(trainingId);
+
+
+            if (train.CoachId == personId || train.AthleteId == personId)
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+
+        public async Task<List<PersonInfo>> GetAthletesIfFree(string idCoach, string date)
+        {
+            var trainDate = DateTime.Parse(date);
+            var exist = await PersonalTrainingRepo.CheckIfCoachHasTrainingInChoosenDay(trainDate, idCoach);
+            if (exist)
+            {
+                return new List<PersonInfo>();
+            }
+            else
+            {
+                return await AggregateRepository.GetAllCoachAthletesAggregate(idCoach);
+            }
+
+        }
+
+
     }
 }
