@@ -8,7 +8,7 @@ namespace TMS
     public class TrainingService: ITrainingService
     {
         public ITrainingsReposiry TrainingRepo { get; set; }
-        public IPersonalTrainingsRepository PersonalTrainingsRepository { get; set; }
+ 
         public async Task<bool> CheckIfTrainingBelongToRightPerson(string personId, string trainingId)
         {
             var train = await TrainingRepo.GetTrainingByID(trainingId);
@@ -19,35 +19,62 @@ namespace TMS
             }
 
             return true;
-        }
+        }       
 
-        public async Task<bool> CheckIfPersonalTrainingBelongToRightPerson(string personId, string trainingId)
+      
+        public async Task<List<TrainingEntity>> InsertTraining(TrainingEntity training, string id)
         {
-            var train = await PersonalTrainingsRepository.GetPersonalTrainingByID(trainingId);
+            await TrainingRepo.InsertTraining(training);
 
-            if (train.CoachId != personId)
-            {
-                return false;
-            }
+            var train = await TrainingRepo.GetAllAvailableTrainings(id);
+            train.Select(x => {
+                var StartN = x.TrainingType.IndexOf("name");
+                var EndN = x.TrainingType.IndexOf("taxonomy");
+                x.TrainingTypeName = x.TrainingType.Substring(StartN + 8, EndN - StartN - 15);
+                StartN = x.TrainingType.IndexOf("id");
+                EndN = x.TrainingType.IndexOf("name");
+                x.TrainingType = x.TrainingType.Substring(StartN + 6, EndN - StartN - 13);
+                return x;
+            }).ToList();
 
-            return true;
+            return train;
         }
 
-        public async Task<bool> CheckIfPersonCanUpdatePersonalTrainingReport(string personId, string trainingId)
+        public async Task<List<TrainingEntity>> UpdateTraining(TrainingEntity training, string id)
         {
-            var train = await PersonalTrainingsRepository.GetPersonalTrainingByID(trainingId);
+            await TrainingRepo.ReplaceTraining(training);
 
-                                 
-            if (train.CoachId == personId)
-            {
-                return true;
-            }
-            if (train.AthleteId == personId)
-            {
-                return true;
-            }
-            return false;
+            var train = await TrainingRepo.GetAllAvailableTrainings(id);
+            train.Select(x => {
+                var StartN = x.TrainingType.IndexOf("name");
+                var EndN = x.TrainingType.IndexOf("taxonomy");
+                x.TrainingTypeName = x.TrainingType.Substring(StartN + 8, EndN - StartN - 15);
+                StartN = x.TrainingType.IndexOf("id");
+                EndN = x.TrainingType.IndexOf("name");
+                x.TrainingType = x.TrainingType.Substring(StartN + 6, EndN - StartN - 13);
+                return x;
+            }).ToList();
+
+            return train;
         }
 
+        public async Task<List<TrainingEntity>> DeleteTraining(string training, string id)
+        {
+            await TrainingRepo.DeleteTraining(training);
+
+            var train = await TrainingRepo.GetAllAvailableTrainings(id);
+            train.Select(x => {
+                var StartN = x.TrainingType.IndexOf("name");
+                var EndN = x.TrainingType.IndexOf("taxonomy");
+                x.TrainingTypeName = x.TrainingType.Substring(StartN + 8, EndN - StartN - 15);
+                StartN = x.TrainingType.IndexOf("id");
+                EndN = x.TrainingType.IndexOf("name");
+                x.TrainingType = x.TrainingType.Substring(StartN + 6, EndN - StartN - 13);
+                return x;
+            }).ToList();
+
+            return train;
+        }
     }
 }
+

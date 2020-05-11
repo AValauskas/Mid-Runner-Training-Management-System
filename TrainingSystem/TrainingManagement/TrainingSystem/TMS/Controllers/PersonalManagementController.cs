@@ -14,11 +14,10 @@ namespace TMS
     public class PersonalManagementController : ControllerBase
     {
 
-        private readonly IPersonalManagementService personalManagementService;
-        private readonly IConsumerRepository ConsumerRepository;
-        private readonly IAuthService authService;
-        private readonly IAggregateRepository aggregateRepo;
-        private readonly IPersonalTrainingsRepository personalTrainingsRepository;
+        public IPersonalManagementService personalManagementService;
+        public IConsumerRepository ConsumerRepository;
+        public IAuthService authService;
+        public IAggregateRepository aggregateRepo;
         public PersonalManagementController()
         {
             aggregateRepo = new AggregateRepository();
@@ -141,13 +140,12 @@ namespace TMS
             var cla = claims.ToList();
             var receiverId = cla[1].Value;
             var receiverRole = cla[0].Value;
-
-            await personalManagementService.DeclineInvitation(consumer.Id, receiverRole, receiverId);
+            await ConsumerRepository.DeleteInvitation(receiverId,consumer.Id);
             var invites = await aggregateRepo.GetAllInvitersAggregate(receiverId);
 
             return Ok(invites);
         }
-
+        ///
         [Authorize(Roles = "Athlete, Coach")]
         [HttpGet("invitations")]
         public async Task<IActionResult> GetInvitations()
@@ -160,25 +158,6 @@ namespace TMS
             return Ok(invites);
         }
 
-        ////----------PersonalTraining--------------
-        [Authorize(Roles = "Coach")]
-        [HttpGet("athleteList/{date}")]
-        public async Task<IActionResult> GetAthletesWhoAreStillWithoutTrain([FromRoute] string date)
-        {
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idCoach = cla[1].Value;
-            var athletes = await aggregateRepo.GetFreeAthletesByDayAggregate(date, idCoach);
-            if (athletes.Count == 0)
-            {
-                athletes = await personalManagementService.GetAthletesIfFree(idCoach, date);                     
-               
-                    return Ok(athletes);
-                
-            }
-            return Ok(athletes);
-
-        }
 
 
         //-----------------------------PersonalInfo     
@@ -195,7 +174,7 @@ namespace TMS
 
 
         [HttpPatch("password")]
-        public async Task<IActionResult> ChangePassword(User user)
+        public async Task<IActionResult> ChangePassword(ConsumerEntity user)
         {
             var claims = User.Claims;
             var cla = claims.ToList();
@@ -209,12 +188,12 @@ namespace TMS
         //Coaches/friends----------------
 
         [HttpGet("personalcoach")]
-        public async Task<IActionResult> GetConsumerCoach()
+        public async Task<IActionResult> GetAthleteCoach()//Get Coach for athlete
         {
             var claims = User.Claims;
             var cla = claims.ToList();
             var idConsumer = cla[1].Value;
-            var consumer = await aggregateRepo.FindOutIfAthleteHasCoachAggregate(idConsumer);
+            var consumer = await aggregateRepo.AthletePersonalCoachAggregate(idConsumer);
 
             return Ok(consumer);
         }
@@ -231,7 +210,7 @@ namespace TMS
         }
 
         [HttpGet("coachAthletes")]
-        public async Task<IActionResult> GetAthletes()
+        public async Task<IActionResult> GetAthletes()//Get all athletes which belongs to coach
         {
             var claims = User.Claims;
             var cla = claims.ToList();

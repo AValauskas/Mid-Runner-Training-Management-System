@@ -8,7 +8,9 @@ namespace TMS
     public interface ITrainingService
     {
         Task<bool> CheckIfTrainingBelongToRightPerson(string personId, string trainingId);
-        Task<bool> CheckIfPersonalTrainingBelongToRightPerson(string personId, string trainingId);
-        Task<bool> CheckIfPersonCanUpdatePersonalTrainingReport(string personId, string trainingId);
+       
+        Task<List<TrainingEntity>> InsertTraining(TrainingEntity training, string id);
+        Task<List<TrainingEntity>> UpdateTraining(TrainingEntity training, string id);
+        Task<List<TrainingEntity>> DeleteTraining(string training, string id);
     }
 }

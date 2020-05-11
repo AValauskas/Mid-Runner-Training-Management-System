@@ -7,7 +7,7 @@ namespace TMS
 {
     public interface IConsumerRepository
     {
-        Task<ConsumerEntity> FindConsumer(User user);
+        Task<ConsumerEntity> FindConsumer(ConsumerEntity user);
         Task<ConsumerEntity> FindConsumerByEmail(string email);
         Task AddNewCompetition(string athleteId, CompetitionEntity competition);
         Task UpdatePersonalRecord(string athleteId, CompetitionEntity competition);
@@ -19,8 +19,10 @@ namespace TMS
         Task AceptInvitationCoach(string coachId, string AthleteId);
         Task AceptInvitationAthlete(string sender, string receiver);
         Task DeleteInvitation(string receiverId, string senderId);
+        Task<List<ConsumerEntity>> GetAllUsers();
+        Task DeleteUser(string userId);
 
-        
+
 
     }
 }

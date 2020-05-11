@@ -10,7 +10,7 @@ namespace TMS
         Task InsertPersonalTraining(PersonalTrainingEntity personalTraining);
         Task<List<PersonalTrainingEntity>> GetAllPersonalTrainings();
         Task<List<PersonalTrainingEntity>> GetAllPersonalTrainingsCoach(string coach);
-        Task<List<PersonalTrainingEntity>> GetAllPersonalTrainingsAthlete(string coach);
+        Task<List<PersonalTrainingEntity>> GetAllPersonalTrainingsAthlete(string athleteId);
         Task<List<PersonalTrainingEntity>> GetAssignedTrainingsByDate(string date, string coach);
         Task<PersonalTrainingEntity> GetPersonalTrainingByID(string id);
         Task DeleteTraining(string id);

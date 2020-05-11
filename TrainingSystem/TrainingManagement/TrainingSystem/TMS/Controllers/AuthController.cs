@@ -1,32 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace TMS
 {
     [Route("api/[controller]")]
+    [ApiController]
+  
     public class AuthController : ControllerBase
     {
-        private readonly IAuthRepository authRepo;
-        private readonly IAuthService authService;
+        public IAuthRepository authRepo;
+        public IAuthService authService;
+        private readonly IEmailRepository emailRepo;
         private readonly IConsumerRepository consumerRepository;
         public AuthController()
         {
+            emailRepo = new EmailRepository();
             authRepo = new AuthRepository();
             consumerRepository = new ConsumerRepository();
             authService = new AuthService()
             {
-                AuthRepository = new AuthRepository(),
-                ConsumerRepository = new ConsumerRepository(),
-                EmailRepository = new EmailRepository()
+                AuthRepository = authRepo,
+                ConsumerRepository = consumerRepository,
+                EmailRepository = emailRepo,
             };
         }
 
-
+      
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] ConsumerEntity user)
         {
 
             var jwt = await authService.Login(user);
@@ -40,7 +49,7 @@ namespace TMS
             return Ok(json); 
         }
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] User user)
+        public async Task<IActionResult> Register([FromBody] ConsumerEntity user)
         {
            var response = await authService.Register(user);
             if (response == null)
@@ -52,17 +61,22 @@ namespace TMS
                 return BadRequest(response);
             }
         }
-        [HttpGet("confirm/{id}")]
-        public async Task<IActionResult> Register([FromRoute] string Id)
+        [HttpPatch("confirm/{id}")]
+        public async Task<IActionResult> CompleteRegister([FromRoute] string Id)
         {
-             await authRepo.VerifyRegister(Id);
+            if (Id.Length != 24)
+            {
+                return BadRequest("Wrong id given");
+            }           
+
+            await authRepo.VerifyRegister(Id);
            
              return Ok();           
             
         }
 
-        [HttpPost("resetpassword/{id}")]
-        public async Task<IActionResult> SendReminderToEmail([FromBody] string email)
+        [HttpPost("resetpassword/{email}")]
+        public async Task<IActionResult> RequestForNewPassword([FromRoute] string email)
         {
             var response = await authService.RequestForNewPassword(email);
             if (response != null)
@@ -73,13 +87,19 @@ namespace TMS
             return Ok();
         }
 
-        [HttpGet("confirmreset/{id}")]
-        public async Task<IActionResult> ConfirmResetPassword([FromRoute] string Id)
+        [HttpPatch("confirmreset/{id}")]
+        public async Task<IActionResult> ConfirmPasswordReset([FromRoute] string Id)
         {
+            if (Id.Length != 24)
+            {
+               return BadRequest("Wrong id given");
+            }
             var pass = RandomWord.RandomString(10);
             await authService.ResetPassword(Id, pass);
 
             return Ok();
         }
+
+
     }
 }
