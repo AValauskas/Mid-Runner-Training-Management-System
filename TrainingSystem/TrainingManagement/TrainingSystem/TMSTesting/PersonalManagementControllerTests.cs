@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TMSTesting
 {
     public class PersonalManagementControllerTests
-    {       
+    {   
                
         public IPersonalManagementService PersonalManagementServiceMock;
         public IConsumerRepository ConsumerRepositoryMock;
@@ -86,13 +86,10 @@ namespace TMSTesting
                 HttpContext = new DefaultHttpContext() { User = user }
             };
             // Arrange
-
             AggregateRepositoryMock.RecordAggregate(Arg.Any<string>()).Returns(personalRecords);
             // Act
-
             var actionResult = await PersonalManagementControllerMock.GetRecords();
-            // Assert
-  
+            // Assert  
             Assert.IsInstanceOf<OkObjectResult>(actionResult);
         }
 

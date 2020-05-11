@@ -21,6 +21,7 @@ namespace TMS
         private readonly IConsumerRepository consumerRepository;
         public AuthController()
         {
+            emailRepo = new EmailRepository();
             authRepo = new AuthRepository();
             consumerRepository = new ConsumerRepository();
             authService = new AuthService()

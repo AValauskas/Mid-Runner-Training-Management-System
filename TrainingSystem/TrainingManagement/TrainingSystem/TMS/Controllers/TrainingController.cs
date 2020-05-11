@@ -60,10 +60,13 @@ namespace TMS
 
           
             training.Select(x => {
-                var Start = x.TrainingType.IndexOf("name");
-                var End = x.TrainingType.IndexOf("taxonomy");
-                x.TrainingType = x.TrainingType.Substring(Start + 8, End - Start - 15);
-                return x;
+                var StartN = x.TrainingType.IndexOf("name");
+                var EndN = x.TrainingType.IndexOf("taxonomy");
+                x.TrainingTypeName = x.TrainingType.Substring(StartN + 8, EndN - StartN - 15);
+                StartN = x.TrainingType.IndexOf("id");
+                EndN = x.TrainingType.IndexOf("name");
+                x.TrainingType = x.TrainingType.Substring(StartN + 6, EndN - StartN - 13);
+                return x;                
             }).ToList();
             return Ok(training);
         }

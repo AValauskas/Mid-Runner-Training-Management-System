@@ -107,9 +107,7 @@ namespace TMS
                        { "id", coachId },
                 }
             });
-
             return athletes;
-
         }
 
         public async Task<List<PersonInfo>> GetAllInvitersAggregate(string consumerId)
