@@ -9,7 +9,7 @@ namespace TMS
     {
         Task ProcessPersonalTraining(PersonalTraining training);
         Task<List<TrainingsWhichAreAssignedByDate>> DeletePersonalTrain(string personId, string trainingId);
-        Task<bool> CheckIfPersonCanUpdatePersonalTrainingReport(string personId, string trainingId);
+        Task<bool> CheckIfCanUpdate(string personId, string trainingId);
         Task<List<PersonInfo>> GetAthletesIfFree(string idCoach, string date);
     }
 }

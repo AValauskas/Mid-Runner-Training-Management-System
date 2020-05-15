@@ -177,10 +177,7 @@ namespace TMS
 
         public async Task ResetPassword(string idConsumer, string password)
         {
-            if (idConsumer.Length != 24)
-            {
-                throw new Exception("Wrong id was given");
-            }
+
             var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
             var hashedPassword = HashNewPassword(password);
             await AuthRepository.ChangePassword(idConsumer, hashedPassword);

@@ -41,7 +41,7 @@ namespace TMS
         }
 
 
-        public async Task<bool> CheckIfPersonCanUpdatePersonalTrainingReport(string personId, string trainingId)
+        public async Task<bool> CheckIfCanUpdate(string personId, string trainingId)
         {
             var train = await PersonalTrainingRepo.GetPersonalTrainingByID(trainingId);
 

@@ -35,8 +35,7 @@ namespace TMSTesting
             PersonalManagementService = new PersonalManagementService()
             {
                 AggregateRepository= AggregateRepository,
-                ConsumerRepository= ConsumerRepository,
-                PersonalTrainingsRepository= PersonalTrainingsRepository
+                ConsumerRepository= ConsumerRepository,                
             };
 
             ConsumerRepositoryMock = Substitute.For<IConsumerRepository>();
@@ -46,7 +45,6 @@ namespace TMSTesting
             {
                 AggregateRepository = AggregateRepositoryMock,
                 ConsumerRepository = ConsumerRepositoryMock,
-                PersonalTrainingsRepository = PersonalTrainingsRepositoryMock
             };
 
             competition = new CompetitionEntity()

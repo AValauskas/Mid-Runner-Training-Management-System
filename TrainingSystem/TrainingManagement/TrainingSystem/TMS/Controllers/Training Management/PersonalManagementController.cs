@@ -31,8 +31,7 @@ namespace TMS
             personalManagementService = new PersonalManagementService()
             {
                 AggregateRepository = aggregateRepo,
-                ConsumerRepository = new ConsumerRepository(),
-                PersonalTrainingsRepository= new PersonalTrainingRepository()               
+                ConsumerRepository = new ConsumerRepository(),                  
             };
         }
 

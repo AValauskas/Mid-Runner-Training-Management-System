@@ -136,25 +136,7 @@ namespace TMS
 
             return Ok(trainings);
         }
-        ///------------------------------------ištrinti blaiviam-----------------
-        [Authorize(Roles = "Athlete")]
-        [HttpPatch("Report/{id}")]
-        public async Task<IActionResult> UpdateTrainingReport([FromRoute] string id, [FromBody] Results report )
-        {
-
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idConsumer = cla[1].Value;
-
-            if (!await personalTrainingService.CheckIfPersonCanUpdatePersonalTrainingReport(idConsumer, id))
-            {
-                return Unauthorized("This isn't yours training");
-            }
-
-            await trainingRepo.AddReportFromAthlete(id, report.report);
-
-            return Ok();
-        }
+     
 
         ///-------------------------permesti į servisą blaiviam---------------------------
         [Authorize(Roles = "Coach, Athlete")]
@@ -165,7 +147,7 @@ namespace TMS
             var cla = claims.ToList();
             var idConsumer = cla[1].Value;
 
-            if (!await personalTrainingService.CheckIfPersonCanUpdatePersonalTrainingReport(idConsumer, id))
+            if (!await personalTrainingService.CheckIfCanUpdate(idConsumer, id))
             {
                 return Unauthorized("This isn't yours training");
             }
@@ -181,7 +163,7 @@ namespace TMS
             }
             else if (report.report == null && report.results == null)
             {
-                return BadRequest("results are ampty, fill all fields");
+                return BadRequest("results are empty, fill all fields");
             }
 
             return Ok();

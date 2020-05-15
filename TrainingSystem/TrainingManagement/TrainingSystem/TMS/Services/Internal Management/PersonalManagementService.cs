@@ -7,8 +7,7 @@ namespace TMS
 {
     public class PersonalManagementService:IPersonalManagementService
     {
-        public IConsumerRepository ConsumerRepository { get; set; }       
-        public IPersonalTrainingsRepository PersonalTrainingsRepository { get; set; }
+        public IConsumerRepository ConsumerRepository { get; set; }      
         public IAggregateRepository AggregateRepository { get; set; }
 
         public async Task AddCompetitionToListOrSetNewRecord(string AthleteId, CompetitionEntity competition)
