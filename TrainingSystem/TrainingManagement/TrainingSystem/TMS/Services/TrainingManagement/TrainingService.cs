@@ -36,7 +36,7 @@ namespace TMS.Services.TrainingManagement
                 endN = x.TrainingType.IndexOf("name");
                 x.TrainingType = x.TrainingType.Substring(startN + 6, endN - startN - 13);
                 return x;
-            });
+            }).ToList();
 
             return train;
         }
@@ -55,7 +55,7 @@ namespace TMS.Services.TrainingManagement
                 endN = x.TrainingType.IndexOf("name");
                 x.TrainingType = x.TrainingType.Substring(startN + 6, endN - startN - 13);
                 return x;
-            });
+            }).ToList();
 
             return train;
         }
@@ -74,7 +74,7 @@ namespace TMS.Services.TrainingManagement
                 endN = x.TrainingType.IndexOf("name");
                 x.TrainingType = x.TrainingType.Substring(startN + 6, endN - startN - 13);
                 return x;
-            });
+            }).ToList();
 
             return train;
         }

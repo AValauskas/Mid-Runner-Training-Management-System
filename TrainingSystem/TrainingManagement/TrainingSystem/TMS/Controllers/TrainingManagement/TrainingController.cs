@@ -60,9 +60,8 @@ namespace TMS.Controllers.InternalManagement
             var cla = claims.ToList();
             var idConsumer = cla[1].Value;
             var training = await trainingRepo.GetAllAvailableTrainings(idConsumer);
-            
-            training.Select(x =>
-            {
+
+            training.Select(x => {            
                 var startN = x.TrainingType.IndexOf("name");
                 var endN = x.TrainingType.IndexOf("taxonomy");
                 x.TrainingTypeName = x.TrainingType.Substring(startN + 8, endN - startN - 15);
@@ -70,7 +69,7 @@ namespace TMS.Controllers.InternalManagement
                 endN = x.TrainingType.IndexOf("name");
                 x.TrainingType = x.TrainingType.Substring(startN + 6, endN - startN - 13);
                 return x;
-            });
+            }).ToList();
             return Ok(training);
         }
         
@@ -100,7 +99,10 @@ namespace TMS.Controllers.InternalManagement
             training.Select(x => {
                 var start = x.TrainingType.IndexOf("name");
                 var end = x.TrainingType.IndexOf("taxonomy");
-                x.TrainingType = x.TrainingType.Substring(start + 8, end - start - 15);
+                x.TrainingTypeName = x.TrainingType.Substring(start + 8, end - start - 15);
+                start = x.TrainingType.IndexOf("id");
+                end = x.TrainingType.IndexOf("name");
+                x.TrainingType = x.TrainingType.Substring(start + 6, end - start - 13);
                 return x;
             }).ToList();
             return Ok(training);
@@ -126,10 +128,14 @@ namespace TMS.Controllers.InternalManagement
             var claims = User.Claims;
             var cla = claims.ToList();
             var idPerson = cla[1].Value;
+            var receiverRole = cla[0].Value;
 
-            if (!await trainingService.CheckIfTrainingBelongToRightPerson(idPerson, id))
-            {
-                return Unauthorized("This isn't yours training");
+            if (receiverRole!="Admin")
+            {            
+                if (!await trainingService.CheckIfTrainingBelongToRightPerson(idPerson, id))
+                {
+                    return Unauthorized("This isn't yours training");
+                }
             }
 
             var train = await trainingService.DeleteTraining(id, idPerson);
@@ -148,10 +154,14 @@ namespace TMS.Controllers.InternalManagement
             var claims = User.Claims;
             var cla = claims.ToList();
             var idPerson = cla[1].Value;
-            
-            if (!await trainingService.CheckIfTrainingBelongToRightPerson(idPerson, training.Id))
+            var receiverRole = cla[0].Value;
+
+            if (receiverRole != "Admin")
             {
-                return Unauthorized("This isn't yours training");
+                if (!await trainingService.CheckIfTrainingBelongToRightPerson(idPerson, training.Id))
+                {
+                    return Unauthorized("This isn't yours training");
+                }
             }
             training.Owner = idPerson;
             var train = await trainingService.UpdateTraining(training, idPerson);
