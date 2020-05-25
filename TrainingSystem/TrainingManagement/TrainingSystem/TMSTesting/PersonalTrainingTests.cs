@@ -6,6 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMS;
+using TMS.Contracts.Repositories;
+using TMS.Contracts.Repositories.TrainingManagement;
+using TMS.Contracts.Services.TrainingManagement;
+using TMS.Repositories;
+using TMS.Repositories.TrainingManagement;
+using TMS.Services.TrainingManagement;
 
 namespace TMSTesting
 {

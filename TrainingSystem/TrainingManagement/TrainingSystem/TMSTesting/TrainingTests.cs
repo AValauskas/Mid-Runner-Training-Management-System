@@ -5,15 +5,19 @@ using SendGrid.Helpers.Mail;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMS;
+using TMS.Contracts.Repositories.TrainingManagement;
+using TMS.Contracts.Services.TrainingManagement;
+using TMS.Repositories.TrainingManagement;
+using TMS.Services.TrainingManagement;
 
 namespace TMSTesting
 {
     public class TrainingTests
     {
-        public ITrainingsReposiry TrainingRepository;
+        public ITrainingsRepository TrainingRepository;
         public ITrainingService TrainingService;
 
-        public ITrainingsReposiry TrainingRepositoryMock;
+        public ITrainingsRepository TrainingRepositoryMock;
         public ITrainingService TrainingServiceMock;
         public TrainingEntity training;
         public List<TrainingEntity> trainings;
@@ -26,7 +30,7 @@ namespace TMSTesting
                 TrainingRepo = TrainingRepository
             };
 
-            TrainingRepositoryMock = Substitute.For<ITrainingsReposiry>();
+            TrainingRepositoryMock = Substitute.For<ITrainingsRepository>();
             TrainingServiceMock = new TrainingService()
             {
                 TrainingRepo = TrainingRepositoryMock

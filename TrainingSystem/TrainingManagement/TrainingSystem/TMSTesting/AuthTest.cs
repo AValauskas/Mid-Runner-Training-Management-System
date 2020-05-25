@@ -7,6 +7,10 @@ using TMS;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using TMS.Contracts.Repositories.InternalManagement;
+using TMS.Contracts.Services.InternalManagement;
+using TMS.Repositories.InternalManagement;
+using TMS.Services.InternalManagement;
 
 namespace TMSTesting
 {

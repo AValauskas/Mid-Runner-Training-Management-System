@@ -7,6 +7,14 @@ using TMS;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using TMS.Contracts.Repositories;
+using TMS.Contracts.Repositories.InternalManagement;
+using TMS.Contracts.Repositories.TrainingManagement;
+using TMS.Contracts.Services.InternalManagement;
+using TMS.Repositories;
+using TMS.Repositories.InternalManagement;
+using TMS.Repositories.TrainingManagement;
+using TMS.Services.InternalManagement;
 
 namespace TMSTesting
 {
@@ -133,7 +141,7 @@ namespace TMSTesting
 
             // Assert
             await ConsumerRepositoryMock.Received().FindConsumerById(Arg.Any<string>());
-            await ConsumerRepositoryMock.Received().AceptInvitationCoach(Arg.Any<string>(), Arg.Any<string>());
+            await ConsumerRepositoryMock.Received().AcceptInvitationCoach(Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Test]
@@ -147,7 +155,7 @@ namespace TMSTesting
 
             // Assert
             await ConsumerRepositoryMock.Received().FindConsumerById(Arg.Any<string>());
-            await ConsumerRepositoryMock.Received().AceptInvitationAthlete(Arg.Any<string>(), Arg.Any<string>());
+            await ConsumerRepositoryMock.Received().AcceptInvitationAthlete(Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Test]
@@ -160,7 +168,7 @@ namespace TMSTesting
             await PersonalManagementServiceMock.AcceptInvitation("id", "Coach", "receiverId");
 
             // Assert
-            await ConsumerRepositoryMock.Received().AceptInvitationCoach(Arg.Any<string>(), Arg.Any<string>());
+            await ConsumerRepositoryMock.Received().AcceptInvitationCoach(Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Test]

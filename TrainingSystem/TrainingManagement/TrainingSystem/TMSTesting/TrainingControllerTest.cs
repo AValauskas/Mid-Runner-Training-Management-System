@@ -10,13 +10,16 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TMS.Contracts.Repositories.TrainingManagement;
+using TMS.Contracts.Services.TrainingManagement;
+using TMS.Controllers.InternalManagement;
 
 namespace TMSTesting
 {
     public class TrainingControllerTests
     {       
                
-        public ITrainingsReposiry TrainingRepoMock;
+        public ITrainingsRepository TrainingRepoMock;
         public ITrainingService TrainingServcieMock;
         public TrainingController TrainingControllerMock;
         public TrainingEntity training;
@@ -26,7 +29,7 @@ namespace TMSTesting
         [SetUp]
         public void Setup()
         {
-            TrainingRepoMock = Substitute.For<ITrainingsReposiry>();
+            TrainingRepoMock = Substitute.For<ITrainingsRepository>();
             TrainingServcieMock = Substitute.For<ITrainingService>();
             TrainingControllerMock = new TrainingController()
             {
