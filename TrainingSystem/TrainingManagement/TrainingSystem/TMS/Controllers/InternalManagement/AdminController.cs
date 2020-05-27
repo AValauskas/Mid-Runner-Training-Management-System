@@ -5,16 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TMS.Contracts.Repositories.InternalManagement;
+using TMS.Contracts.Services.InternalManagement;
+using TMS.Repositories.InternalManagement;
+using TMS.Services.InternalManagement;
 
-namespace TMS
+namespace TMS.Controllers.InternalManagement
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = " Admin", AuthenticationSchemes = "admin")]
     public class AdminController : ControllerBase
     {
-
-
         public IConsumerRepository ConsumerRepository;
         public IAuthService authService;
         public AdminController()
@@ -42,7 +44,7 @@ namespace TMS
         {
             if (user.Password.Length < 6)
             {
-                return BadRequest("Password must contain atleast 6 symbols");
+                return BadRequest("Password must contain at least 6 symbols");
             }
             var response = await authService.InsertNewAdmin(user);
             if (response == null)
@@ -55,8 +57,6 @@ namespace TMS
                 return BadRequest(response);
             }
         }
-
-
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser([FromRoute] string id)
@@ -64,7 +64,6 @@ namespace TMS
             await ConsumerRepository.DeleteUser(id);
             var users = await ConsumerRepository.GetAllUsers();
             return Ok(users);
-
         }
     }
 }

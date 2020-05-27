@@ -6,8 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TMS.Contracts.Repositories.TrainingManagement;
 
-namespace TMS
+namespace TMS.Repositories.TrainingManagement
 {
     public class PersonalTrainingRepository:IPersonalTrainingsRepository
     {
@@ -15,14 +16,14 @@ namespace TMS
 
         public async Task InsertPersonalTraining(PersonalTrainingEntity personalTraining)
         {
-            var PersonalTrainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
-            await PersonalTrainingRepo.InsertOneAsync(personalTraining);
+            var personalTrainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
+            await personalTrainingRepo.InsertOneAsync(personalTraining);
         }
 
         public async Task InsertManyPersonalTrainings(List<PersonalTrainingEntity> personalTrainings)
         {
-            var PersonalTrainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
-            await PersonalTrainingRepo.InsertManyAsync(personalTrainings);
+            var personalTrainingRepo = new CodeMashRepository<PersonalTrainingEntity>(Client);
+            await personalTrainingRepo.InsertManyAsync(personalTrainings);
         }
 
         public async Task<List<PersonalTrainingEntity>> GetAllPersonalTrainings()
@@ -38,8 +39,6 @@ namespace TMS
             var filterBuilder = Builders<PersonalTrainingEntity>.Filter;
             var filter = filterBuilder.Eq("coach", ObjectId.Parse(coach));
             var response = await trainingRepo.FindAsync(filter);
-
-
             return response.Items;
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TMS
+namespace TMS.Contracts.Services.TrainingManagement
 {
     public interface ITrainingService
     {

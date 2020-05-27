@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TMS.Contracts.Repositories;
+using TMS.Contracts.Repositories.TrainingManagement;
+using TMS.Contracts.Services.TrainingManagement;
 
-namespace TMS
+namespace TMS.Services.TrainingManagement
 {
     public class PersonalTrainingService:IPersonalTrainingService
     {
@@ -41,7 +44,7 @@ namespace TMS
         }
 
 
-        public async Task<bool> CheckIfPersonCanUpdatePersonalTrainingReport(string personId, string trainingId)
+        public async Task<bool> CheckIfCanUpdate(string personId, string trainingId)
         {
             var train = await PersonalTrainingRepo.GetPersonalTrainingByID(trainingId);
 

@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TMS.Contracts.Repositories.TrainingManagement;
+using TMS.Contracts.Services.TrainingManagement;
+using TMS.Repositories.TrainingManagement;
+using TMS.Services.TrainingManagement;
 
-namespace TMS
+namespace TMS.Controllers.InternalManagement
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Coach, Athlete, Admin", AuthenticationSchemes = "coach, athlete, admin")]
     public class TrainingController : ControllerBase
     {
-        public ITrainingsReposiry trainingRepo;
+        public ITrainingsRepository trainingRepo;
         public ITrainingService trainingService;
         public TrainingController()
         {
@@ -57,16 +61,14 @@ namespace TMS
             var idConsumer = cla[1].Value;
             var training = await trainingRepo.GetAllAvailableTrainings(idConsumer);
 
-
-          
-            training.Select(x => {
-                var StartN = x.TrainingType.IndexOf("name");
-                var EndN = x.TrainingType.IndexOf("taxonomy");
-                x.TrainingTypeName = x.TrainingType.Substring(StartN + 8, EndN - StartN - 15);
-                StartN = x.TrainingType.IndexOf("id");
-                EndN = x.TrainingType.IndexOf("name");
-                x.TrainingType = x.TrainingType.Substring(StartN + 6, EndN - StartN - 13);
-                return x;                
+            training.Select(x => {            
+                var startN = x.TrainingType.IndexOf("name");
+                var endN = x.TrainingType.IndexOf("taxonomy");
+                x.TrainingTypeName = x.TrainingType.Substring(startN + 8, endN - startN - 15);
+                startN = x.TrainingType.IndexOf("id");
+                endN = x.TrainingType.IndexOf("name");
+                x.TrainingType = x.TrainingType.Substring(startN + 6, endN - startN - 13);
+                return x;
             }).ToList();
             return Ok(training);
         }
@@ -95,9 +97,12 @@ namespace TMS
             var training = await trainingRepo.GetTrainingsByType(id, idCoach);
 
             training.Select(x => {
-                var Start = x.TrainingType.IndexOf("name");
-                var End = x.TrainingType.IndexOf("taxonomy");
-                x.TrainingType = x.TrainingType.Substring(Start + 8, End - Start - 15);
+                var start = x.TrainingType.IndexOf("name");
+                var end = x.TrainingType.IndexOf("taxonomy");
+                x.TrainingTypeName = x.TrainingType.Substring(start + 8, end - start - 15);
+                start = x.TrainingType.IndexOf("id");
+                end = x.TrainingType.IndexOf("name");
+                x.TrainingType = x.TrainingType.Substring(start + 6, end - start - 13);
                 return x;
             }).ToList();
             return Ok(training);
@@ -123,14 +128,17 @@ namespace TMS
             var claims = User.Claims;
             var cla = claims.ToList();
             var idPerson = cla[1].Value;
+            var receiverRole = cla[0].Value;
 
-            if (!await trainingService.CheckIfTrainingBelongToRightPerson(idPerson, id))
-            {
-                return Unauthorized("This isn't yours training");
+            if (receiverRole!="Admin")
+            {            
+                if (!await trainingService.CheckIfTrainingBelongToRightPerson(idPerson, id))
+                {
+                    return Unauthorized("This isn't yours training");
+                }
             }
-            
 
-           var train = await trainingService.DeleteTraining(id, idPerson);
+            var train = await trainingService.DeleteTraining(id, idPerson);
 
             return Ok(train);
         }
@@ -146,10 +154,14 @@ namespace TMS
             var claims = User.Claims;
             var cla = claims.ToList();
             var idPerson = cla[1].Value;
-            
-            if (!await trainingService.CheckIfTrainingBelongToRightPerson(idPerson, training.Id))
+            var receiverRole = cla[0].Value;
+
+            if (receiverRole != "Admin")
             {
-                return Unauthorized("This isn't yours training");
+                if (!await trainingService.CheckIfTrainingBelongToRightPerson(idPerson, training.Id))
+                {
+                    return Unauthorized("This isn't yours training");
+                }
             }
             training.Owner = idPerson;
             var train = await trainingService.UpdateTraining(training, idPerson);

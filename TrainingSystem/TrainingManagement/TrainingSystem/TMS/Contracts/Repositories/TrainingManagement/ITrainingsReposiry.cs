@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TMS
+namespace TMS.Contracts.Repositories.TrainingManagement
 {
-    public interface ITrainingsReposiry
+    public interface ITrainingsRepository
     {
         Task InsertTraining(TrainingEntity training);
         Task<List<TrainingEntity>> GetAllTrainings();
@@ -14,7 +14,6 @@ namespace TMS
         Task<TrainingEntity> GetTrainingByID(string id);
         Task ReplaceTraining(TrainingEntity training);
         Task DeleteTraining(string id);
-     //   Task<List<TrainingEntity>> GetAllTrainingsIncludedPersonal(string owner);
         Task<List<TrainingEntity>> GetTrainingsByType(string typeId, string owner);
     }
 }

@@ -5,8 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TMS.Contracts.Repositories;
+using TMS.Contracts.Repositories.TrainingManagement;
+using TMS.Contracts.Services.TrainingManagement;
+using TMS.Repositories;
+using TMS.Repositories.TrainingManagement;
+using TMS.Services.TrainingManagement;
 
-namespace TMS
+namespace TMS.Controllers.TrainingManagement
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +33,7 @@ namespace TMS
                 PersonalTrainingRepo = trainingRepo
             };
         }
-        //NAUDOJAMA
+
         [Authorize(Roles = "Coach")]
         [HttpPost]
         public async Task<IActionResult> CreatePersonalTraining([FromBody] PersonalTraining training)
@@ -42,7 +48,7 @@ namespace TMS
 
             return Ok();
         }
-        //naudojama norint gauti asmenines treniruotes atletui ir jas atvaizduoti
+
         [Authorize(Roles = "Athlete")]
         [HttpGet("athlete")]
         public async Task<IActionResult> GetPersonalTrainingsByAthlete()
@@ -58,7 +64,6 @@ namespace TMS
 
         [Authorize(Roles = "Coach")]
         [HttpGet("countByBusy")]
-        //gaunama dienos ir atvaizduojama kiek atletų iš kiek atitinkamą dieną jau yra užimti
         public async Task<IActionResult> GetPersonalTrainingsCount()
         {
             var claims = User.Claims;
@@ -136,27 +141,7 @@ namespace TMS
 
             return Ok(trainings);
         }
-        ///------------------------------------ištrinti blaiviam-----------------
-        [Authorize(Roles = "Athlete")]
-        [HttpPatch("Report/{id}")]
-        public async Task<IActionResult> UpdateTrainingReport([FromRoute] string id, [FromBody] Results report )
-        {
-
-            var claims = User.Claims;
-            var cla = claims.ToList();
-            var idConsumer = cla[1].Value;
-
-            if (!await personalTrainingService.CheckIfPersonCanUpdatePersonalTrainingReport(idConsumer, id))
-            {
-                return Unauthorized("This isn't yours training");
-            }
-
-            await trainingRepo.AddReportFromAthlete(id, report.report);
-
-            return Ok();
-        }
-
-        ///-------------------------permesti į servisą blaiviam---------------------------
+        
         [Authorize(Roles = "Coach, Athlete")]
         [HttpPatch("Results/{id}")]
         public async Task<IActionResult> UpdateTrainingResults([FromRoute] string id, [FromBody] Results report)
@@ -165,7 +150,7 @@ namespace TMS
             var cla = claims.ToList();
             var idConsumer = cla[1].Value;
 
-            if (!await personalTrainingService.CheckIfPersonCanUpdatePersonalTrainingReport(idConsumer, id))
+            if (!await personalTrainingService.CheckIfCanUpdate(idConsumer, id))
             {
                 return Unauthorized("This isn't yours training");
             }
@@ -181,7 +166,7 @@ namespace TMS
             }
             else if (report.report == null && report.results == null)
             {
-                return BadRequest("results are ampty, fill all fields");
+                return BadRequest("results are empty, fill all fields");
             }
 
             return Ok();

@@ -2,33 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TMS.Contracts.Repositories;
+using TMS.Contracts.Repositories.InternalManagement;
+using TMS.Contracts.Services.InternalManagement;
 
-namespace TMS
+namespace TMS.Services.InternalManagement
 {
     public class PersonalManagementService:IPersonalManagementService
     {
-        public IConsumerRepository ConsumerRepository { get; set; }       
-        public IPersonalTrainingsRepository PersonalTrainingsRepository { get; set; }
+        public IConsumerRepository ConsumerRepository { get; set; }      
         public IAggregateRepository AggregateRepository { get; set; }
 
-        public async Task AddCompetitionToListOrSetNewRecord(string AthleteId, CompetitionEntity competition)
+        public async Task AddCompetitionToListOrSetNewRecord(string athleteId, CompetitionEntity competition)
         {
             competition.Time = double.Parse(String.Format("{0:0.00}", competition.Time));
-            await ConsumerRepository.AddNewCompetition(AthleteId, competition);
+            await ConsumerRepository.AddNewCompetition(athleteId, competition);
 
-            var consumer = await ConsumerRepository.CheckIfRecordExist(AthleteId, competition);
+            var consumer = await ConsumerRepository.CheckIfRecordExist(athleteId, competition);
 
             if (consumer!= null)
             {
-                consumer = await ConsumerRepository.CheckIfBiggerPersonalTimeExist(AthleteId, competition);
+                consumer = await ConsumerRepository.CheckIfBiggerPersonalTimeExist(athleteId, competition);
                 if (consumer == null)
                 {
-                    await ConsumerRepository.UpdatePersonalRecord(AthleteId, competition);
+                    await ConsumerRepository.UpdatePersonalRecord(athleteId, competition);
                 }
             }
             else
             {
-                await ConsumerRepository.AddNewPersonalBest(AthleteId, competition);
+                await ConsumerRepository.AddNewPersonalBest(athleteId, competition);
             }                     
         }
 
@@ -133,15 +135,15 @@ namespace TMS
 
                 if (consumer.Role == "Coach")
                 {
-                    await ConsumerRepository.AceptInvitationCoach(senderId, receiverId);
+                    await ConsumerRepository.AcceptInvitationCoach(senderId, receiverId);
                 }
                 else {
-                    await ConsumerRepository.AceptInvitationAthlete(senderId, receiverId);
+                    await ConsumerRepository.AcceptInvitationAthlete(senderId, receiverId);
                 }              
             }
             else if (role == "Coach")
             {
-                await ConsumerRepository.AceptInvitationCoach(receiverId, senderId);
+                await ConsumerRepository.AcceptInvitationCoach(receiverId, senderId);
                
             }
             await ConsumerRepository.DeleteInvitation(receiverId, senderId);

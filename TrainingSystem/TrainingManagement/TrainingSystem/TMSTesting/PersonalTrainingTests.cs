@@ -6,6 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMS;
+using TMS.Contracts.Repositories;
+using TMS.Contracts.Repositories.TrainingManagement;
+using TMS.Contracts.Services.TrainingManagement;
+using TMS.Repositories;
+using TMS.Repositories.TrainingManagement;
+using TMS.Services.TrainingManagement;
 
 namespace TMSTesting
 {
@@ -158,7 +164,7 @@ namespace TMSTesting
         {
             PersonalTrainingsRepositoryMock.GetPersonalTrainingByID(Arg.Any<string>()).Returns(personalTrainingentity);
             // Act
-            var response = await PersonalTrainingMock.CheckIfPersonCanUpdatePersonalTrainingReport("5e7b9c1f980hfgh5e2000126e82e", "5e7b9c1f9885e20001dgh26e82e");
+            var response = await PersonalTrainingMock.CheckIfCanUpdate("5e7b9c1f980hfgh5e2000126e82e", "5e7b9c1f9885e20001dgh26e82e");
                        
             Assert.AreEqual(false, response);
         }
@@ -168,7 +174,7 @@ namespace TMSTesting
         {
             PersonalTrainingsRepositoryMock.GetPersonalTrainingByID(Arg.Any<string>()).Returns(personalTrainingentity);
             // Act
-            var response = await PersonalTrainingMock.CheckIfPersonCanUpdatePersonalTrainingReport("5e7b9c1f9805e2000126e82e", "5e7b9c1f9885e2000126e82e");
+            var response = await PersonalTrainingMock.CheckIfCanUpdate("5e7b9c1f9805e2000126e82e", "5e7b9c1f9885e2000126e82e");
 
             Assert.AreEqual(true, response);
         }

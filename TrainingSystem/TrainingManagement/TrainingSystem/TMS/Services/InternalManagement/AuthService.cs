@@ -9,8 +9,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TMS.Contracts.Repositories.InternalManagement;
+using TMS.Contracts.Services.InternalManagement;
 
-namespace TMS
+namespace TMS.Services.InternalManagement
 {
     public class AuthService: IAuthService
     {
@@ -22,11 +24,11 @@ namespace TMS
         {
             if (user.Password.Length<6)
             {
-                throw new Exception("Password must be atleast 6 symbols length");
+                throw new Exception("Password must be at least 6 symbols length");
             }
             if (!Regex.IsMatch(user.Password, @"^(?=.*[a-zA-Z])(?=.*[0-9])"))
             {
-                throw new Exception("Password must contain atleast one number and atleast one letter");
+                throw new Exception("Password must contain at least one number and at least one letter");
 
             }
             var response = await AuthRepository.CheckIfEmailAlreadyExist(user);
@@ -50,27 +52,26 @@ namespace TMS
            var consumer = await ConsumerRepository.FindConsumerByEmail(user.Email);
             if (consumer!=null)
             {           
-            if (!consumer.EmailConfirmed)
-            {
-                throw new Exception("email isn't confirmed yet");
-            }
-            var hash = HashOldPassword(user.Password, consumer.Salt);         
+                if (!consumer.EmailConfirmed)
+                {
+                    throw new Exception("email isn't confirmed yet");
+                }
+                var hash = HashOldPassword(user.Password, consumer.Salt);         
 
-            if (hash.Password == consumer.Password)
-            {
-                
-                if (consumer.Role == "Athlete")
+                if (hash.Password == consumer.Password)
                 {
-                   return GenerateAthleteToken(consumer.Id);
-                }
-                if (consumer.Role == "Coach")
-                {
-                    return GenerateCoachToken(consumer.Id);
-                }
-                if (consumer.Role == "Admin")
-                {
-                    return GenerateAdminToken(consumer.Id);
-                }
+                    if (consumer.Role == "Athlete")
+                    {
+                       return GenerateAthleteToken(consumer.Id);
+                    }
+                    if (consumer.Role == "Coach")
+                    {
+                        return GenerateCoachToken(consumer.Id);
+                    }
+                    if (consumer.Role == "Admin")
+                    {
+                        return GenerateAdminToken(consumer.Id);
+                    }
                 }
             }
             return null;
@@ -98,7 +99,6 @@ namespace TMS
 
                 );
             return token;
-            // return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
         public JwtSecurityToken GenerateCoachToken(string id)
@@ -156,7 +156,7 @@ namespace TMS
             }
             if (!Regex.IsMatch(password, @"^(?=.*[a-zA-Z])(?=.*[0-9])"))
             {
-                throw new Exception("Password must contain atleast one number and atleast one letter");                
+                throw new Exception("Password must contain at least one number and at least one letter");                
             }
 
             var hashedPassword = HashNewPassword(password);
@@ -177,19 +177,37 @@ namespace TMS
 
         public async Task ResetPassword(string idConsumer, string password)
         {
-            if (idConsumer.Length != 24)
-            {
-                throw new Exception("Wrong id was given");
-            }
+
             var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
             var hashedPassword = HashNewPassword(password);
             await AuthRepository.ChangePassword(idConsumer, hashedPassword);
            // var consumer = await ConsumerRepository.FindConsumerById(idConsumer);
             await EmailRepository.SendNewPassword(consumer.Email, password);
         }
+                  
 
+        public async Task<string> InsertNewAdmin(ConsumerEntity user)
+        {
+            if (!Regex.IsMatch(user.Password, @"^(?=.*[a-zA-Z])(?=.*[0-9])"))
+            {
+                throw new Exception("Password must contain at least one number and at least one letter");
 
-        public static HashPasswordInfo HashNewPassword(string password)
+            }
+            var response = await AuthRepository.CheckIfEmailAlreadyExist(user);
+            if (response != null)
+            {
+                return response;
+            }
+
+            var hash = HashNewPassword(user.Password);
+            user.Password = hash.Password;
+            user.Salt = hash.Salt;
+            user.EmailConfirmed = true;
+            var consumer = await AuthRepository.RegisterUser(user);          
+            return null;
+        }
+
+        public  HashPasswordInfo HashNewPassword(string password)
         {
             byte[] salt = new byte[128 / 8];
             using (var rng = RandomNumberGenerator.Create())
@@ -208,7 +226,7 @@ namespace TMS
             var hashPw = new HashPasswordInfo() { Password = hashedPass, Salt = Convert.ToBase64String(salt) };
             return hashPw;
         }
-        public static HashPasswordInfo HashOldPassword(string password, string saltString)
+        public HashPasswordInfo HashOldPassword(string password, string saltString)
         {
             byte[] salt = Convert.FromBase64String(saltString);
             string hashedPass = Convert.ToBase64String(
@@ -223,27 +241,6 @@ namespace TMS
             var hashPw = new HashPasswordInfo() { Password = hashedPass, Salt = Convert.ToBase64String(salt) };
             return hashPw;
 
-        }
-
-        public async Task<string> InsertNewAdmin(ConsumerEntity user)
-        {
-            if (!Regex.IsMatch(user.Password, @"^(?=.*[a-zA-Z])(?=.*[0-9])"))
-            {
-                throw new Exception("Password must contain atleast one number and atleast one letter");
-
-            }
-            var response = await AuthRepository.CheckIfEmailAlreadyExist(user);
-            if (response != null)
-            {
-                return response;
-            }
-
-            var hash = HashNewPassword(user.Password);
-            user.Password = hash.Password;
-            user.Salt = hash.Salt;
-            user.EmailConfirmed = true;
-            var consumer = await AuthRepository.RegisterUser(user);          
-            return null;
         }
     }
 }

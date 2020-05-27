@@ -5,8 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TMS.Contracts.Repositories;
+using TMS.Contracts.Repositories.InternalManagement;
+using TMS.Contracts.Services.InternalManagement;
+using TMS.Repositories;
+using TMS.Repositories.InternalManagement;
+using TMS.Services.InternalManagement;
 
-namespace TMS
+namespace TMS.Controllers.TrainingManagement
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -31,8 +37,7 @@ namespace TMS
             personalManagementService = new PersonalManagementService()
             {
                 AggregateRepository = aggregateRepo,
-                ConsumerRepository = new ConsumerRepository(),
-                PersonalTrainingsRepository= new PersonalTrainingRepository()               
+                ConsumerRepository = new ConsumerRepository(),                  
             };
         }
 

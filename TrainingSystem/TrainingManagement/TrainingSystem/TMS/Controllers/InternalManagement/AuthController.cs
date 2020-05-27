@@ -7,8 +7,12 @@ using System.Security.Claims;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using TMS.Contracts.Repositories.InternalManagement;
+using TMS.Contracts.Services.InternalManagement;
+using TMS.Repositories.InternalManagement;
+using TMS.Services.InternalManagement;
 
-namespace TMS
+namespace TMS.Controllers.InternalManagement
 {
     [Route("api/[controller]")]
     [ApiController]

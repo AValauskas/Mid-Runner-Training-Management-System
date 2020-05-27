@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TMS
+namespace TMS.Contracts.Services.InternalManagement
 {
    public interface IAuthService
     {

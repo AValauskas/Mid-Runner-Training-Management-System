@@ -6,10 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TMS.Contracts.Repositories.TrainingManagement;
 
-namespace TMS
+namespace TMS.Repositories.TrainingManagement
 {
-    public class TrainingsRepository:ITrainingsReposiry
+    public class TrainingsRepository:ITrainingsRepository
     {
         private static CodeMashClient Client => new CodeMashClient(Settings.ApiKey, Settings.ProjectId);
 
